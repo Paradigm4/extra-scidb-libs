@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sed -i "s/LOGNAME/scidb/" /var/lib/shim/conf 
+basepath=$(cat /opt/scidb/18.1/etc/config.ini | grep base-path | cut -d= -f2)
+sed -i "s:\[INSTANCE_0_DATA_DIR\]:$basepath/0/0/tmp:" /var/lib/shim/conf 
+if test -f /etc/init.d/shimsvc; then /etc/init.d/shimsvc start;fi

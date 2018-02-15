@@ -1,0 +1,17 @@
+Name        : extra-scidb-libs-VERSION
+Version     : 0
+Release     : 1
+Architecture: noarch
+Install Date: (not installed)
+Group       : System Environment/Base
+Size        : 3604
+License     : Affero
+Signature   : (none)
+Build Date  : DATE
+Build Host  : HOSTNAME
+Relocations : (not relocatable)
+URL         : https://github.com/Paradigm4
+Summary     : Extra Scidb Libraries
+Description :
+Extra Scidb Libraries Installation package
+

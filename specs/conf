@@ -1,0 +1,14 @@
+# Shim configuration file
+# Uncomment and change any of the following values. Restart shim for
+# your changes to take effect (default values are shown). See
+# man shim
+# for more information on the options.
+
+#ports=8080,8083s
+scidbport=1239
+instance=0
+tmp=[INSTANCE_0_DATA_DIR]
+user=scidb
+#max_sessions=50
+#timeout=60
+aio=1

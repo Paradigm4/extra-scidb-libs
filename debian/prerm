@@ -1,0 +1,3 @@
+#!/bin/bash
+
+if test -f /etc/init.d/shimsvc; then /etc/init.d/shimsvc stop; rm -f /etc/init.d/shimsvc;fi
