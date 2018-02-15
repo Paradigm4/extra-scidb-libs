@@ -22,3 +22,26 @@ Similarly, for debian packages, one should run the script on Ubuntu 14.04.
 
 All the requirements for building plugins are present here - no magic happens to make plugins compile with this script, if they do not compile on a cloned repository on their own.
 
+To specify the plugins included in the package, edit the extra-scidb-libs.sh file.  There is an array declared there that looks like:
+
+# The following array should contain tuples of the repo name and the branch to get.
+declare -a libs=("superfunpack" "master"
+		             "grouped_aggregate" "master"
+                 "accelerated_io_tools" "master"
+                 "equi_join" "master"
+                 "shim" "master"
+		)
+
+To add a new plugin, e.g. foobar, just add it and the attendant branch you'd like to use so the array look like this:
+
+# The following array should contain tuples of the repo name and the branch to get.
+declare -a libs=("superfunpack" "master"
+		 "grouped_aggregate" "master"
+                 "accelerated_io_tools" "master"
+                 "equi_join" "master"
+                 "shim" "master"
+                 "foobar" "my_dev_branch"
+		)
+
+This should work for any plugin that builds a .so and wants it copied to $SCIDB_INSTALL_PATH/lib/scidb/plugins.  For more complicated installations, like shim, you are on your own.  You'll have to modify the scripts, spec files and control files appropriately.
+
