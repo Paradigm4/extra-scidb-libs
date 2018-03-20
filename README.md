@@ -21,7 +21,7 @@ e.g.
                                  # compling and packaging.  The version is 0.
 ```
 
-To build for rpm, one should build on a CentOS 6 system as most of our plugins need to be compiled on the same platfrom as SciDB itself - which is CentOS 6. 
+To build for rpm, one should build on a CentOS 6 system as most of our plugins need to be compiled on the same platfrom as SciDB itself - which is CentOS 6. Also see dependencies below. 
 
 Similarly, for debian packages, one should run the script on Ubuntu 14.04.
 
@@ -53,3 +53,11 @@ declare -a libs=("superfunpack" "master"
 ```
 
 This should work for any plugin that builds a `.so` and wants it copied to `$SCIDB_INSTALL_PATH/lib/scidb/plugins`.  For more complicated installations, like `shim`, you are on your own.  You'll have to modify the scripts, spec files and control files appropriately.
+
+# Dependencies
+
+You might need to install `rpmdevtools` for Centos 
+
+```sh
+sudo yum install rpm-build rpmdevtools
+```
