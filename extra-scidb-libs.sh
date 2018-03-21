@@ -43,12 +43,12 @@ function downloadLibs ()
 
 	params=("${params[@]:2}")
 
-	wget https://github.com/Paradigm4/$lib_name/archive/$arch_name.zip
-	mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$lib_name
-	unzip $arch_name
-	mv $work_dir/$lib_name-$arch_name/* $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$lib_name
-	rm -rf $work_dir/$lib_name-$arch_name
-	[ -e $arch_name.zip ] && rm $arch_name.zip || rm $arch_name
+        git clone https://github.com/Paradigm4/$lib_name.git
+        cd $work_dir/$lib_name
+        git checkout $arch_name
+        cd ..
+	mv $work_dir/$lib_name $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/
+	rm -rf $work_dir/$lib_name
     done
 }
 
@@ -74,6 +74,10 @@ work_dir=$2
 result_dir=$3
 PKG_VER=$4
 
+echo "Work dir is at: $work_dir"
+echo "Result dir is at: $result_dir"
+echo "Package version: $PKG_VER"
+
 source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 [ -d $work_dir -a -w $work_dir ] || die "Working directory $work_dir does not exist or is not writable."
@@ -83,11 +87,11 @@ rm -rf $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
 mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
 
 # The following array should contain tuples of the repo name and the branch to get.
-declare -a libs=("superfunpack" "master"
-		 "grouped_aggregate" "master"
-                 "accelerated_io_tools" "master"
-                 "equi_join" "master"
-                 "shim" "master"
+declare -a libs=("superfunpack" "rel18.1.1"
+		 "grouped_aggregate" "rel18.1.1"
+                 "accelerated_io_tools" "rel18.1.1"
+                 "equi_join" "rel18.1.1"
+                 "shim" "rel18.1.1"
 		)
 
 downloadLibs "${libs[@]}"
