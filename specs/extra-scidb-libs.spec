@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-18.1
-Version:        0
+Version:        1
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -81,5 +81,7 @@ if test -f /etc/init.d/shimsvc; then /etc/init.d/shimsvc stop; rm -f /etc/init.d
 %doc
 
 %changelog
+* Fri Apr 13 2018 Jason Kinchen <jkinchen@paradigm4.com>
+- Support for 18.1.7
 * Tue Sep 26 2017 Jason Kinchen <jkinchen@paradigm4.com> 18.1-1
 - Initial version of the package
