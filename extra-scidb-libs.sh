@@ -89,7 +89,7 @@ mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
 # The following array should contain tuples of the repo name and the branch to get.
 declare -a libs=("superfunpack" "rel18.1.1"
 		 "grouped_aggregate" "rel18.1.1"
-                 "accelerated_io_tools" "rel18.1.1"
+                 "accelerated_io_tools" "master"
                  "equi_join" "rel18.1.1"
                  "shim" "rel18.1.1"
 		)
@@ -107,7 +107,7 @@ if [[ "$1" == "rpm" || "$1" == "both" ]]; then
     create_makefile $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
 
     cp $source_dir/specs/conf $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/shim/conf
-    
+
     tar -zcvf extra-scidb-libs-${SCIDB_VER:=18.1}.tar.gz extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
 
     until ls -l $work_dir/rpmbuild/SOURCES > /dev/null; do sleep 1; done
@@ -140,7 +140,7 @@ if [[ "$1" == "deb" || "$1" == "both" ]]; then
 	mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/etc/init.d
 	cp shim/init.d/shimsvc $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/etc/init.d
 	chmod 755 $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/etc/init.d/shimsvc
-	
+
 	mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/var/lib/shim
 	cp $source_dir/specs/conf $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/var/lib/shim
 	cp -aR shim/wwwroot $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/var/lib/shim
@@ -171,10 +171,7 @@ if [[ "$1" == "deb" || "$1" == "both" ]]; then
 
 	dpkg-deb --build ./extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
 	mv ./extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER.deb $result_dir
-	
+
 
     fi
 fi
-
-
-
