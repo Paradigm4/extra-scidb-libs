@@ -60,7 +60,7 @@ function create_makefile()
     echo "all:" > $make_dir/Makefile
     for lib_name in "${dirs[@]}"
     do
-	makefiles=($(find . -name Makefile | grep $lib_name | xargs -n1 dirname))
+	makefiles=($(find . -name Makefile | sort | grep $lib_name | xargs -n1 dirname))
 	echo -e "\t\$(MAKE) -C ${makefiles[0]}" >> $make_dir/Makefile
     done
     cd $work_dir
