@@ -19,6 +19,7 @@ before_install:
   - docker run
     --name scidb
     --detach
+    --tty
     --env SCIDB_VER=${SCIDB_VER}
     --env SCIDB_INSTALL_PATH=/opt/scidb/${SCIDB_VER}
     --volume `pwd`:/this
