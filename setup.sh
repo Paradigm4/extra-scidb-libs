@@ -1,37 +1,5 @@
 #!/bin/sh
 
-    cat <<APT_LINE | tee /etc/apt/sources.list.d/bintray-rvernica.list
-deb https://dl.bintray.com/rvernica/deb trusty universe
-APT_LINE
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv 46BD98A354BA5235
-
-    echo "Step 2. Install prerequisites"
-    apt-get update
-    apt-get install                             \
-        --assume-yes                            \
-        --no-install-recommends                 \
-        g++                                     \
-        git                                     \
-        liblog4cxx10-dev                        \
-        libarrow-dev=$ARROW_VER                 \
-        libpcre3-dev                            \
-        libpqxx-dev                             \
-        libprotobuf-dev                         \
-        m4                                      \
-        make                                    \
-        scidb-18.1-dev                          \
-        scidb-18.1-libboost1.54-dev             \
-        scidb-18.1-libboost-system1.54-dev
-
-    if [ "$dist" = "Ubuntu" ]
-    then
-        apt-get install                         \
-            --assume-yes                        \
-            --no-install-recommends             \
-            g++-4.9
-    fi
-fi
-
 set -o errexit
 
 ARROW_VER=0.9.0-1
