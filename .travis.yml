@@ -8,16 +8,20 @@ python:
 env:
   global: SCIDB_VER=18.1
   matrix:
-    - IMG=debian:8      TARGET=deb
-    - IMG=ubuntu:trusty TARGET=deb
-    - IMG=centos:6      TARGET=rpm
+    - IMG=debian:8               TARGET=deb
+    - IMG=ubuntu:trusty          TARGET=deb
+    - IMG=centos:6               TARGET=rpm
+    - IMG=${SCIDB_VER}           TARGET=try
+    - IMG=${SCIDB_VER}-trusty    TARGET=try
+    - IMG=${SCIDB_VER}-centos-6  TARGET=try
+    - IMG=${SCIDB_VER}-centos-7  TARGET=try
 
 services:
   - docker
 
 before_install:
   - docker run
-    --name scidb
+    --name container
     --detach
     --tty
     --env SCIDB_VER=${SCIDB_VER}
@@ -26,9 +30,17 @@ before_install:
     ${IMG}
 
 script:
-  - docker exec scidb sh /this/setup.sh
-  - docker exec scidb /this/extra-scidb-libs.sh
+  - if [ "${TARGET}" = "deb" -o "${TARGET}" = "rpm" ]; then
+    docker exec container sh /this/setup.sh;
+    docker exec container /this/extra-scidb-libs.sh
     $TARGET
     /root
-    /tmp
-    1
+    tmp
+    1;
+    fi
+  - if [ "${TARGET}" = "try" ]; then
+    docker exec container sh -c
+    "wget -O - https://paradigm4.github.io/extra-scidb-libs/install.sh | sh";
+    docker exec container sh -c
+    "wget -O - https://paradigm4.github.io/extra-scidb-libs/try.sh | sh";
+    fi
