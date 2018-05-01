@@ -8,13 +8,13 @@ python:
 env:
   global: SCIDB_VER=18.1
   matrix:
-    - IMG=debian:8               TARGET=deb
-    - IMG=ubuntu:trusty          TARGET=deb
-    - IMG=centos:6               TARGET=rpm
-    - IMG=${SCIDB_VER}           TARGET=try
-    - IMG=${SCIDB_VER}-trusty    TARGET=try
-    - IMG=${SCIDB_VER}-centos-6  TARGET=try
-    - IMG=${SCIDB_VER}-centos-7  TARGET=try
+    - IMG=debian:8                              TARGET=deb
+    - IMG=ubuntu:trusty                         TARGET=deb
+    - IMG=centos:6                              TARGET=rpm
+    - IMG=rvernica/scidb:${SCIDB_VER}           TARGET=try
+    - IMG=rvernica/scidb:${SCIDB_VER}-trusty    TARGET=try
+    - IMG=rvernica/scidb:${SCIDB_VER}-centos-6  TARGET=try
+    - IMG=rvernica/scidb:${SCIDB_VER}-centos-7  TARGET=try
 
 services:
   - docker
