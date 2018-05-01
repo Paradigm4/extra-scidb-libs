@@ -20,7 +20,7 @@ Source0:        %{name}/%{name}.tar.gz
 Requires(post): info
 Requires(preun): info
 
-%description 
+%description
 The Paradigm4 github repository has several prototype operators and functions for SciDB: equi_join, grouped aggregate, accelerated I/O tools, superfunpack, stream and shim.  The package contains the latest version for the current SciDB version.
 
 %prep
@@ -51,7 +51,7 @@ mkdir -p %{buildroot}/etc/init.d
 cp shim/init.d/shimsvc %{buildroot}/etc/init.d
 chmod 0755 %{buildroot}/etc/init.d/shimsvc
 mkdir -p %{buildroot}/var/lib/shim
-cat shim/conf | sed "s/user=scidb/user=LOGNAME/" > %{buildroot}/var/lib/shim/conf
+cp shim/conf %{buildroot}/var/lib/shim/conf
 
 echo %{_scidb_install_path}/lib/scidb/plugins/libsuperfunpack.so > files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libgrouped_aggregate.so >> files.lst
@@ -68,9 +68,10 @@ echo /var/lib/shim/conf >> files.lst
 %post
 if test -z "$SCIDB_INSTALL_PATH"; then export SCIDB_INSTALL_PATH=/opt/scidb/18.1; fi
 if test -x /etc/init.d/shimsvc; then /etc/init.d/shimsvc stop;fi
-sed -i "s/LOGNAME/$(logname)/" /var/lib/shim/conf 
+scidbuser=`ps axfo user:64,cmd | grep scidb | grep dbname | head -n 1 | cut -d ' ' -f 1`
+sed -i "s/LOGNAME/$scidbuser/" /var/lib/shim/conf
 basepath=$(cat $SCIDB_INSTALL_PATH/etc/config.ini | grep base-path | cut -d= -f2)
-sed -i "s:\[INSTANCE_0_DATA_DIR\]:$basepath/0/0/tmp:" /var/lib/shim/conf 
+sed -i "s:\[INSTANCE_0_DATA_DIR\]:$basepath/0/0/tmp:" /var/lib/shim/conf
 if test -f /etc/init.d/shimsvc; then /etc/init.d/shimsvc start;fi
 
 %preun
