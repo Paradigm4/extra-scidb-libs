@@ -155,9 +155,11 @@ if [[ "$1" == "deb" || "$1" == "both" ]]; then
         userinfo="$userinfo <$(whoami)@paradigm4.com>"
         m4 -DVERSION=${SCIDB_VER:=18.1} -DUSERINFO="$userinfo" $source_dir/debian/changelog > $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN/changelog
 
-        cp -p $source_dir/debian/compat $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
-        cp -p $source_dir/debian/postinst $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
-        cp -p $source_dir/debian/prerm $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
+        dest=$work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
+        cp -p $source_dir/debian/conffiles $dest
+        cp -p $source_dir/debian/compat    $dest
+        cp -p $source_dir/debian/postinst  $dest
+        cp -p $source_dir/debian/prerm     $dest
 
         cd $work_dir
 
