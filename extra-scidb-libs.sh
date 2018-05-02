@@ -37,18 +37,18 @@ function downloadLibs ()
     params=("$@")
     for i in $(seq 1 "$((${#params[@]}/2))")
     do
-	lib_name=${params[0]}
-	arch_name=${params[1]}
-	dir_name=$lib_name
+        lib_name=${params[0]}
+        arch_name=${params[1]}
+        dir_name=$lib_name
 
-	params=("${params[@]:2}")
+        params=("${params[@]:2}")
 
         git clone https://github.com/Paradigm4/$lib_name.git
         cd $work_dir/$lib_name
         git checkout $arch_name
         cd ..
-	mv $work_dir/$lib_name $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/
-	rm -rf $work_dir/$lib_name
+        mv $work_dir/$lib_name $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/
+        rm -rf $work_dir/$lib_name
     done
 }
 
@@ -60,8 +60,8 @@ function create_makefile()
     echo "all:" > $make_dir/Makefile
     for lib_name in "${dirs[@]}"
     do
-	makefiles=($(find . -name Makefile | sort | grep $lib_name | xargs -n1 dirname))
-	echo -e "\t\$(MAKE) -C ${makefiles[0]}" >> $make_dir/Makefile
+        makefiles=($(find . -name Makefile | sort | grep $lib_name | xargs -n1 dirname))
+        echo -e "\t\$(MAKE) -C ${makefiles[0]}" >> $make_dir/Makefile
     done
     cd $work_dir
 }
@@ -88,11 +88,11 @@ mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
 
 # The following array should contain tuples of the repo name and the branch to get.
 declare -a libs=("superfunpack" "rel18.1.1"
-		 "grouped_aggregate" "rel18.1.1"
+                 "grouped_aggregate" "rel18.1.1"
                  "accelerated_io_tools" "rel18.1.1"
                  "equi_join" "rel18.1.1"
                  "shim" "rel18.1.1"
-		)
+                )
 
 downloadLibs "${libs[@]}"
 
@@ -107,7 +107,7 @@ if [[ "$1" == "rpm" || "$1" == "both" ]]; then
     create_makefile $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
 
     cp $source_dir/specs/conf $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/shim/conf
-    
+
     tar -zcvf extra-scidb-libs-${SCIDB_VER:=18.1}.tar.gz extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
 
     until ls -l $work_dir/rpmbuild/SOURCES > /dev/null; do sleep 1; done
@@ -131,50 +131,47 @@ if [[ "$1" == "deb" || "$1" == "both" ]]; then
     make SCIDB=$SCIDB_INSTALL_PATH
 
     if [ $? -eq 0 ]; then
-	mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$SCIDB_INSTALL_PATH/lib/scidb/plugins
-	cp */*.so $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$SCIDB_INSTALL_PATH/lib/scidb/plugins
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$SCIDB_INSTALL_PATH/lib/scidb/plugins
+        cp */*.so $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$SCIDB_INSTALL_PATH/lib/scidb/plugins
 
-	mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$SCIDB_INSTALL_PATH/bin
-	cp shim/shim $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$SCIDB_INSTALL_PATH/bin
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$SCIDB_INSTALL_PATH/bin
+        cp shim/shim $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$SCIDB_INSTALL_PATH/bin
 
-	mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/etc/init.d
-	cp shim/init.d/shimsvc $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/etc/init.d
-	chmod 755 $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/etc/init.d/shimsvc
-	
-	mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/var/lib/shim
-	cp $source_dir/specs/conf $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/var/lib/shim
-	cp -aR shim/wwwroot $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/var/lib/shim
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/etc/init.d
+        cp shim/init.d/shimsvc $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/etc/init.d
+        chmod 755 $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/etc/init.d/shimsvc
 
-	mkdir $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
-	m4 -DVERSION=${SCIDB_VER:=18.1} $source_dir/debian/control > $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN/control
-	hname=$(hostname); hname="$hname.$(hostname -d)"
-	m4 -DVERSION=${SCIDB_VER:=18.1} -DDATE="$(date)" -DHOSTNAME=$hname $source_dir/debian/copyright > $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN/copyright
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/var/lib/shim
+        cp $source_dir/specs/conf $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/var/lib/shim
+        cp -aR shim/wwwroot $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/var/lib/shim
 
-	userinfo=$(getent passwd $(whoami) | cut -d: -f 5)
-	[[ $userinfo == "" ]] && userinfo=$(whoami)
-	userinfo="$userinfo <$(whoami)@paradigm4.com>"
-	m4 -DVERSION=${SCIDB_VER:=18.1} -DUSERINFO="$userinfo" $source_dir/debian/changelog > $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN/changelog
+        mkdir $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
+        m4 -DVERSION=${SCIDB_VER:=18.1} $source_dir/debian/control > $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN/control
+        hname=$(hostname); hname="$hname.$(hostname -d)"
+        m4 -DVERSION=${SCIDB_VER:=18.1} -DDATE="$(date)" -DHOSTNAME=$hname $source_dir/debian/copyright > $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN/copyright
 
-	cp -p $source_dir/debian/compat $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
-	cp -p $source_dir/debian/postinst $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
-	cp -p $source_dir/debian/prerm $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
+        userinfo=$(getent passwd $(whoami) | cut -d: -f 5)
+        [[ $userinfo == "" ]] && userinfo=$(whoami)
+        userinfo="$userinfo <$(whoami)@paradigm4.com>"
+        m4 -DVERSION=${SCIDB_VER:=18.1} -DUSERINFO="$userinfo" $source_dir/debian/changelog > $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN/changelog
 
-	cd $work_dir
+        cp -p $source_dir/debian/compat $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
+        cp -p $source_dir/debian/postinst $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
+        cp -p $source_dir/debian/prerm $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/DEBIAN
 
-	params=("${libs[@]}")
-	for i in `seq 1 "$((${#params[@]}/2))"`
-	do
-	    lib_name=${params[0]}
-	    rm -rf ./extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$lib_name
-	    params=("${params[@]:2}")
-	done
+        cd $work_dir
 
-	dpkg-deb --build ./extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
-	mv ./extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER.deb $result_dir
-	
+        params=("${libs[@]}")
+        for i in `seq 1 "$((${#params[@]}/2))"`
+        do
+            lib_name=${params[0]}
+            rm -rf ./extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER/$lib_name
+            params=("${params[@]:2}")
+        done
+
+        dpkg-deb --build ./extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
+        mv ./extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER.deb $result_dir
+
 
     fi
 fi
-
-
-
