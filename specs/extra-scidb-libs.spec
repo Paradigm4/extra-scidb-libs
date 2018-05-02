@@ -62,7 +62,7 @@ echo %{_scidb_install_path}/bin/shim >> files.lst
 echo /var/lib/shim/wwwroot >> files.lst
 echo /usr/local/share/man/man1/shim.1 >> files.lst
 echo /etc/init.d/shimsvc >> files.lst
-echo /var/lib/shim/conf >> files.lst
+# echo /var/lib/shim/conf >> files.lst
 
 
 %post
@@ -78,6 +78,8 @@ if test -f /etc/init.d/shimsvc; then /etc/init.d/shimsvc start;fi
 if test -f /etc/init.d/shimsvc; then /etc/init.d/shimsvc stop; rm -f /etc/init.d/shimsvc;fi
 
 %files -f files.lst
+
+%config(noreplace) /var/lib/shim/conf
 
 %doc
 
