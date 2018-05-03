@@ -13,7 +13,7 @@ install_lsb_release()
     ( which yum                                                       \
       >  /dev/null                                                    \
       2>&1 )                                                          \
-    || ( which apt-get                                                \git checkout --orphan
+    || ( which apt-get                                                \
          >  /dev/null                                                 \
          2>&1 )                                                       \
     || ( echo "yum or apt-get not detected. Unsuported distribution." \
