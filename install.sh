@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Args:
+#     --only-prereq: only install prerequisites, skip installing
+#                    extra-scidb-libs
+
 set -o errexit
 
 ARROW_VER=0.9.0-1
@@ -58,10 +62,12 @@ then
     echo "Step 2. Install prerequisites"
     yum install --assumeyes arrow-devel-$ARROW_VER.el6
 
-    echo "Step 3. Install extra-scidb-libs"
-    yum install --assumeyes \
-        https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-1-1.x86_64.rpm
-
+    if [ "$1" != "--only-prereq" ]
+    then
+        echo "Step 3. Install extra-scidb-libs"
+        yum install --assumeyes \
+            https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-1-1.x86_64.rpm
+    fi
 else
     # Debian/Ubuntu
 
@@ -84,8 +90,11 @@ APT_LINE
     apt-get update
     apt-get install --assume-yes --no-install-recommends libarrow-dev=$ARROW_VER
 
-    echo "Step 3. Install extra-scidb-libs"
-    wget --output-document /tmp/extra-scidb-libs-18.1-1.deb \
-        https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-1.deb
-    dpkg --install /tmp/extra-scidb-libs-18.1-1.deb
+    if [ "$1" != "--only-prereq" ]
+    then
+        echo "Step 3. Install extra-scidb-libs"
+        wget --output-document /tmp/extra-scidb-libs-18.1-1.deb \
+            https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-1.deb
+        dpkg --install /tmp/extra-scidb-libs-18.1-1.deb
+    fi
 fi
