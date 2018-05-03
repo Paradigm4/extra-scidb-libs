@@ -41,11 +41,9 @@ script:
     /root
     tmp
     $PKG_VER
-
-after_script:
   - docker stop script
 
-before_deploy:
+after_script:
   - docker run
     --name deploy
     --detach
@@ -53,8 +51,6 @@ before_deploy:
     --rm
     --volume `pwd`:/this
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
-
-deploy:
   - docker exec deploy sh /this/install.sh --only-prereq
   - if [ "$TARGET" = "rpm" ]; then
       docker exec deploy yum install
@@ -63,6 +59,4 @@ deploy:
       docker exec deploy dpkg --install
         /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb;
     fi
-
-after_deploy:
   - docker stop deploy
