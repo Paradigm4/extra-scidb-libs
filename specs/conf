@@ -8,7 +8,7 @@
 scidbport=1239
 instance=0
 tmp=[INSTANCE_0_DATA_DIR]
-user=scidb
+user=LOGNAME
 #max_sessions=50
 #timeout=60
 aio=1
