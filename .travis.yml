@@ -11,41 +11,58 @@ python:
   - "3.6"
 
 env:
-  global: SCIDB_VER=18.1
+  global:
+    - SCIDB_VER=18.1
+    - PKG_VER=1
   matrix:
-    - IMG=debian:8                              TARGET=deb
-    - IMG=ubuntu:trusty                         TARGET=deb
-    - IMG=centos:6                              TARGET=rpm
-    - IMG=rvernica/scidb:${SCIDB_VER}           TARGET=try
-    - IMG=rvernica/scidb:${SCIDB_VER}-trusty    TARGET=try
-    - IMG=rvernica/scidb:${SCIDB_VER}-centos-6  TARGET=try
-    - IMG=rvernica/scidb:${SCIDB_VER}-centos-7  TARGET=try
+    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=           TARGET=deb
+    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=-trusty    TARGET=deb
+    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-6  TARGET=rpm
+    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-7  TARGET=rpm
 
 services:
   - docker
 
-before_install:
+before_script:
   - docker run
-    --name container
+    --name script
     --detach
     --tty
-    --env SCIDB_VER=${SCIDB_VER}
-    --env SCIDB_INSTALL_PATH=/opt/scidb/${SCIDB_VER}
+    --rm
+    --env SCIDB_VER=$SCIDB_VER
+    --env SCIDB_INSTALL_PATH=/opt/scidb/$SCIDB_VER
     --volume `pwd`:/this
-    ${IMG}
+    $BUILD_IMG
 
 script:
-  - if [ "${TARGET}" = "deb" -o "${TARGET}" = "rpm" ]; then
-    docker exec container sh /this/setup.sh;
-    docker exec container /this/extra-scidb-libs.sh
+  - docker exec script sh /this/setup.sh
+  - docker exec script /this/extra-scidb-libs.sh
     $TARGET
     /root
     tmp
-    1;
+    $PKG_VER
+
+after_script:
+  - docker stop script
+
+before_deploy:
+  - docker run
+    --name deploy
+    --detach
+    --tty
+    --rm
+    --volume `pwd`:/this
+    rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
+
+deploy:
+  - docker exec deploy sh /this/install.sh --only-prereq
+  - if [ "$TARGET" = "rpm" ]; then
+      docker exec deploy yum install
+        /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER-1.x86_64.rpm;
+    else
+      docker exec deploy dpkg --install
+        /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb;
     fi
-  - if [ "${TARGET}" = "try" ]; then
-    docker exec container sh -c
-    "wget -O - https://paradigm4.github.io/extra-scidb-libs/install.sh | sh";
-    docker exec container sh -c
-    "wget -O - https://paradigm4.github.io/extra-scidb-libs/try.sh | sh";
-    fi
+
+after_deploy:
+  - docker stop deploy
