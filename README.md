@@ -74,7 +74,10 @@ This should work for any plugin that builds a `.so` and wants it
 copied to `$SCIDB_INSTALL_PATH/lib/scidb/plugins`.  For more
 complicated installations, like `shim`, the package build files need
 to be updated. You will have to modify the the build scripts, `.spec`
-file, and `control` file.  appropriately.
+file, and `control` file.  appropriately. Finally, add a
+`load_library` command to the `try.sh` script in order for Travis to
+try to load the plugin once the `extra-scidb-libs` package is
+installed.
 
 # Dependencies
 
