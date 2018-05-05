@@ -160,6 +160,7 @@ if [[ "$1" == "deb" || "$1" == "both" ]]; then
         cp -p $source_dir/debian/compat    $dest
         cp -p $source_dir/debian/postinst  $dest
         cp -p $source_dir/debian/prerm     $dest
+        chmod a+rx $dest/{postinst,prerm}
 
         cd $work_dir
 
