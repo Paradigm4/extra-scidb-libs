@@ -96,6 +96,7 @@ following:
 1. Edit the `debian/control` file and update the `Version:` line.
 1. Edit the `debian/copyright` file and update the `Version:` line.
 1. Optionally, update the `debian/changelog` file.
+1. Edit the `.travis.yml` file and update the `PKG_VER=` line.
 1. Use the new version number when building the packages.
 
 # Publishing Packages
