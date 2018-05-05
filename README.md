@@ -83,3 +83,14 @@ You might need to install `rpmdevtools` for CentOS
 ```sh
 sudo yum install rpm-build rpmdevtools
 ```
+
+# Bump Version
+
+In order to increase the version number of the package do the
+following:
+
+1. Edit the `specs/extra-scidb-libs.spec` and update the `Version:` line. Optionally, update the `%changelog` section.
+1. Edit the `debian/control` file and update the `Version:` line.
+1. Edit the `debian/copyright` file and update the `Version:` line.
+1. Optionally, update the `debian/changelog` file.
+1. Use the new version number when building the packages.
