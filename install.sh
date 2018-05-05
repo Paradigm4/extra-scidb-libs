@@ -1,7 +1,13 @@
 #!/bin/sh
 
+# Args:
+#     --only-prereq: only install prerequisites, skip installing
+#                    extra-scidb-libs
+
 set -o errexit
 
+
+PKG_VER=2
 ARROW_VER=0.9.0-1
 
 
@@ -13,7 +19,7 @@ install_lsb_release()
     ( which yum                                                       \
       >  /dev/null                                                    \
       2>&1 )                                                          \
-    || ( which apt-get                                                \git checkout --orphan
+    || ( which apt-get                                                \
          >  /dev/null                                                 \
          2>&1 )                                                       \
     || ( echo "yum or apt-get not detected. Unsuported distribution." \
@@ -58,10 +64,12 @@ then
     echo "Step 2. Install prerequisites"
     yum install --assumeyes arrow-devel-$ARROW_VER.el6
 
-    echo "Step 3. Install extra-scidb-libs"
-    yum install --assumeyes \
-        https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-1-1.x86_64.rpm
-
+    if [ "$1" != "--only-prereq" ]
+    then
+        echo "Step 3. Install extra-scidb-libs"
+        yum install --assumeyes \
+            https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-$PKG_VER-1.x86_64.rpm
+    fi
 else
     # Debian/Ubuntu
 
@@ -84,8 +92,11 @@ APT_LINE
     apt-get update
     apt-get install --assume-yes --no-install-recommends libarrow-dev=$ARROW_VER
 
-    echo "Step 3. Install extra-scidb-libs"
-    wget --output-document /tmp/extra-scidb-libs-18.1-1.deb \
-        https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-1.deb
-    dpkg --install /tmp/extra-scidb-libs-18.1-1.deb
+    if [ "$1" != "--only-prereq" ]
+    then
+        echo "Step 3. Install extra-scidb-libs"
+        wget --output-document /tmp/extra-scidb-libs-18.1-$PKG_VER.deb \
+            https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-$PKG_VER.deb
+        dpkg --install /tmp/extra-scidb-libs-18.1-$PKG_VER.deb
+    fi
 fi
