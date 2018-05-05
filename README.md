@@ -1,3 +1,5 @@
+# Overview
+
 This repository contains the scripts and control files to build a
 single package file for Debian/Ubuntu (`.deb`) or CentOS/Red Hat
 Enterprise Linux (RHEL) (`.rpm`) containing the built libraries and
@@ -11,12 +13,17 @@ Currently, the following tools are included:
 - [shim](https://github.com/Paradigm4/shim)
 - [superfunpack](https://github.com/Paradigm4/superfunpack)
 
-The packages themselves have also been uploaded here for convenience,
+# Build
+
+The packages themselves have also been uploaded
+[here](https://paradigm4.github.io/extra-scidb-libs/) for convenience,
 but to be sure to have gotten the latest, one should clone the
 repository and run the script:
+
 ```bash
 ./extra-scidb-libs <rpm|deb|both> <working directory> <result directory> <package version>
 ```
+
 * `<working dir>` and `<result dir>` need to be absolute paths
 * Due to constraints in the tool used to build CentOS/RHEL packages,
   `<working dir>` has to be the user's home directory (i.e., `~`)
@@ -27,6 +34,7 @@ repository and run the script:
 e.g. Build the CentOS/RHEL package, deposit it in `/tmp` using the home
 directory as the place to do the compiling and packaging.  The version
 is 0:
+
 ```bash
 ./extra-scidb-libs rpm ~ /tmp 0
 ```
@@ -42,11 +50,23 @@ All the requirements for building plugins are present here - no magic
 happens to make plugins compile with this script, if they do not
 compile on a cloned repository on their own.
 
+# Dependencies
+
+A convenience script is provided which installs all the dependencies
+required to build the packages for Debian/Ubuntu or CentOS/RHEL
+systems. The script can be run with:
+
+```bash
+sudo sh setup.sh
+```
+
+# Add New Plugin
+
 To specify the plugins included in the package, edit the
 `extra-scidb-libs.sh` file.  There is an array declared there that
 looks like:
 
-```sh
+```bash
 # The following array should contain tuples of the repo name and the branch to get.
 declare -a libs=("superfunpack" "master"
                  "grouped_aggregate" "master"
@@ -59,7 +79,7 @@ declare -a libs=("superfunpack" "master"
 To add a new plugin, e.g. foobar, just add it and the attendant branch
 you would like to use so the array look like this:
 
-```sh
+```bash
 # The following array should contain tuples of the repo name and the branch to get.
 declare -a libs=("superfunpack" "master"
                  "grouped_aggregate" "master"
@@ -79,14 +99,6 @@ file, and `control` file.  appropriately. Finally, add a
 try to load the plugin once the `extra-scidb-libs` package is
 installed.
 
-# Dependencies
-
-You might need to install `rpmdevtools` for CentOS
-
-```sh
-sudo yum install rpm-build rpmdevtools
-```
-
 # Bump Version
 
 In order to increase the version number of the package do the
@@ -96,9 +108,10 @@ following:
 1. Edit the `debian/control` file and update the `Version:` line.
 1. Edit the `debian/copyright` file and update the `Version:` line.
 1. Optionally, update the `debian/changelog` file.
+1. Edit the `.travis.yml` file and update the `PKG_VER=` line.
 1. Use the new version number when building the packages.
 
-# Publishing Packages
+# Publish
 
 After building a new version of the packages, do the following to
 publish them:

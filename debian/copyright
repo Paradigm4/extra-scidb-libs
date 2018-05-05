@@ -1,5 +1,5 @@
 Name        : extra-scidb-libs-VERSION
-Version     : 0
+Version     : 2
 Release     : 1
 Architecture: noarch
 Install Date: (not installed)
@@ -14,4 +14,3 @@ URL         : https://github.com/Paradigm4
 Summary     : Extra Scidb Libraries
 Description :
 Extra Scidb Libraries Installation package
-

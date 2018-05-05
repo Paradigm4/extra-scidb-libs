@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-18.1
-Version:        1
+Version:        2
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -17,6 +17,7 @@ Source0:        %{name}/%{name}.tar.gz
 %global __find_requires_orig %{__find_requires}
 %define __find_requires %{_builddir}/find-requires %{__find_requires_orig}
 
+Requires: /opt/scidb/18.1/bin/scidb
 Requires(post): info
 Requires(preun): info
 
