@@ -1,0 +1,62 @@
+branches:
+  only:
+  - gh-pages
+  - /.*/
+
+sudo: required
+
+language: python
+
+python:
+  - "3.6"
+
+env:
+  global:
+    - SCIDB_VER=18.1
+    - PKG_VER=1
+  matrix:
+    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=           TARGET=deb
+    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=-trusty    TARGET=deb
+    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-6  TARGET=rpm
+    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-7  TARGET=rpm
+
+services:
+  - docker
+
+before_script:
+  - docker run
+    --name script
+    --detach
+    --tty
+    --rm
+    --env SCIDB_VER=$SCIDB_VER
+    --env SCIDB_INSTALL_PATH=/opt/scidb/$SCIDB_VER
+    --volume `pwd`:/this
+    $BUILD_IMG
+
+script:
+  - docker exec script sh /this/setup.sh
+  - docker exec script /this/extra-scidb-libs.sh
+    $TARGET
+    /root
+    /this
+    $PKG_VER
+  - docker stop script
+
+after_script:
+  - docker run
+    --name deploy
+    --detach
+    --tty
+    --rm
+    --volume `pwd`:/this
+    rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
+  - docker exec deploy sh /this/install.sh --only-prereq
+  - if [ "$TARGET" = "rpm" ]; then
+      docker exec deploy yum install --assumeyes
+        /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER-1.x86_64.rpm;
+    else
+      docker exec deploy dpkg --install
+        /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb;
+    fi
+  - docker stop deploy
