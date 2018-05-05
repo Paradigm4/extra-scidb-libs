@@ -39,7 +39,7 @@ script:
   - docker exec script /this/extra-scidb-libs.sh
     $TARGET
     /root
-    tmp
+    /this
     $PKG_VER
   - docker stop script
 
