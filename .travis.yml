@@ -1,0 +1,34 @@
+branches:
+  only:
+  - gh-pages
+  - /.*/
+
+sudo: required
+
+language: python
+
+python:
+  - "3.6"
+
+env:
+  global: SCIDB_VER=18.1
+  matrix:
+    - IMG=
+    - IMG=-trusty
+    - IMG=-centos-6
+    - IMG=-centos-7
+
+services:
+  - docker
+
+install:
+  - docker run
+    --name container
+    --detach
+    rvernica/scidb:${SCIDB_VER}${IMG}
+
+script:
+  - docker exec container sh -c
+    "wget -O - https://paradigm4.github.io/extra-scidb-libs/install.sh | sh"
+  - docker exec container sh -c
+    "wget -O - https://paradigm4.github.io/extra-scidb-libs/try.sh | sh"
