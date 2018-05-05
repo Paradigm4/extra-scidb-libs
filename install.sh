@@ -6,6 +6,8 @@
 
 set -o errexit
 
+
+PKG_VER=1
 ARROW_VER=0.9.0-1
 
 
@@ -66,7 +68,7 @@ then
     then
         echo "Step 3. Install extra-scidb-libs"
         yum install --assumeyes \
-            https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-1-1.x86_64.rpm
+            https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-$PKG_VER-1.x86_64.rpm
     fi
 else
     # Debian/Ubuntu
@@ -93,8 +95,8 @@ APT_LINE
     if [ "$1" != "--only-prereq" ]
     then
         echo "Step 3. Install extra-scidb-libs"
-        wget --output-document /tmp/extra-scidb-libs-18.1-1.deb \
-            https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-1.deb
-        dpkg --install /tmp/extra-scidb-libs-18.1-1.deb
+        wget --output-document /tmp/extra-scidb-libs-18.1-$PKG_VER.deb \
+            https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-$PKG_VER.deb
+        dpkg --install /tmp/extra-scidb-libs-18.1-$PKG_VER.deb
     fi
 fi
