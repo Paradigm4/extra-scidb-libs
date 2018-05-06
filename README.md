@@ -68,12 +68,13 @@ looks like:
 
 ```bash
 # The following array should contain tuples of the repo name and the branch to get.
-declare -a libs=("superfunpack" "master"
-                 "grouped_aggregate" "master"
-                 "accelerated_io_tools" "master"
-                 "equi_join" "master"
-                 "shim" "master"
-                )
+declare -a libs=(
+    "accelerated_io_tools" "master"
+    "equi_join"            "master"
+    "grouped_aggregate"    "master"
+    "shim"                 "master"
+    "superfunpack"         "master"
+)
 ```
 
 To add a new plugin, e.g. foobar, just add it and the attendant branch
@@ -81,14 +82,21 @@ you would like to use so the array look like this:
 
 ```bash
 # The following array should contain tuples of the repo name and the branch to get.
-declare -a libs=("superfunpack" "master"
-                 "grouped_aggregate" "master"
-                 "accelerated_io_tools" "master"
-                 "equi_join" "master"
-                 "shim" "master"
-                 "foobar" "my_dev_branch" # <-- NEW PLUGIN
-                )
+declare -a libs=(
+    "accelerated_io_tools" "master"
+    "equi_join"            "master"
+    "grouped_aggregate"    "master"
+    "shim"                 "master"
+    "superfunpack"         "master"
+    "foobar"               "my_dev_branch" # <-- NEW PLUGIN
+)
 ```
+
+Moreover, edit the `%install` section of the
+`specs/extra-scidb-libs.spec` file to:
+
+1. Copy the `.so` file of the new plugin to `buildroot`.
+1. Add the `.so` file to `files.lst`.
 
 This should work for any plugin that builds a `.so` and wants it
 copied to `$SCIDB_INSTALL_PATH/lib/scidb/plugins`.  For more
