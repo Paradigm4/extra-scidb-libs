@@ -87,12 +87,14 @@ rm -rf $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
 mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=18.1}-$PKG_VER
 
 # The following array should contain tuples of the repo name and the branch to get.
-declare -a libs=("superfunpack"         "remove-pcre-flag"
-                 "grouped_aggregate"    "rel18.1.1"
-                 "accelerated_io_tools" "master"
-                 "equi_join"            "rel18.1.1"
-                 "shim"                 "rel18.1.1"
-                )
+declare -a libs=(
+    "accelerated_io_tools" "master"
+    "equi_join"            "rel18.1.1"
+    "grouped_aggregate"    "rel18.1.1"
+    "shim"                 "rel18.1.1"
+    "stream"               "master"
+    "superfunpack"         "remove-pcre-flag"
+)
 
 downloadLibs "${libs[@]}"
 

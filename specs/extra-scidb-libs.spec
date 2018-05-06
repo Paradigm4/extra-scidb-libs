@@ -34,11 +34,11 @@ make SCIDB=%{_scidb_install_path} %{?_smp_mflags}
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
-cp superfunpack/src/libsuperfunpack.so %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
-cp grouped_aggregate/libgrouped_aggregate.so %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 cp accelerated_io_tools/libaccelerated_io_tools.so %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
-cp equi_join/libequi_join.so %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
-#cp stream/libstream.so %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
+cp equi_join/libequi_join.so                       %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
+cp grouped_aggregate/libgrouped_aggregate.so       %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
+cp stream/libstream.so                             %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
+cp superfunpack/src/libsuperfunpack.so             %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 
 mkdir -p %{buildroot}%{_scidb_install_path}/bin
 cp shim/shim "%{buildroot}/%{_scidb_install_path}/bin"
@@ -54,11 +54,11 @@ chmod 0755 %{buildroot}/etc/init.d/shimsvc
 mkdir -p %{buildroot}/var/lib/shim
 cp shim/conf %{buildroot}/var/lib/shim/conf
 
-echo %{_scidb_install_path}/lib/scidb/plugins/libsuperfunpack.so > files.lst
-echo %{_scidb_install_path}/lib/scidb/plugins/libgrouped_aggregate.so >> files.lst
-echo %{_scidb_install_path}/lib/scidb/plugins/libaccelerated_io_tools.so >> files.lst
-echo %{_scidb_install_path}/lib/scidb/plugins/libequi_join.so >> files.lst
-#echo %{_scidb_install_path}/lib/scidb/plugins/libstream.so >> files.lst
+echo %{_scidb_install_path}/lib/scidb/plugins/libaccelerated_io_tools.so >  files.lst
+echo %{_scidb_install_path}/lib/scidb/plugins/libequi_join.so            >> files.lst
+echo %{_scidb_install_path}/lib/scidb/plugins/libgrouped_aggregate.so    >> files.lst
+echo %{_scidb_install_path}/lib/scidb/plugins/libstream.so               >> files.lst
+echo %{_scidb_install_path}/lib/scidb/plugins/libsuperfunpack.so         >> files.lst
 echo %{_scidb_install_path}/bin/shim >> files.lst
 echo /var/lib/shim/wwwroot >> files.lst
 echo /usr/local/share/man/man1/shim.1 >> files.lst
