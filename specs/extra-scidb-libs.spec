@@ -22,7 +22,7 @@ Requires(post): info
 Requires(preun): info
 
 %description
-The Paradigm4 github repository has several prototype operators and functions for SciDB: equi_join, grouped aggregate, accelerated I/O tools, superfunpack, stream and shim.  The package contains the latest version for the current SciDB version.
+Extra SciDB libraries submitted to our Paradigm4 github repository.
 
 %prep
 
