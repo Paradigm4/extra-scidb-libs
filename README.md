@@ -118,6 +118,7 @@ publish them:
 
 1. Edit the `install.sh` file and update the `PKG_VER=` line. Commit
    the change in the `master` branch.
+1. Create a new Release on GitHub.com
 1. Copy the `install.sh` file to the `gh-pages` branch.
 1. Copy the `.rpm` and `.deb` files to the `gh-pages` branch.
 1. Update the `README.md` in the `gh-pages` branch to list the new packages.
