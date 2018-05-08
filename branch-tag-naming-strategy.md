@@ -14,7 +14,7 @@ The main takeaway is that
 - **Branches**: Versions of plugins that work on old SciDB versions should branch off at `vXX.Y` (e.g. `v15.7`, `v15.12`). 
 - **Master branch**: The version of plugin that works on latest version of SciDB (and where active development happens) is 
 at `master`. 
-    + So while SciDB is current at `18.1`, there is no `v18.1` branch for any plugin.
+    + Note that while SciDB is current at `18.1`, there is no `v18.1` branch for any plugin.
 - **Release tags**: Now plugins must be shipped to customer for old or current versions of SciDB. 
     + Proposal is to create `vXX.Y.Z` (where `XX.Y` is the scidb version, and `Z` is the minor releases numbered `1, 2, ...`). 
 - **Use of tags for extra-scidb-libs**: Only tags should be used for building `extra-scidb-libs` 
