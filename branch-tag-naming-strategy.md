@@ -7,7 +7,7 @@ The following is a proposal for branch and tag naming strategy for Paradigm4 plu
 The main takeaway is that 
 
 - branches evolve e.g. `master` and `v16.9`
-- Tags are fixed points on the time-line of a branch e.g. "v18.1.1", "v16.9.1", etc.
+- Tags are fixed points on the time-line of a branch e.g. `v18.1.1`, `v16.9.1`, etc.
 
 ## Details
 
