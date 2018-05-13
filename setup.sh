@@ -60,26 +60,26 @@ then
     cat <<EOF | tee /etc/yum.repos.d/scidb.repo
 [scidb]
 name=SciDB repository
-baseurl=https://downloads.paradigm4.com/community/18.1/centos6.3
+baseurl=https://downloads.paradigm4.com/community/$SCIDB_VER/centos6.3
 gpgkey=https://downloads.paradigm4.com/key
 gpgcheck=1
 enabled=1
 EOF
 
     echo "Step 2. Install prerequisites"
-    for pkg in arrow-devel-$ARROW_VER.el6 \
-               devtoolset-3-runtime       \
-               devtoolset-3-toolchain     \
-               gcc                        \
-               git                        \
-               libpqxx-devel              \
-               log4cxx-devel              \
-               pcre-devel                 \
-               protobuf-devel-2.4.1       \
-               rpm-build                  \
-               rpmdevtools                \
-               scidb-18.1-dev             \
-               scidb-18.1-libboost-devel  \
+    for pkg in arrow-devel-$ARROW_VER.el6       \
+               devtoolset-3-runtime             \
+               devtoolset-3-toolchain           \
+               gcc                              \
+               git                              \
+               libpqxx-devel                    \
+               log4cxx-devel                    \
+               pcre-devel                       \
+               protobuf-devel-2.4.1             \
+               rpm-build                        \
+               rpmdevtools                      \
+               scidb-$SCIDB_VER-dev             \
+               scidb-$SCIDB_VER-libboost-devel  \
                zlib-devel
     do
         yum install --assumeyes $pkg
@@ -113,7 +113,7 @@ APT_LINE
     fi
 
     cat <<APT_LINE | tee /etc/apt/sources.list.d/scidb.list
-deb https://downloads.paradigm4.com/ community/18.1/ubuntu14.04/
+deb https://downloads.paradigm4.com/ community/$SCIDB_VER/ubuntu14.04/
 APT_LINE
      apt-key adv --fetch-keys https://downloads.paradigm4.com/key
 
@@ -124,21 +124,21 @@ APT_LINE
 
     echo "Step 2. Install prerequisites"
     apt-get update
-    apt-get install                             \
-        --assume-yes                            \
-        --no-install-recommends                 \
-        g++                                     \
-        git                                     \
-        liblog4cxx10-dev                        \
-        libarrow-dev=$ARROW_VER                 \
-        libpcre3-dev                            \
-        libpqxx-dev                             \
-        libprotobuf-dev                         \
-        m4                                      \
-        make                                    \
-        scidb-18.1-dev                          \
-        scidb-18.1-libboost1.54-dev             \
-        scidb-18.1-libboost-system1.54-dev
+    apt-get install                                     \
+        --assume-yes                                    \
+        --no-install-recommends                         \
+        g++                                             \
+        git                                             \
+        libarrow-dev=$ARROW_VER                         \
+        liblog4cxx10-dev                                \
+        libpcre3-dev                                    \
+        libpqxx-dev                                     \
+        libprotobuf-dev                                 \
+        m4                                              \
+        make                                            \
+        scidb-$SCIDB_VER-dev                            \
+        scidb-$SCIDB_VER-libboost-system1.54-dev        \
+        scidb-$SCIDB_VER-libboost1.54-dev
 
     if [ "$dist" = "Ubuntu" ]
     then
