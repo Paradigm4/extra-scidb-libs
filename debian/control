@@ -2,7 +2,7 @@ Package: extra-scidb-libs-VERSION
 Source: extra-scidb-libs VERSION
 Maintainer: Paradigm4 <info@paradigm4.com>
 Architecture: all
-Version: 2
+Version: 3
 Depends: scidb-VERSION | paradigm4-VERSION
 Description: Extra SciDB Libraries
  Extra SciDB libraries submitted to our Paradigm4 github repository.

@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-18.1
-Version:        2
+Version:        3
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -85,7 +85,18 @@ if test -f /etc/init.d/shimsvc; then /etc/init.d/shimsvc stop; rm -f /etc/init.d
 %doc
 
 %changelog
+
+* Sun May 13 2018 Rares Vernica <rvernica@gmail.com>
+- Fix empty SciDB version in shim (Closes: #15)
+
+* Tue May 8 2018 Rares Vernica <rvernica@gmail.com>
+- Add stream plugin with Apache Arrow
+- Update accelerated_io_tools to include Apache Arrow
+- Fix requirements
+- Fix shim configuration and start
+
 * Fri Apr 13 2018 Jason Kinchen <jkinchen@paradigm4.com>
 - Support for 18.1.7
-* Tue Sep 26 2017 Jason Kinchen <jkinchen@paradigm4.com> 18.1-1
+
+* Tue Sep 26 2017 Jason Kinchen <jkinchen@paradigm4.com>
 - Initial version of the package

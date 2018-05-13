@@ -13,7 +13,7 @@ python:
 env:
   global:
     - SCIDB_VER=18.1
-    - PKG_VER=2
+    - PKG_VER=3
   matrix:
     - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=           TARGET=deb
     - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=-trusty    TARGET=deb

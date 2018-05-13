@@ -1,5 +1,26 @@
-extra-scidb-libs-VERSION
+extra-scidb-libs-18.1 (3)
 
-  - Initial build.
+ * Fix empty SciDB version in shim (Closes: #15)
 
- -- USERINFO
+-- Rares Vernica <rvernica@gmail.com>  Sun, 13 May 2018 11:00:00 -0700
+
+extra-scidb-libs-18.1 (2)
+
+ * Add stream plugin with Apache Arrow
+ * Update accelerated_io_tools to include Apache Arrow
+ * Fix requirements
+ * Fix shim configuration and start
+
+-- Rares Vernica <rvernica@gmail.com>  Tue, 8 May 2018 00:00:00 +0000
+
+extra-scidb-libs-18.1 (1)
+
+ * Support for 18.1.7
+
+-- Jason Kinchen <jkinchen@paradigm4.com>  Fri, 13 Apr 2018 00:00:00 +0000
+
+extra-scidb-libs-18.1 (0)
+
+ * Initial version of the package
+
+-- Jason Kinchen <jkinchen@paradigm4.com>  Mon, 5 Mar 2018 00:00:00 +0000
