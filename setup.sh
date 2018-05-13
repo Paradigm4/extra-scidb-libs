@@ -53,6 +53,9 @@ then
 
     yum install --assumeyes centos-release-scl
 
+    yum install --assumeyes \
+        https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-3.noarch.rpm
+
     yum install --assumeyes wget
     wget --output-document /etc/yum.repos.d/bintray-rvernica-rpm.repo \
          https://bintray.com/rvernica/rpm/rpm
@@ -78,6 +81,7 @@ EOF
                protobuf-devel-2.4.1             \
                rpm-build                        \
                rpmdevtools                      \
+               scidb-$SCIDB_VER                 \
                scidb-$SCIDB_VER-dev             \
                scidb-$SCIDB_VER-libboost-devel  \
                zlib-devel
@@ -136,6 +140,7 @@ APT_LINE
         libprotobuf-dev                                 \
         m4                                              \
         make                                            \
+        scidb-$SCIDB_VER                                \
         scidb-$SCIDB_VER-dev                            \
         scidb-$SCIDB_VER-libboost-system1.54-dev        \
         scidb-$SCIDB_VER-libboost1.54-dev
