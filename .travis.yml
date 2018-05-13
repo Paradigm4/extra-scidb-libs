@@ -59,4 +59,5 @@ after_script:
       docker exec deploy dpkg --install
         /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb;
     fi
+  - docker exec deploy sh /this/try.sh
   - docker stop deploy
