@@ -67,28 +67,28 @@ To specify the plugins included in the package, edit the
 looks like:
 
 ```bash
-# The following array should contain tuples of the repo name and the branch to get.
+# The following array should contain tuples of the repo name and the tag to get.
 declare -a libs=(
-    "accelerated_io_tools" "master"
-    "equi_join"            "master"
-    "grouped_aggregate"    "master"
-    "shim"                 "master"
-    "superfunpack"         "master"
+    "accelerated_io_tools" "v18.1.0"
+    "equi_join"            "v18.1.0"
+    "grouped_aggregate"    "v18.1.0"
+    "shim"                 "v18.1.0"
+    "superfunpack"         "v18.1.0"
 )
 ```
 
-To add a new plugin, e.g. foobar, just add it and the attendant branch
+To add a new plugin, e.g. foobar, just add it and the attendant tag
 you would like to use so the array look like this:
 
 ```bash
-# The following array should contain tuples of the repo name and the branch to get.
+# The following array should contain tuples of the repo name and the tag to get.
 declare -a libs=(
-    "accelerated_io_tools" "master"
-    "equi_join"            "master"
-    "grouped_aggregate"    "master"
-    "shim"                 "master"
-    "superfunpack"         "master"
-    "foobar"               "my_dev_branch" # <-- NEW PLUGIN
+    "accelerated_io_tools" "v18.1.0"
+    "equi_join"            "v18.1.0"
+    "grouped_aggregate"    "v18.1.0"
+    "shim"                 "v18.1.0"
+    "superfunpack"         "v18.1.0"
+    "foobar"               "foobar_tag" # <-- NEW PLUGIN
 )
 ```
 
@@ -106,6 +106,15 @@ file, and `control` file.  appropriately. Finally, add a
 `load_library` command to the `try.sh` script in order for Travis to
 try to load the plugin once the `extra-scidb-libs` package is
 installed.
+
+# Update Plug-in
+
+To update one of the included plugins do the following:
+
+1. Create a tag in the pugin repository. Bump the plugin tag version 
+   accordingly.
+1. Update `extra-scidb-libs.sh` and use the new tag.
+1. Bump package version (see next)
 
 # Bump Version
 
