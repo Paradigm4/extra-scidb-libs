@@ -7,7 +7,7 @@
 set -o errexit
 
 
-PKG_VER=2
+PKG_VER=3
 ARROW_VER=0.9.0-1
 
 
