@@ -1,3 +1,12 @@
+# Tools Included
+
+- [accelerated_io_tools](https://github.com/Paradigm4/accelerated_io_tools)
+- [equi_join](https://github.com/Paradigm4/equi_join)
+- [grouped_aggregate](https://github.com/Paradigm4/grouped_aggregate)
+- [shim](https://github.com/Paradigm4/shim)
+- [stream](https://github.com/Paradigm4/stream)
+- [superfunpack](https://github.com/Paradigm4/superfunpack)
+
 # Install Script
 
 * [install.sh](install.sh)
