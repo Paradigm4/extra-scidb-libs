@@ -11,6 +11,7 @@ Currently, the following tools are included:
 - [equi_join](https://github.com/Paradigm4/equi_join)
 - [grouped_aggregate](https://github.com/Paradigm4/grouped_aggregate)
 - [shim](https://github.com/Paradigm4/shim)
+- [stream](https://github.com/Paradigm4/stream)
 - [superfunpack](https://github.com/Paradigm4/superfunpack)
 
 # Build
@@ -71,9 +72,6 @@ looks like:
 declare -a libs=(
     "accelerated_io_tools" "v18.1.0"
     "equi_join"            "v18.1.0"
-    "grouped_aggregate"    "v18.1.0"
-    "shim"                 "v18.1.0"
-    "superfunpack"         "v18.1.0"
 )
 ```
 
@@ -85,9 +83,6 @@ you would like to use so the array look like this:
 declare -a libs=(
     "accelerated_io_tools" "v18.1.0"
     "equi_join"            "v18.1.0"
-    "grouped_aggregate"    "v18.1.0"
-    "shim"                 "v18.1.0"
-    "superfunpack"         "v18.1.0"
     "foobar"               "foobar_tag" # <-- NEW PLUGIN
 )
 ```
@@ -106,6 +101,9 @@ file, and `control` file.  appropriately. Finally, add a
 `load_library` command to the `try.sh` script in order for Travis to
 try to load the plugin once the `extra-scidb-libs` package is
 installed.
+
+Make sure to also add the new plugin to the list of tools included in 
+the `README.md` file on the `master` and `gh-pages` branches.
 
 # Update Plug-in
 
