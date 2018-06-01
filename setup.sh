@@ -56,16 +56,18 @@ then
     yum install --assumeyes \
         https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-3.noarch.rpm
 
-    yum install --assumeyes wget
-    wget --output-document /etc/yum.repos.d/bintray-rvernica-rpm.repo \
-         https://bintray.com/rvernica/rpm/rpm
-
     cat <<EOF | tee /etc/yum.repos.d/scidb.repo
 [scidb]
 name=SciDB repository
 baseurl=https://downloads.paradigm4.com/community/$SCIDB_VER/centos6.3
 gpgkey=https://downloads.paradigm4.com/key
 gpgcheck=1
+enabled=1
+
+[scidb-extra]
+name=SciDB extra libs repository
+baseurl=https://downloads.paradigm4.com/extra/$SCIDB_VER/centos6.3
+gpgcheck=0
 enabled=1
 EOF
 
@@ -118,13 +120,9 @@ APT_LINE
 
     cat <<APT_LINE | tee /etc/apt/sources.list.d/scidb.list
 deb https://downloads.paradigm4.com/ community/$SCIDB_VER/ubuntu14.04/
+deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu14.04/
 APT_LINE
      apt-key adv --fetch-keys https://downloads.paradigm4.com/key
-
-    cat <<APT_LINE | tee /etc/apt/sources.list.d/bintray-rvernica.list
-deb https://dl.bintray.com/rvernica/deb trusty universe
-APT_LINE
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv 46BD98A354BA5235
 
     echo "Step 2. Install prerequisites"
     apt-get update
