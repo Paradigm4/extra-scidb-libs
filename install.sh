@@ -57,9 +57,13 @@ then
     || yum install --assumeyes \
         https://dl.fedoraproject.org/pub/epel/epel-release-latest-$rel.noarch.rpm
 
-    yum install --assumeyes wget
-    wget --output-document /etc/yum.repos.d/bintray-rvernica-rpm.repo \
-         https://bintray.com/rvernica/rpm/rpm
+    cat <<EOF | tee /etc/yum.repos.d/scidb-extra.repo
+[scidb-extra]
+name=SciDB extra libs repository
+baseurl=https://downloads.paradigm4.com/extra/$SCIDB_VER/centos6.3
+gpgcheck=0
+enabled=1
+EOF
 
     echo "Step 2. Install prerequisites"
     yum install --assumeyes arrow-devel-$ARROW_VER.el6
@@ -83,10 +87,9 @@ else
         gnupg-curl                              \
         wget
 
-    cat <<APT_LINE | tee /etc/apt/sources.list.d/bintray-rvernica.list
-deb https://dl.bintray.com/rvernica/deb trusty universe
+    cat <<APT_LINE | tee /etc/apt/sources.list.d/scidb-extra.list
+deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu14.04/
 APT_LINE
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv 46BD98A354BA5235
 
     echo "Step 2. Install prerequisites"
     apt-get update
