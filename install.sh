@@ -65,14 +65,21 @@ gpgcheck=0
 enabled=1
 EOF
 
-    echo "Step 2. Install prerequisites"
-    yum install --assumeyes arrow-devel-$ARROW_VER.el6
-
-    if [ "$1" != "--only-prereq" ]
+    if [ "$1" = "--only-prereq" ]
     then
-        echo "Step 3. Install extra-scidb-libs"
-        yum install --assumeyes \
-            https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-$PKG_VER-1.x86_64.rpm
+        echo "Step 2. Install prerequisites"
+        yum install --assumeyes arrow-devel-$ARROW_VER.el6
+    else
+        echo "Step 2. Install extra-scidb-libs"
+        if [ "$1" = "--github" ]
+        then
+            yum install --assumeyes \
+                https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-$SCIDB_VER-$PKG_VER-1.x86_64.rpm
+        else
+            # Default installation
+            yum install --assumeyes \
+                extra-scidb-libs-$SCIDB_VER-$PKG_VER-1.x86_64
+        fi
     fi
 else
     # Debian/Ubuntu
@@ -84,22 +91,37 @@ else
         --no-install-recommends                 \
         apt-transport-https                     \
         ca-certificates                         \
-        gnupg-curl                              \
-        wget
+        gnupg-curl
 
     cat <<APT_LINE | tee /etc/apt/sources.list.d/scidb-extra.list
 deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu14.04/
 APT_LINE
-
-    echo "Step 2. Install prerequisites"
     apt-get update
-    apt-get install --assume-yes --no-install-recommends libarrow-dev=$ARROW_VER
 
-    if [ "$1" != "--only-prereq" ]
+    if [ "$1" = "--only-prereq" ]
     then
-        echo "Step 3. Install extra-scidb-libs"
-        wget --output-document /tmp/extra-scidb-libs-18.1-$PKG_VER.deb \
-            https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-18.1-$PKG_VER.deb
-        dpkg --install /tmp/extra-scidb-libs-18.1-$PKG_VER.deb
+        echo "Step 2. Install prerequisites"
+        apt-get install                         \
+            --assume-yes                        \
+            --no-install-recommends             \
+            libarrow-dev=$ARROW_VER
+    else
+        echo "Step 2. Install extra-scidb-libs"
+        if [ "$1" = "--github" ]
+        then
+            apt-get install                     \
+                    --assume-yes                \
+                    --no-install-recommends     \
+                    wget
+            wget --output-document /tmp/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb \
+                 https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb
+            dpkg --install /tmp/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb
+        else
+            # Default installation
+            apt-get install                                     \
+                --assume-yes                                    \
+                --no-install-recommends                         \
+                extra-scidb-libs-$SCIDB_VER=$PKG_VER
+        fi
     fi
 fi
