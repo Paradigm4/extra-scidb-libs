@@ -103,6 +103,7 @@ APT_LINE
             apt-get install                     \
                     --assume-yes                \
                     --no-install-recommends     \
+                    libarrow0                   \
                     wget
             wget --output-document /tmp/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb \
                  https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb
