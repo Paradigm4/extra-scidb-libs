@@ -13,10 +13,14 @@ python:
 env:
   global: SCIDB_VER=18.1
   matrix:
-    - IMG=
-    - IMG=-trusty
-    - IMG=-centos-6
-    - IMG=-centos-7
+    - IMG=          INSTALL=
+    - IMG=          INSTALL=--github
+    - IMG=-trusty   INSTALL=
+    - IMG=-trusty   INSTALL=--github
+    - IMG=-centos-6 INSTALL=
+    - IMG=-centos-6 INSTALL=--github
+    - IMG=-centos-7 INSTALL=
+    - IMG=-centos-7 INSTALL=--github
 
 services:
   - docker
@@ -29,6 +33,6 @@ install:
 
 script:
   - docker exec container sh -c
-    "wget -O - https://paradigm4.github.io/extra-scidb-libs/install.sh | sh"
+    "wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sh -s $INSTALL"
   - docker exec container sh -c
-    "wget -O - https://paradigm4.github.io/extra-scidb-libs/try.sh | sh"
+    "wget -O- https://paradigm4.github.io/extra-scidb-libs/try.sh | sh"

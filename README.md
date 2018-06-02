@@ -13,18 +13,61 @@
 
 Usage:
 ```bash
-wget -O - https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
+wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 ```
+# Manuall Install
 
-# CentOS 6 & 7
+## CentOS 6 & 7
 
+1. Install the Extra Packages for Enterprise Linux (EPEL) repository
+   (see [instructions](https://fedoraproject.org/wiki/EPEL)), if not
+   already installed.
+1. Add the SciDB Extra Libs repository:
+   ```bash
+   > cat <<EOF | sudo tee /etc/yum.repos.d/scidb-extra.repo
+   [scidb-extra]
+   name=SciDB extra libs repository
+   baseurl=https://downloads.paradigm4.com/extra/$SCIDB_VER/centos6.3
+   gpgcheck=0
+   enabled=1
+   EOF
+   ```
+1. Install the `extra-scidb-libs` package:
+   ```bash
+   > sudo yum install extra-scidb-libs-18.1
+   ```
+
+## Ubuntu Trusty
+
+1. Install the `apt-transport-https` package (if not already installed):
+   ```bash
+   > sudo apt-get install apt-transport-https
+   ```
+1. Add the SciDB Extra Libs repository:
+   ```bash
+   > cat <<APT_LINE | sudo tee /etc/apt/sources.list.d/scidb-extra.list
+   deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu14.04/
+   APT_LINE
+   > sudo apt-get update
+   ```
+1. Install the `extra-scidb-libs` package:
+   ```bash
+   > sudo apt-get install extra-scidb-libs-18.1
+   ```
+
+# Download
+
+## CentOS 6 & 7
+
+* [extra-scidb-libs-18.1-4-1.x86_64.rpm](extra-scidb-libs-18.1-4-1.x86_64.rpm) (June 1, 2018)
 * [extra-scidb-libs-18.1-3-1.x86_64.rpm](extra-scidb-libs-18.1-3-1.x86_64.rpm) (May 13, 2018)
 * [extra-scidb-libs-18.1-2-1.x86_64.rpm](extra-scidb-libs-18.1-2-1.x86_64.rpm) (May 8, 2018)
 * [extra-scidb-libs-18.1-1-1.x86_64.rpm](extra-scidb-libs-18.1-1-1.x86_64.rpm) (April 13, 2018)
 * [extra-scidb-libs-18.1-0-1.x86_64.rpm](extra-scidb-libs-18.1-0-1.x86_64.rpm) (March 21, 2018)
 
-# Ubuntu Trusty
+## Ubuntu Trusty
 
+* [extra-scidb-libs-18.1-4.deb](extra-scidb-libs-18.1-4.deb) (June 1, 2018)
 * [extra-scidb-libs-18.1-3.deb](extra-scidb-libs-18.1-3.deb) (May 13, 2018)
 * [extra-scidb-libs-18.1-2.deb](extra-scidb-libs-18.1-2.deb) (May 8, 2018)
 * [extra-scidb-libs-18.1-1.deb](extra-scidb-libs-18.1-1.deb) (April 13, 2018)
@@ -32,6 +75,9 @@ wget -O - https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 # Change Log
 
+* Version `4`
+  * Add dependency to Apache Arrow and OpenSSL
+  * Generate self-signed certificate for Shim
 * Version `3`
   * Fix empty SciDB version in shim (Closes: #15)
 * Version `2`
