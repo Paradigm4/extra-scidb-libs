@@ -17,9 +17,7 @@ Source0:        %{name}/%{name}.tar.gz
 %global __find_requires_orig %{__find_requires}
 %define __find_requires %{_builddir}/find-requires %{__find_requires_orig}
 
-Requires: /opt/scidb/18.1/bin/scidb
-Requires: openssl
-Requires: arrow-libs >= 0.9.0-1
+Requires: /opt/scidb/18.1/bin/scidb, openssl, arrow-libs >= 0.9.0-1
 Requires(post): info
 Requires(preun): info
 
@@ -107,6 +105,17 @@ then
         -keyout /var/lib/shim/ssl_cert.pem                              \
     2> /dev/null                                                        \
     >> /var/lib/shim/ssl_cert.pem
+fi
+
+
+if [ ! -e /var/lib64/libssl.so ]
+then
+   ln --symbolic /usr/lib64/libssl.so.1.0.2k /usr/lib64/libssl.so
+fi
+
+if [ ! -e /usr/lib64/libcrypto.so ]
+then
+   ln --symbolic /usr/lib64/libcrypto.so.1.0.2k /usr/lib64/libcrypto.so
 fi
 
 
