@@ -33,6 +33,8 @@ install:
 
 script:
   - docker exec container sh -c
-    "wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sh -s $INSTALL"
+    "wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh
+     |  sh -s -- $INSTALL"
   - docker exec container sh -c
-    "wget -O- https://paradigm4.github.io/extra-scidb-libs/try.sh | sh"
+    "wget -O- https://paradigm4.github.io/extra-scidb-libs/try.sh
+     |  sh"
