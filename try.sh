@@ -8,5 +8,9 @@ iquery --afl --query "load_library('grouped_aggregate')"
 iquery --afl --query "load_library('stream')"
 iquery --afl --query "load_library('superfunpack')"
 
-echo "SciDB version in shim..."
+echo "SciDB version in Shim..."
 shim -version | grep "SciDB Version: $SCIDB_VER"
+
+echo "HTTPS in Shim..."
+wget --quiet --no-check-certificate --output-document=- \
+    https://localhost:8083/version

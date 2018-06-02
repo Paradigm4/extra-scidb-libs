@@ -65,11 +65,8 @@ gpgcheck=0
 enabled=1
 EOF
 
-    if [ "$1" = "--only-prereq" ]
+    if [ "$1" != "--only-prereq" ]
     then
-        echo "Step 2. Install prerequisites"
-        yum install --assumeyes arrow-devel-$ARROW_VER.el6
-    else
         echo "Step 2. Install extra-scidb-libs"
         if [ "$1" = "--github" ]
         then
@@ -98,14 +95,8 @@ deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu14.04/
 APT_LINE
     apt-get update
 
-    if [ "$1" = "--only-prereq" ]
+    if [ "$1" != "--only-prereq" ]
     then
-        echo "Step 2. Install prerequisites"
-        apt-get install                         \
-            --assume-yes                        \
-            --no-install-recommends             \
-            libarrow-dev=$ARROW_VER
-    else
         echo "Step 2. Install extra-scidb-libs"
         if [ "$1" = "--github" ]
         then

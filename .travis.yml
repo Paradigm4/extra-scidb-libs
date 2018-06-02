@@ -13,7 +13,7 @@ python:
 env:
   global:
     - SCIDB_VER=18.1
-    - PKG_VER=3
+    - PKG_VER=4
   matrix:
     - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=           TARGET=deb
     - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=-trusty    TARGET=deb
@@ -55,6 +55,10 @@ script:
       docker exec deploy yum install --assumeyes
         /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER-1.x86_64.rpm;
     else
+      docker exec deploy apt-get install
+        --assume-yes
+        --no-install-recommends
+        libarrow0;
       docker exec deploy dpkg --install
         /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb;
     fi

@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-18.1
-Version:        3
+Version:        4
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -18,6 +18,8 @@ Source0:        %{name}/%{name}.tar.gz
 %define __find_requires %{_builddir}/find-requires %{__find_requires_orig}
 
 Requires: /opt/scidb/18.1/bin/scidb
+Requires: openssl
+Requires: arrow-libs >= 0.9.0-1
 Requires(post): info
 Requires(preun): info
 
@@ -67,16 +69,57 @@ echo /etc/init.d/shimsvc >> files.lst
 
 
 %post
-if test -z "$SCIDB_INSTALL_PATH"; then export SCIDB_INSTALL_PATH=/opt/scidb/18.1; fi
-if test -x /etc/init.d/shimsvc; then /etc/init.d/shimsvc stop;fi
-scidbuser=`ps axfo user:64,cmd | grep scidb | grep dbname | head -n 1 | cut -d ' ' -f 1`
-sed -i "s/LOGNAME/$scidbuser/" /var/lib/shim/conf
-basepath=$(cat $SCIDB_INSTALL_PATH/etc/config.ini | grep base-path | cut -d= -f2)
+if [ -x /etc/init.d/shimsvc ]
+then
+    /etc/init.d/shimsvc stop
+fi
+
+if [ -z "$SCIDB_INSTALL_PATH" ]
+then
+    export SCIDB_INSTALL_PATH=/opt/scidb/18.1
+fi
+
+
+scidbuser=$(                                    \
+    ps axfo user:64,cmd                         \
+    |  grep scidb                               \
+    |  grep dbname                              \
+    |  head -n 1                                \
+    |  cut -d ' ' -f 1)
+basepath=$(                                     \
+    cat $SCIDB_INSTALL_PATH/etc/config.ini      \
+    | grep base-path                            \
+    | cut -d = -f 2)
+
+sed -i "s/LOGNAME/$scidbuser/"                        /var/lib/shim/conf
 sed -i "s:\[INSTANCE_0_DATA_DIR\]:$basepath/0/0/tmp:" /var/lib/shim/conf
-if test -f /etc/init.d/shimsvc; then /etc/init.d/shimsvc start;fi
+
+
+if [ ! -f /var/lib/shim/ssl_cert.pem ]
+then
+    openssl req                                                         \
+        -new                                                            \
+        -newkey rsa:4096                                                \
+        -days 3650                                                      \
+        -nodes                                                          \
+        -x509                                                           \
+        -subj "/C=US/ST=MA/L=Waltham/O=Paradigm4/CN=$(hostname)"        \
+        -keyout /var/lib/shim/ssl_cert.pem                              \
+    2> /dev/null                                                        \
+    >> /var/lib/shim/ssl_cert.pem
+fi
+
+
+if [ -x /etc/init.d/shimsvc ]
+then
+    /etc/init.d/shimsvc start
+fi
 
 %preun
-if test -f /etc/init.d/shimsvc; then /etc/init.d/shimsvc stop; rm -f /etc/init.d/shimsvc;fi
+if [ -x /etc/init.d/shimsvc ]
+then
+    /etc/init.d/shimsvc stop
+fi
 
 %files -f files.lst
 
@@ -85,6 +128,10 @@ if test -f /etc/init.d/shimsvc; then /etc/init.d/shimsvc stop; rm -f /etc/init.d
 %doc
 
 %changelog
+
+* Fri Jun 1 2018 Rares Vernica <rvernica@gmail.com>
+- Add dependency to Apache Arrow and OpenSSL
+- Generate self-signed certificate for Shim
 
 * Sun May 13 2018 Rares Vernica <rvernica@gmail.com>
 - Fix empty SciDB version in shim (Closes: #15)

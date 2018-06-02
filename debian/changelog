@@ -1,3 +1,10 @@
+extra-scidb-libs-18.1 (4)
+
+ * Add dependency to Apache Arrow and OpenSSL
+ * Generate self-signed certificate for Shim
+
+-- Rares Vernica <rvernica@gmail.com>  Thu, 1 June 2018 21:00:00 -0700
+
 extra-scidb-libs-18.1 (3)
 
  * Fix empty SciDB version in shim (Closes: #15)
