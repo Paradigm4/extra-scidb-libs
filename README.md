@@ -59,6 +59,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ## CentOS 6 & 7
 
+* [extra-scidb-libs-18.1-5-1.x86_64.rpm](extra-scidb-libs-18.1-5-1.x86_64.rpm) (August 5, 2018)
 * [extra-scidb-libs-18.1-4-1.x86_64.rpm](extra-scidb-libs-18.1-4-1.x86_64.rpm) (June 1, 2018)
 * [extra-scidb-libs-18.1-3-1.x86_64.rpm](extra-scidb-libs-18.1-3-1.x86_64.rpm) (May 13, 2018)
 * [extra-scidb-libs-18.1-2-1.x86_64.rpm](extra-scidb-libs-18.1-2-1.x86_64.rpm) (May 8, 2018)
@@ -67,6 +68,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ## Ubuntu Trusty
 
+* [extra-scidb-libs-18.1-5.deb](extra-scidb-libs-18.1-5.deb) (August 5, 2018)
 * [extra-scidb-libs-18.1-4.deb](extra-scidb-libs-18.1-4.deb) (June 1, 2018)
 * [extra-scidb-libs-18.1-3.deb](extra-scidb-libs-18.1-3.deb) (May 13, 2018)
 * [extra-scidb-libs-18.1-2.deb](extra-scidb-libs-18.1-2.deb) (May 8, 2018)
@@ -75,6 +77,9 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 # Change Log
 
+* Version `5`
+  * `accelerated_io_tools` with `atts_only` support
+  * `shim` with `admin` and `atts_only` support
 * Version `4`
   * Add dependency to Apache Arrow and OpenSSL
   * Generate self-signed certificate for Shim
