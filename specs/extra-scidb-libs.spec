@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-18.1
-Version:        4
+Version:        5
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -137,6 +137,10 @@ fi
 %doc
 
 %changelog
+
+* Sun Aug 5 2018 Rares Vernica <rvernica@gmail.com>
+- accelerated_io_tools with atts_only support
+- Shim with admin and atts_only support
 
 * Fri Jun 1 2018 Rares Vernica <rvernica@gmail.com>
 - Add dependency to Apache Arrow and OpenSSL
