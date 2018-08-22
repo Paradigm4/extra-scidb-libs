@@ -51,7 +51,8 @@ then
     || yum install --assumeyes \
         https://dl.fedoraproject.org/pub/epel/epel-release-latest-$rel.noarch.rpm
 
-    yum install --assumeyes centos-release-scl
+    yum install --assumeyes    \
+        https://downloads.paradigm4.com/devtoolset-3/centos/6/sclo/x86_64/rh/devtoolset-3/scidb-devtoolset-3.noarch.rpm
 
     yum install --assumeyes \
         https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-3.noarch.rpm
@@ -72,42 +73,20 @@ enabled=1
 EOF
 
     echo "Step 2. Install prerequisites"
-
-    url=http://mirror.centos.org/centos/6/sclo/x86_64/rh/devtoolset-3
-    pkg_lst=""
-    for pkg in binutils-2.24-18                 \
-               dwz-0.11-1.1                     \
-               elfutils-0.161-1                 \
-               elfutils-libelf-0.161-1          \
-               elfutils-libs-0.161-1            \
-               gcc-4.9.2-6.2                    \
-               gcc-c++-4.9.2-6.2                \
-               gcc-gfortran-4.9.2-6.2           \
-               gdb-7.8.2-38                     \
-               libquadmath-devel-4.9.2-6.2      \
-               libstdc++-devel-4.9.2-6.2        \
-               ltrace-0.7.91-10                 \
-               memstomp-0.1.5-3                 \
-               runtime-3.1-12                   \
-               strace-4.8-8                     \
-               toolchain-3.1-12
-    do
-        pkg_lst="$pkg_lst $url/devtoolset-3-$pkg.el6.x86_64.rpm"
-    done
-    yum install --assumeyes $pkg_lst
-
-    for pkg in arrow-devel-$ARROW_VER.el6                               \
-               gcc                                                      \
-               git                                                      \
-               libpqxx-devel                                            \
-               log4cxx-devel                                            \
-               pcre-devel                                               \
-               protobuf-devel-2.4.1                                     \
-               rpm-build                                                \
-               rpmdevtools                                              \
-               scidb-$SCIDB_VER                                         \
-               scidb-$SCIDB_VER-dev                                     \
-               scidb-$SCIDB_VER-libboost-devel                          \
+    for pkg in arrow-devel-$ARROW_VER.el6       \
+               devtoolset-3-runtime             \
+               devtoolset-3-toolchain           \
+               gcc                              \
+               git                              \
+               libpqxx-devel                    \
+               log4cxx-devel                    \
+               pcre-devel                       \
+               protobuf-devel-2.4.1             \
+               rpm-build                        \
+               rpmdevtools                      \
+               scidb-$SCIDB_VER                 \
+               scidb-$SCIDB_VER-dev             \
+               scidb-$SCIDB_VER-libboost-devel  \
                zlib-devel
     do
         yum install --assumeyes $pkg
