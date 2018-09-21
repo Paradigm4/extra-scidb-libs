@@ -136,7 +136,7 @@ APT_LINE
         liblog4cxx10-dev                                \
         libpcre3-dev                                    \
         libpqxx-dev                                     \
-        libprotobuf-dev                                 \
+        libprotobuf-dev=2.5.0-9ubuntu1                  \
         m4                                              \
         make                                            \
         scidb-$SCIDB_VER                                \
