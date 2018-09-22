@@ -1,9 +1,17 @@
-extra-scidb-libs-18.1 (4)
+extra-scidb-libs-18.1 (6)
+
+ * superfunpack linked against libpcre
+
+-- Rares Vernica <rvernica@gmail.com>  Fri, 21 Sep 21 2018 19:00:00 -0700
+
+extra-scidb-libs-18.1 (5)
 
  * accelerated_io_tools with atts_only support
  * Shim with admin and atts_only support
 
 -- Rares Vernica <rvernica@gmail.com>  Sun, 5 August 2018 18:00:00 -0700
+
+extra-scidb-libs-18.1 (4)
 
  * Add dependency to Apache Arrow and OpenSSL
  * Generate self-signed certificate for Shim

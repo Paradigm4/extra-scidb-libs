@@ -93,7 +93,7 @@ declare -a libs=(
     "grouped_aggregate"    "v18.1.0"
     "shim"                 "v18.1.2"
     "stream"               "v18.1.0"
-    "superfunpack"         "v18.1.1"
+    "superfunpack"         "v18.1.2"
 )
 
 downloadLibs "${libs[@]}"

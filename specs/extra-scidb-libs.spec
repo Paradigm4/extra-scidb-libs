@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-18.1
-Version:        5
+Version:        6
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -137,6 +137,9 @@ fi
 %doc
 
 %changelog
+
+* Fri Sep 21 2018 Rares Vernica <rvernica@gmail.com>
+- superfunpack linked against libpcre
 
 * Sun Aug 5 2018 Rares Vernica <rvernica@gmail.com>
 - accelerated_io_tools with atts_only support
