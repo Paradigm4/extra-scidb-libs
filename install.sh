@@ -108,12 +108,18 @@ APT_LINE
                     wget
             wget --output-document /tmp/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb \
                  https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb
-            dpkg --install /tmp/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb
+            dpkg                                                \
+                --install                                       \
+                --force-confdef                                 \
+                --force-confold                                 \
+                /tmp/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb
         else
             # Default installation
             apt-get install                                     \
                 --assume-yes                                    \
                 --no-install-recommends                         \
+                --option Dpkg::Options::="--force-confdef"      \
+                --option Dpkg::Options::="--force-confold"      \
                 extra-scidb-libs-$SCIDB_VER=$PKG_VER
         fi
     fi
