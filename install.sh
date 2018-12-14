@@ -66,6 +66,9 @@ gpgcheck=0
 enabled=1
 EOF
 
+    yum install --assumeyes \
+        https://dl.bintray.com/rvernica/rpm/arrow-libs-$ARROW_VER.el6.x86_64.rpm
+
     if [ "$1" != "--only-prereq" ]
     then
         echo "Step 2. Install extra-scidb-libs"

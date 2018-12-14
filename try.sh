@@ -16,6 +16,7 @@ shim -version | grep "SciDB Version: $SCIDB_VER"
 echo "HTTPS in Shim..."
 wget --quiet --no-check-certificate --output-document=- \
     https://localhost:8083/version
+echo
 
 echo "regex()..."
 $QUERY "filter(list('operators'), regex(name,'(.*)q(.*)'));"
