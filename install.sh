@@ -66,6 +66,11 @@ gpgcheck=0
 enabled=1
 EOF
 
+    if [ "$rel" = "7" ]
+    then
+        ln -s /usr/lib64/libpcre.so.1 /usr/lib64/libpcre.so.0
+    fi
+
     yum install --assumeyes \
         https://dl.bintray.com/rvernica/rpm/arrow-libs-$ARROW_VER.el6.x86_64.rpm
 
