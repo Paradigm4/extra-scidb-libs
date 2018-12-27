@@ -1,3 +1,10 @@
+extra-scidb-libs-18.1 (7)
+
+ * accelerated_io_tools with result_size_limit support
+ * Shim with result_size_limit support
+
+-- Rares Vernica <rvernica@gmail.com>  Thu, 27 Dec 21 2018 02:00:00 -0700
+
 extra-scidb-libs-18.1 (6)
 
  * superfunpack linked against libpcre
