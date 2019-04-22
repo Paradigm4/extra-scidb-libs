@@ -91,7 +91,7 @@ declare -a libs=(
     "accelerated_io_tools" "v18.2"
     "equi_join"            "v18.2"
     "grouped_aggregate"    "v18.2"
-    "shim"                 "v18.2"
+    "shim"                 "v19.3"
     "stream"               "v19.3"
     "superfunpack"         "master"
 )
