@@ -7,7 +7,7 @@ fi
 
 if [ -z "$SCIDB_INSTALL_PATH" ]
 then
-    export SCIDB_INSTALL_PATH=/opt/scidb/18.2
+    export SCIDB_INSTALL_PATH=/opt/scidb/19.3
 fi
 
 
