@@ -51,7 +51,7 @@ script:
     $PKG_VER
 
   - if [ "$TARGET" = "deb" ]; then
-      docker exec deply sed --in-place
+      docker exec deploy sed --in-place
         "\#deb http://deb.debian.org/debian jessie-updates main#d"
         /etc/apt/sources.list;
     fi
