@@ -96,6 +96,9 @@ else
     # Debian/Ubuntu
 
     echo "Step 1. Configure prerequisites repositories"
+    sed --in-place                                                  \
+        "\#deb http://deb.debian.org/debian jessie-updates main#d"  \
+        /etc/apt/sources.list
     apt-get update
     apt-get install                             \
         --assume-yes                            \
