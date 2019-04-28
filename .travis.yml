@@ -50,6 +50,11 @@ script:
     /this
     $PKG_VER
 
+  - if [ "$TARGET" = "deb" ]; then
+      docker exec scidb sed --in-place
+        "\#deb http://deb.debian.org/debian jessie-updates main#d"
+        /etc/apt/sources.list
+    fi
   - docker exec deploy sh /this/install.sh --only-prereq
   - if [ "$TARGET" = "rpm" ]; then
       docker exec deploy yum install --assumeyes
