@@ -59,6 +59,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ## CentOS 6 & 7
 
+* [extra-scidb-libs-18.1-8-1.x86_64.rpm](extra-scidb-libs-18.1-8-1.x86_64.rpm) (May 22, 2019)
 * [extra-scidb-libs-18.1-7-1.x86_64.rpm](extra-scidb-libs-18.1-7-1.x86_64.rpm) (December 27, 2018)
 * [extra-scidb-libs-18.1-6-1.x86_64.rpm](extra-scidb-libs-18.1-6-1.x86_64.rpm) (September 21, 2018)
 * [extra-scidb-libs-18.1-5-1.x86_64.rpm](extra-scidb-libs-18.1-5-1.x86_64.rpm) (August 5, 2018)
@@ -70,6 +71,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ## Ubuntu Trusty
 
+* [extra-scidb-libs-18.1-8.deb](extra-scidb-libs-18.1-8.deb) (May 22, 2019)
 * [extra-scidb-libs-18.1-7.deb](extra-scidb-libs-18.1-7.deb) (December 27, 2018)
 * [extra-scidb-libs-18.1-6.deb](extra-scidb-libs-18.1-6.deb) (September 21, 2018)
 * [extra-scidb-libs-18.1-5.deb](extra-scidb-libs-18.1-5.deb) (August 5, 2018)
@@ -81,6 +83,8 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 # Change Log
 
+* Version `8`
+  * `shim` with fix for `save` argument length (`v18.1.4`)
 * Version `7`
   * `accelerated_io_tools` with `result_size_limit` support (`v18.1.3`)
   * `shim` with `result_size_limit` support (`v18.1.3`)
