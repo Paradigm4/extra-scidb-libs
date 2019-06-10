@@ -107,6 +107,13 @@ else
         ca-certificates                         \
         gnupg-curl
 
+    apt-key adv --fetch-keys                                                              \
+        https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+    cat <<APT_LINE | tee /etc/apt/sources.list.d/intel-mkl.list
+deb https://apt.repos.intel.com/mkl all main
+APT_LINE
+    apt-get update
+
     if [ "$dist" = "Debian" ]
     then
         cat <<APT_LINE | tee /etc/apt/sources.list.d/trusty-main.list
