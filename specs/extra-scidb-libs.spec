@@ -1,5 +1,5 @@
-Name:           extra-scidb-libs-18.1
-Version:        8
+Name:           extra-scidb-libs-19.3
+Version:        1
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -17,7 +17,7 @@ Source0:        %{name}/%{name}.tar.gz
 %global __find_requires_orig %{__find_requires}
 %define __find_requires %{_builddir}/find-requires %{__find_requires_orig}
 
-Requires: /opt/scidb/18.1/bin/scidb, openssl, arrow-libs >= 0.9.0-1
+Requires: /opt/scidb/19.3/bin/scidb, openssl, arrow-libs >= 0.9.0-1
 Requires(post): info
 Requires(preun): info
 
@@ -74,7 +74,7 @@ fi
 
 if [ -z "$SCIDB_INSTALL_PATH" ]
 then
-    export SCIDB_INSTALL_PATH=/opt/scidb/18.1
+    export SCIDB_INSTALL_PATH=/opt/scidb/19.3
 fi
 
 

@@ -7,8 +7,8 @@
 set -o errexit
 
 
-SCIDB_VER=18.1
-PKG_VER=8
+SCIDB_VER=19.3
+PKG_VER=1
 ARROW_VER=0.9.0-1
 
 
