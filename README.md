@@ -1,5 +1,9 @@
 # Overview
 
+[![SciDB 19.3](https://img.shields.io/badge/SciDB-19.3-blue.svg)](https://forum.paradigm4.com/t/scidb-release-19-3/2359)
+[![Build Status](https://travis-ci.org/Paradigm4/extra-scidb-libs.svg)](https://travis-ci.org/Paradigm4/extra-scidb-libs)
+
+
 This repository contains the scripts and control files to build a
 single package file for Debian/Ubuntu (`.deb`) or CentOS/Red Hat
 Enterprise Linux (RHEL) (`.rpm`) containing the built libraries and
