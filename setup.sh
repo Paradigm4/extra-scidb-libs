@@ -51,6 +51,10 @@ then
     || yum install --assumeyes \
         https://dl.fedoraproject.org/pub/epel/epel-release-latest-$rel.noarch.rpm
 
+    yum install --assumeyes yum-utils
+    yum-config-manager --add-repo                               \
+        https://yum.repos.intel.com/mkl/setup/intel-mkl.repo
+
     yum install --assumeyes    \
         https://downloads.paradigm4.com/devtoolset-3/centos/6/sclo/x86_64/rh/devtoolset-3/scidb-devtoolset-3.noarch.rpm
 
