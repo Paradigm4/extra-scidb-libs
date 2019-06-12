@@ -106,14 +106,14 @@ file, and `control` file.  appropriately. Finally, add a
 try to load the plugin once the `extra-scidb-libs` package is
 installed.
 
-Make sure to also add the new plugin to the list of tools included in 
+Make sure to also add the new plugin to the list of tools included in
 the `README.md` file on the `master` and `gh-pages` branches.
 
 # Update Plug-in
 
 To update one of the included plugins do the following:
 
-1. Create a tag in the pugin repository. Bump the plugin tag version 
+1. Create a tag in the pugin repository. Bump the plugin tag version
    accordingly.
 1. Update `extra-scidb-libs.sh` and use the new tag.
 1. Bump package version (see next)
