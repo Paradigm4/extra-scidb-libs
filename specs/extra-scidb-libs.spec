@@ -138,6 +138,9 @@ fi
 
 %changelog
 
+* Tue Jul 9 2019 Rares Vernica <rvernica@gmail.com>
+- Port plugins to SciDB 19.3
+
 * Wed May 22 2019 Rares Vernica <rvernica@gmail.com>
 - Shim with fix for save argument length
 
