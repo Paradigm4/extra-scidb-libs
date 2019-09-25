@@ -59,10 +59,13 @@ echo %{_scidb_install_path}/lib/scidb/plugins/libequi_join.so            >> file
 echo %{_scidb_install_path}/lib/scidb/plugins/libgrouped_aggregate.so    >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libstream.so               >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libsuperfunpack.so         >> files.lst
-echo %{_scidb_install_path}/bin/shim                                     >> files.lst
-echo /var/lib/shim/wwwroot                                               >> files.lst
-echo /usr/local/share/man/man1/shim.1                                    >> files.lst
-echo /var/lib/shim/conf                                                  >> files.lst
+echo %{_scidb_install_path}/systemd/shimsvc                              >> files.lst
+echo %{_scidb_install_path}/systemd/shim_systemd                         >> files.lst
+
+echo %{_scidb_install_path}/bin/shim >> files.lst
+echo /var/lib/shim/wwwroot >> files.lst
+echo /usr/local/share/man/man1/shim.1 >> files.lst
+echo /var/lib/shim/conf >> files.lst
 
 %if ! %{_use_systemd}
 mkdir -p %{buildroot}/etc/init.d
