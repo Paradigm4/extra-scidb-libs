@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-18.1
-Version:        8
+Version:        9
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -167,6 +167,10 @@ fi
 %doc
 
 %changelog
+
+* Thu Sep 26 2019 Rares Vernica <rvernica@gmail.com>
+- Shim systemd support
+- accelerated_io_tools fix cleanup after query cancellation
 
 * Wed May 22 2019 Rares Vernica <rvernica@gmail.com>
 - Shim with fix for save argument length

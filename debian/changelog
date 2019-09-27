@@ -1,3 +1,10 @@
+extra-scidb-libs-18.1 (9)
+
+ * Shim systemd support
+ * accelerated_io_tools fix cleanup after query cancellation
+
+-- Rares Vernica <rvernica@gmail.com>  Thr, 26 Sep 2019 20:00:00 -0700
+
 extra-scidb-libs-18.1 (8)
 
  * Shim with fix for save argument length
@@ -22,14 +29,14 @@ extra-scidb-libs-18.1 (5)
  * accelerated_io_tools with atts_only support
  * Shim with admin and atts_only support
 
--- Rares Vernica <rvernica@gmail.com>  Sun, 5 August 2018 18:00:00 -0700
+-- Rares Vernica <rvernica@gmail.com>  Sun, 5 Aug 2018 18:00:00 -0700
 
 extra-scidb-libs-18.1 (4)
 
  * Add dependency to Apache Arrow and OpenSSL
  * Generate self-signed certificate for Shim
 
--- Rares Vernica <rvernica@gmail.com>  Thu, 1 June 2018 21:00:00 -0700
+-- Rares Vernica <rvernica@gmail.com>  Thu, 1 Jun 2018 21:00:00 -0700
 
 extra-scidb-libs-18.1 (3)
 
