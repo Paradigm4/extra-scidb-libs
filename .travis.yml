@@ -40,6 +40,8 @@ before_script:
     --tty
     --rm
     --volume `pwd`:/this
+    --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
+    --privileged
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 
 script:
