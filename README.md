@@ -61,10 +61,12 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ### SciDB 19.1
 
+* [extra-scidb-libs-19.3-2-1.x86_64.rpm](extra-scidb-libs-19.3-2-1.x86_64.rpm) (September 26, 2019)
 * [extra-scidb-libs-19.3-1-1.x86_64.rpm](extra-scidb-libs-19.3-1-1.x86_64.rpm) (July 9, 2019)
 
 ### SciDB 18.1
 
+* [extra-scidb-libs-18.1-9-1.x86_64.rpm](extra-scidb-libs-18.1-9-1.x86_64.rpm) (September 26, 2019)
 * [extra-scidb-libs-18.1-8-1.x86_64.rpm](extra-scidb-libs-18.1-8-1.x86_64.rpm) (May 22, 2019)
 * [extra-scidb-libs-18.1-7-1.x86_64.rpm](extra-scidb-libs-18.1-7-1.x86_64.rpm) (December 27, 2018)
 * [extra-scidb-libs-18.1-6-1.x86_64.rpm](extra-scidb-libs-18.1-6-1.x86_64.rpm) (September 21, 2018)
@@ -79,10 +81,12 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ### SciDB 19.3
 
+* [extra-scidb-libs-19.3-2.deb](extra-scidb-libs-19.3-2.deb) (September 26, 2019)
 * [extra-scidb-libs-19.3-1.deb](extra-scidb-libs-19.3-1.deb) (July 9, 2019)
 
 ### SciDB 18.1
 
+* [extra-scidb-libs-18.1-9.deb](extra-scidb-libs-18.1-9.deb) (September 26, 2019)
 * [extra-scidb-libs-18.1-8.deb](extra-scidb-libs-18.1-8.deb) (May 22, 2019)
 * [extra-scidb-libs-18.1-7.deb](extra-scidb-libs-18.1-7.deb) (December 27, 2018)
 * [extra-scidb-libs-18.1-6.deb](extra-scidb-libs-18.1-6.deb) (September 21, 2018)
@@ -97,11 +101,17 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ## SciDB 19.3
 
+* Version `2`
+  * `shim` systemd support
+  * `accelerated_io_tools` fix cleanup after query cancellation
 * Version `1`
   * Port plug-ins to SciDB `19.3`
 
 ## SciDB 18.1
 
+* Version `9`
+  * `shim` systemd support
+  * `accelerated_io_tools` fix cleanup after query cancellation
 * Version `8`
   * `shim` with fix for `save` argument length (`v18.1.4`)
 * Version `7`
