@@ -1,3 +1,9 @@
+extra-scidb-libs-19.3 (1)
+
+ * Port plugins to SciDB 19.3
+
+-- Rares Vernica <rvernica@gmail.com>  Tue, 9 July 2019 21:00:00 -0700
+
 extra-scidb-libs-18.1 (8)
 
  * Shim with fix for save argument length
