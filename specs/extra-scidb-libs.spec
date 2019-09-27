@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-19.3
-Version:        1
+Version:        2
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -167,6 +167,10 @@ fi
 %doc
 
 %changelog
+
+* Thu Sep 26 2019 Rares Vernica <rvernica@gmail.com>
+- Shim systemd support
+- accelerated_io_tools fix cleanup after query cancellation
 
 * Tue Jul 9 2019 Rares Vernica <rvernica@gmail.com>
 - Port plugins to SciDB 19.3
