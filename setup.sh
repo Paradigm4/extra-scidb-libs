@@ -143,6 +143,7 @@ APT_LINE
     echo "Step 2. Install prerequisites"
     apt-get update
     apt-get install                                     \
+        --assume-yes                                    \
         --force-yes                                     \
         --no-install-recommends                         \
         g++                                             \
