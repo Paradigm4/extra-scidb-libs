@@ -54,6 +54,7 @@ then
     yum install --assumeyes yum-utils
     yum-config-manager --add-repo                               \
         https://yum.repos.intel.com/mkl/setup/intel-mkl.repo
+    sed -i 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/intel-mkl.repo
 
     yum install --assumeyes    \
         https://downloads.paradigm4.com/devtoolset-3/centos/6/sclo/x86_64/rh/devtoolset-3/scidb-devtoolset-3.noarch.rpm
@@ -142,7 +143,7 @@ APT_LINE
     echo "Step 2. Install prerequisites"
     apt-get update
     apt-get install                                     \
-        --assume-yes                                    \
+        --force-yes                                     \
         --no-install-recommends                         \
         g++                                             \
         git                                             \
