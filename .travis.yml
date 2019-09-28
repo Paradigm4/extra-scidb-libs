@@ -41,7 +41,7 @@ before_script:
     --rm
     --volume `pwd`:/this
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
-    --privileged
+    --volume /tmp/$(mktemp --directory):/run
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 
 script:
@@ -58,6 +58,9 @@ script:
         /etc/apt/sources.list;
     fi
   - docker exec deploy sh /this/install.sh --only-prereq
+  - if [ "$DEPLOY_IMG" = "-centos-7" ]; then
+      docker exec deploy /opt/scidb/$SCIDB_VER/bin/scidb.py startall scidb;
+    fi
   - if [ "$TARGET" = "rpm" ]; then
       docker exec deploy yum install --assumeyes
         /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER-1.x86_64.rpm;
