@@ -30,6 +30,7 @@ install:
     --name container
     --detach
     rvernica/scidb:${SCIDB_VER}${IMG}
+  - sleep 5
 
 script:
   - if [ "$IMG" = "-centos-7" ]; then
