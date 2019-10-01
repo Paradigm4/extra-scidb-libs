@@ -32,6 +32,9 @@ install:
     rvernica/scidb:${SCIDB_VER}${IMG}
 
 script:
+  - if [ "$IMG" = "-centos-7" ]; then
+      docker exec deploy /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb;
+    fi
   - docker exec container sh -c
     "wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh
      |  sh -s -- $INSTALL"
