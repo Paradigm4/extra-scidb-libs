@@ -29,8 +29,11 @@ install:
   - docker run
     --name container
     --detach
+    --tty
+    --rm
+    --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
+    --volume /tmp/$(mktemp --directory):/run
     rvernica/scidb:${SCIDB_VER}${IMG}
-  - sleep 5
 
 script:
   - if [ "$IMG" = "-centos-7" ]; then
