@@ -7,7 +7,6 @@ URL:            https://github.com/Paradigm4/%{name}
 Source0:        %{name}/%{name}.tar.gz
 
 %define _scidb_install_path $SCIDB_INSTALL_PATH
-%define _use_systemd (0%{?rhel} && 0%{?rhel} >= 7)
 
 %global _clientlibs libscidbclient[.]so.*
 %global __provides_exclude ^(%{_clientlibs})$
@@ -40,9 +39,9 @@ cp equi_join/libequi_join.so                       %{buildroot}%{_scidb_install_
 cp grouped_aggregate/libgrouped_aggregate.so       %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 cp stream/libstream.so                             %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 cp superfunpack/src/libsuperfunpack.so             %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
-mkdir -p %{buildroot}%{_scidb_install_path}/systemd
-cp shim/init.d/shimsvc                             %{buildroot}%{_scidb_install_path}/systemd
-cp shim/init.d/shim_systemd                        %{buildroot}%{_scidb_install_path}/systemd
+mkdir -p %{buildroot}%{_scidb_install_path}/shim
+cp shim/init.d/shimsvc                             %{buildroot}%{_scidb_install_path}/shim
+cp shim/init.d/shim.service                        %{buildroot}%{_scidb_install_path}/shim
 
 mkdir -p %{buildroot}%{_scidb_install_path}/bin
 cp shim/shim "%{buildroot}/%{_scidb_install_path}/bin"
@@ -59,20 +58,13 @@ echo %{_scidb_install_path}/lib/scidb/plugins/libequi_join.so            >> file
 echo %{_scidb_install_path}/lib/scidb/plugins/libgrouped_aggregate.so    >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libstream.so               >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libsuperfunpack.so         >> files.lst
-echo %{_scidb_install_path}/systemd/shimsvc                              >> files.lst
-echo %{_scidb_install_path}/systemd/shim_systemd                         >> files.lst
+echo %{_scidb_install_path}/shim/shimsvc                                 >> files.lst
+echo %{_scidb_install_path}/shim/shim.service                            >> files.lst
 
 echo %{_scidb_install_path}/bin/shim >> files.lst
 echo /var/lib/shim/wwwroot >> files.lst
 echo /usr/local/share/man/man1/shim.1 >> files.lst
 echo /var/lib/shim/conf >> files.lst
-
-%if ! %{_use_systemd}
-mkdir -p %{buildroot}/etc/init.d
-cp shim/init.d/shimsvc %{buildroot}/etc/init.d
-chmod 0755 %{buildroot}/etc/init.d/shimsvc
-echo /etc/init.d/shimsvc >> files.lst
-%endif
 
 %post
 if test -n "$(which systemctl 2>/dev/null)"; then
@@ -82,7 +74,7 @@ if test -n "$(which systemctl 2>/dev/null)"; then
   rm -f /usr/lib/systemd/system/shim.service
   systemctl -q daemon-reload 2>/dev/null || true
 elif test -n "$(which chkconfig 2>/dev/null)"; then
-# RHEL sysV
+# InitD
   chkconfig --del shimsvc
   chkconfig shimsvc off
   /etc/init.d/shimsvc stop
@@ -138,9 +130,13 @@ fi
 
 if test -n "$(which systemctl 2>/dev/null)"; then
 # SystemD
-  find /opt/scidb/ -name shim_systemd -exec {} \;
+  cp $SCIDB_INSTALL_PATH/shim/shim.service /lib/systemd/system/shim.service
+  systemctl -q daemon-reload 2>/dev/null || true
+  systemctl -q enable shim 2>/dev/null || true
+  systemctl -q start shim 2>/dev/null || true
 elif test -n "$(which chkconfig 2>/dev/null)"; then
-# RHEL sysV
+# InitD
+  cp $SCIDB_INSTALL_PATH/shim/shimsvc /etc/init.d/shimsvc
   chmod 0755 /etc/init.d/shimsvc
   chkconfig --add shimsvc && chkconfig shimsvc on
   /etc/init.d/shimsvc start
@@ -151,13 +147,14 @@ if test -n "$(which systemctl 2>/dev/null)"; then
 # SystemD
   systemctl -q stop shim 2>/dev/null || true
   systemctl -q disable  shim 2>/dev/null || true
-  rm -f /usr/lib/systemd/system/shim.service
+  rm -f /lib/systemd/system/shim.service
   systemctl -q daemon-reload 2>/dev/null || true
 elif test -n "$(which chkconfig 2>/dev/null)"; then
-# RHEL sysV
+# InitD
   chkconfig --del shimsvc
   chkconfig shimsvc off
   /etc/init.d/shimsvc stop
+  rm -f /etc/init.d/shimsvc
 fi
 
 %files -f files.lst
