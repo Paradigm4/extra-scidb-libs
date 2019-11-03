@@ -7,6 +7,7 @@ URL:            https://github.com/Paradigm4/%{name}
 Source0:        %{name}/%{name}.tar.gz
 
 %define _scidb_install_path $SCIDB_INSTALL_PATH
+%define _scidb_version $SCIDB_VER
 
 %global _clientlibs libscidbclient[.]so.*
 %global __provides_exclude ^(%{_clientlibs})$
@@ -39,9 +40,13 @@ cp equi_join/libequi_join.so                       %{buildroot}%{_scidb_install_
 cp grouped_aggregate/libgrouped_aggregate.so       %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 cp stream/libstream.so                             %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 cp superfunpack/src/libsuperfunpack.so             %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
+
 mkdir -p %{buildroot}%{_scidb_install_path}/shim
-cp shim/init.d/shimsvc                             %{buildroot}%{_scidb_install_path}/shim
-cp shim/init.d/shim.service                        %{buildroot}%{_scidb_install_path}/shim
+sed "s!XXX_SCIDB_VER_XXX!%{_scidb_version}!g" shim/init.d/after-install.sh > %{buildroot}%{_scidb_install_path}/shim/after-install.sh
+cp shim/init.d/before-remove.sh %{buildroot}%{_scidb_install_path}/shim
+cp shim/init.d/setup-conf.sh %{buildroot}%{_scidb_install_path}/shim
+sed "s!XXX_SCIDB_VER_XXX!%{_scidb_version}!g" shim/init.d/shimsvc.service > %{buildroot}%{_scidb_install_path}/shim/shimsvc.service
+sed "s!XXX_SCIDB_VER_XXX!%{_scidb_version}!g" shim/init.d/shimsvc.initd > %{buildroot}%{_scidb_install_path}/shim/shimsvc.initd
 
 mkdir -p %{buildroot}%{_scidb_install_path}/bin
 cp shim/shim "%{buildroot}/%{_scidb_install_path}/bin"
@@ -51,115 +56,48 @@ chmod -R 755 %{buildroot}/var/lib/shim
 mkdir -p %{buildroot}/usr/local/share/man/man1
 cp shim/man/shim.1 %{buildroot}/usr/local/share/man/man1
 mkdir -p %{buildroot}/var/lib/shim
-cp shim/conf %{buildroot}/var/lib/shim/conf
 
 echo %{_scidb_install_path}/lib/scidb/plugins/libaccelerated_io_tools.so >  files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libequi_join.so            >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libgrouped_aggregate.so    >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libstream.so               >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libsuperfunpack.so         >> files.lst
-echo %{_scidb_install_path}/shim/shimsvc                                 >> files.lst
-echo %{_scidb_install_path}/shim/shim.service                            >> files.lst
+echo %{_scidb_install_path}/shim/after-install.sh                        >> files.lst
+echo %{_scidb_install_path}/shim/before-remove.sh                        >> files.lst
+echo %{_scidb_install_path}/shim/setup-conf.sh                           >> files.lst
+echo %{_scidb_install_path}/shim/shimsvc.initd                           >> files.lst
+echo %{_scidb_install_path}/shim/shimsvc.service                         >> files.lst
 
 echo %{_scidb_install_path}/bin/shim >> files.lst
 echo /var/lib/shim/wwwroot >> files.lst
 echo /usr/local/share/man/man1/shim.1 >> files.lst
-echo /var/lib/shim/conf >> files.lst
 
 %post
-if test -n "$(which systemctl 2>/dev/null)"; then
+# Stop any existing service
 # SystemD
-  systemctl -q stop shim 2>/dev/null || true
-  systemctl -q disable  shim 2>/dev/null || true
-  rm -f /usr/lib/systemd/system/shim.service
-  systemctl -q daemon-reload 2>/dev/null || true
+if test -n "$(which systemctl 2>/dev/null)"; then
+  systemctl -q stop shimsvc 2>/dev/null || true
+# InitD Ubuntu
+elif test -n "$(which update-rc.d 2>/dev/null)"; then
+  service shimsvc stop 2>/dev/null||true
+# InitD Fedora
 elif test -n "$(which chkconfig 2>/dev/null)"; then
-# InitD
-  chkconfig --del shimsvc
-  chkconfig shimsvc off
-  /etc/init.d/shimsvc stop
+  service shimsvc stop 2>/dev/null||true
 fi
-
 
 if [ -z "$SCIDB_INSTALL_PATH" ]
 then
     export SCIDB_INSTALL_PATH=/opt/scidb/19.3
 fi
 
+$SCIDB_INSTALL_PATH/shim/after-install.sh
 
-scidbuser=$(                                    \
-    ps axfo user:64,cmd                         \
-    |  grep scidb                               \
-    |  grep dbname                              \
-    |  head -n 1                                \
-    |  cut -d ' ' -f 1)
-basepath=$(                                     \
-    cat $SCIDB_INSTALL_PATH/etc/config.ini      \
-    | grep base-path                            \
-    | cut -d = -f 2)
-
-sed -i "s/LOGNAME/$scidbuser/"                        /var/lib/shim/conf
-sed -i "s:\[INSTANCE_0_DATA_DIR\]:$basepath/0/0/tmp:" /var/lib/shim/conf
-
-
-if [ ! -f /var/lib/shim/ssl_cert.pem ]
-then
-    openssl req                                                         \
-        -new                                                            \
-        -newkey rsa:4096                                                \
-        -days 3650                                                      \
-        -nodes                                                          \
-        -x509                                                           \
-        -subj "/C=US/ST=MA/L=Waltham/O=Paradigm4/CN=$(hostname)"        \
-        -keyout /var/lib/shim/ssl_cert.pem                              \
-    2> /dev/null                                                        \
-    >> /var/lib/shim/ssl_cert.pem
-fi
-
-
-if [ ! -e /var/lib64/libssl.so ]
-then
-   ln --symbolic /usr/lib64/libssl.so.1.0.2k /usr/lib64/libssl.so
-fi
-
-if [ ! -e /usr/lib64/libcrypto.so ]
-then
-   ln --symbolic /usr/lib64/libcrypto.so.1.0.2k /usr/lib64/libcrypto.so
-fi
-
-
-if test -n "$(which systemctl 2>/dev/null)"; then
-# SystemD
-  cp $SCIDB_INSTALL_PATH/shim/shim.service /lib/systemd/system/shim.service
-  systemctl -q daemon-reload 2>/dev/null || true
-  systemctl -q enable shim 2>/dev/null || true
-  systemctl -q start shim 2>/dev/null || true
-elif test -n "$(which chkconfig 2>/dev/null)"; then
-# InitD
-  cp $SCIDB_INSTALL_PATH/shim/shimsvc /etc/init.d/shimsvc
-  chmod 0755 /etc/init.d/shimsvc
-  chkconfig --add shimsvc && chkconfig shimsvc on
-  /etc/init.d/shimsvc start
-fi
 
 %preun
-if test -n "$(which systemctl 2>/dev/null)"; then
-# SystemD
-  systemctl -q stop shim 2>/dev/null || true
-  systemctl -q disable  shim 2>/dev/null || true
-  rm -f /lib/systemd/system/shim.service
-  systemctl -q daemon-reload 2>/dev/null || true
-elif test -n "$(which chkconfig 2>/dev/null)"; then
-# InitD
-  chkconfig --del shimsvc
-  chkconfig shimsvc off
-  /etc/init.d/shimsvc stop
-  rm -f /etc/init.d/shimsvc
-fi
+$SCIDB_INSTALL_PATH/shim/before-remove.sh
+
 
 %files -f files.lst
-
-%config(noreplace) /var/lib/shim/conf
 
 %doc
 

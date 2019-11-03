@@ -26,6 +26,10 @@ function die
     exit 1
 }
 
+if [ -z "$SCIDB_VER" ]; then
+    echo "Need to set SCIDB_VER"
+    exit 1
+fi
 if [ -z "$SCIDB_INSTALL_PATH" ]; then
     echo "Need to set SCIDB_INSTALL_PATH - it is usually /opt/scidb/\$SCIDB_VER"
     exit 1
