@@ -13,6 +13,9 @@ $QUERY "load_library('superfunpack')"
 echo "SciDB version in Shim..."
 shim -version | grep "SciDB Version: $SCIDB_VER"
 
+echo "Is shim running?"
+service shimsvc status
+
 echo "HTTPS in Shim..."
 wget --quiet --no-check-certificate --output-document=- \
     https://localhost:8083/version
