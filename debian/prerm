@@ -1,3 +1,8 @@
 #!/bin/bash
 
-if test -f /etc/init.d/shimsvc; then /etc/init.d/shimsvc stop; rm -f /etc/init.d/shimsvc;fi
+if [ -z "$SCIDB_INSTALL_PATH" ]
+then
+    export SCIDB_INSTALL_PATH=/opt/scidb/XXX_SCIDB_VER_XXX
+fi
+
+$SCIDB_INSTALL_PATH/shim/before-remove.sh

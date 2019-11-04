@@ -95,7 +95,7 @@ declare -a libs=(
     "accelerated_io_tools" "v19.3.1"
     "equi_join"            "v19.3.0"
     "grouped_aggregate"    "v19.3.0"
-    "shim"                 "v19.3.1"
+    "shim"                 "tag_mlr_shim_svc"
     "stream"               "v19.3.0"
     "superfunpack"         "v19.3.0"
 )
@@ -143,12 +143,14 @@ if [[ "$1" == "deb" || "$1" == "both" ]]; then
         mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/bin
         cp shim/shim $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/bin
 
-        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/etc/init.d
-        cp shim/init.d/shimsvc $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/etc/init.d
-        chmod 755 $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/etc/init.d/shimsvc
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim
+        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} shim/init.d/after-install.sh > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/after-install.sh
+	cp shim/init.d/before-remove.sh $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/before-remove.sh
+	cp shim/init.d/setup-conf.sh $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/setup-conf.sh
+        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} shim/init.d/shimsvc.service > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/shimsvc.service
+        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} shim/init.d/shimsvc.initd > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/shimsvc.initd
 
         mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/var/lib/shim
-        cp $source_dir/specs/conf $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/var/lib/shim
         cp -aR shim/wwwroot $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/var/lib/shim
 
         mkdir $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/DEBIAN
@@ -162,10 +164,9 @@ if [[ "$1" == "deb" || "$1" == "both" ]]; then
         m4 -DVERSION=${SCIDB_VER:=19.3} -DUSERINFO="$userinfo" $source_dir/debian/changelog > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/DEBIAN/changelog
 
         dest=$work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/DEBIAN
-        cp -p $source_dir/debian/conffiles $dest
-        cp -p $source_dir/debian/compat    $dest
-        cp -p $source_dir/debian/postinst  $dest
-        cp -p $source_dir/debian/prerm     $dest
+        cp -p $source_dir/debian/compat    $dest/compat
+        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} $source_dir/debian/postinst > $dest/postinst
+        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} $source_dir/debian/prerm > $dest/prerm
         chmod a+rx $dest/{postinst,prerm}
 
         cd $work_dir
