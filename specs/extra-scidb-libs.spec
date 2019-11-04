@@ -43,10 +43,14 @@ cp superfunpack/src/libsuperfunpack.so             %{buildroot}%{_scidb_install_
 
 mkdir -p %{buildroot}%{_scidb_install_path}/shim
 sed "s!XXX_SCIDB_VER_XXX!%{_scidb_version}!g" shim/init.d/after-install.sh > %{buildroot}%{_scidb_install_path}/shim/after-install.sh
-cp shim/init.d/before-remove.sh %{buildroot}%{_scidb_install_path}/shim
-cp shim/init.d/setup-conf.sh %{buildroot}%{_scidb_install_path}/shim
+chmod a+rx %{buildroot}%{_scidb_install_path}/shim/after-install.sh
+cp shim/init.d/before-remove.sh %{buildroot}%{_scidb_install_path}/shim/before-remove.sh
+chmod a+rx %{buildroot}%{_scidb_install_path}/shim
+cp shim/init.d/setup-conf.sh %{buildroot}%{_scidb_install_path}/shim/setup-conf.sh
+chmod a+rx %{buildroot}%{_scidb_install_path}/shim/setup-conf.sh
 sed "s!XXX_SCIDB_VER_XXX!%{_scidb_version}!g" shim/init.d/shimsvc.service > %{buildroot}%{_scidb_install_path}/shim/shimsvc.service
 sed "s!XXX_SCIDB_VER_XXX!%{_scidb_version}!g" shim/init.d/shimsvc.initd > %{buildroot}%{_scidb_install_path}/shim/shimsvc.initd
+chmod a+rx %{buildroot}%{_scidb_install_path}/shim/shimsvc.initd
 
 mkdir -p %{buildroot}%{_scidb_install_path}/bin
 cp shim/shim "%{buildroot}/%{_scidb_install_path}/bin"

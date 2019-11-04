@@ -145,10 +145,14 @@ if [[ "$1" == "deb" || "$1" == "both" ]]; then
 
         mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim
         m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} shim/init.d/after-install.sh > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/after-install.sh
+	chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/after-install.sh
 	cp shim/init.d/before-remove.sh $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/before-remove.sh
+	chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/before-remove.sh
 	cp shim/init.d/setup-conf.sh $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/setup-conf.sh
+	chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/setup-conf.sh
         m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} shim/init.d/shimsvc.service > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/shimsvc.service
         m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} shim/init.d/shimsvc.initd > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/shimsvc.initd
+	chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/shimsvc.initd
 
         mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/var/lib/shim
         cp -aR shim/wwwroot $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/var/lib/shim
