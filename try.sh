@@ -16,6 +16,9 @@ shim -version | grep "SciDB Version: $SCIDB_VER"
 echo "Is shim running?"
 if test -n "$(which systemctl 2>/dev/null)"; then
   systemctl status shimvc
+  journalctl -xe
+  ldd /opt/scidb/19.3/bin/shim
+  ldd /opt/scidb/19.3/bin/scidb
 else
   service shimsvc status
 fi
