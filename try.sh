@@ -17,8 +17,8 @@ echo "Is shim running?"
 if test -n "$(which systemctl 2>/dev/null)"; then
   systemctl status shimvc || true
   journalctl -xe
-  ldd /opt/scidb/19.3/bin/shim
-  ldd /opt/scidb/19.3/bin/scidb
+  yum list installed|grep ssl
+  ls /lib64/libssl.o
 else
   service shimsvc status
 fi
