@@ -1,47 +1,20 @@
 #!/bin/bash
 
-if [ -x /etc/init.d/shimsvc ]
-then
-    /etc/init.d/shimsvc stop
+# Stop any existing service
+# SystemD
+if test -n "$(which systemctl 2>/dev/null)"; then
+  systemctl -q stop shimsvc 2>/dev/null || true
+# InitD Ubuntu
+elif test -n "$(which update-rc.d 2>/dev/null)"; then
+  service shimsvc stop 2>/dev/null||true
+# InitD Fedora
+elif test -n "$(which chkconfig 2>/dev/null)"; then
+  service shimsvc stop 2>/dev/null||true
 fi
 
 if [ -z "$SCIDB_INSTALL_PATH" ]
 then
-    export SCIDB_INSTALL_PATH=/opt/scidb/19.3
+    export SCIDB_INSTALL_PATH=/opt/scidb/XXX_SCIDB_VER_XXX
 fi
 
-
-scidbuser=$(                                    \
-    ps axfo user:64,cmd                         \
-    |  grep scidb                               \
-    |  grep dbname                              \
-    |  head -n 1                                \
-    |  cut -d ' ' -f 1)
-basepath=$(                                     \
-    cat $SCIDB_INSTALL_PATH/etc/config.ini      \
-    |  grep base-path                           \
-    |  cut -d = -f 2)
-
-sed -i "s/LOGNAME/$scidbuser/"                        /var/lib/shim/conf
-sed -i "s:\[INSTANCE_0_DATA_DIR\]:$basepath/0/0/tmp:" /var/lib/shim/conf
-
-
-if [ ! -f /var/lib/shim/ssl_cert.pem ]
-then
-    openssl req                                                         \
-        -new                                                            \
-        -newkey rsa:4096                                                \
-        -days 3650                                                      \
-        -nodes                                                          \
-        -x509                                                           \
-        -subj "/C=US/ST=MA/L=Waltham/O=Paradigm4/CN=$(hostname)"        \
-        -keyout /var/lib/shim/ssl_cert.pem                              \
-    2> /dev/null                                                        \
-    >> /var/lib/shim/ssl_cert.pem
-fi
-
-
-if [ -x /etc/init.d/shimsvc ]
-then
-    /etc/init.d/shimsvc start
-fi
+$SCIDB_INSTALL_PATH/shim/after-install.sh
