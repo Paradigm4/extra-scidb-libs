@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-19.3
-Version:        2
+Version:        3
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
