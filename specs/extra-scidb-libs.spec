@@ -107,6 +107,9 @@ $SCIDB_INSTALL_PATH/shim/before-remove.sh
 
 %changelog
 
+* Tue Nov 5 2019  Rares Vernica <rvernica@gmail.com>
+- shim with service support
+
 * Thu Sep 26 2019 Rares Vernica <rvernica@gmail.com>
 - Shim systemd support
 - accelerated_io_tools fix cleanup after query cancellation
