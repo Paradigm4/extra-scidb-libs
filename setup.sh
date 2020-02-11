@@ -110,13 +110,17 @@ else
         --no-install-recommends                 \
         apt-transport-https                     \
         ca-certificates                         \
-        gnupg-curl
+        gnupg-curl                              \
+        wget
 
-    apt-key adv --fetch-keys                                                              \
-        https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
-    cat <<APT_LINE | tee /etc/apt/sources.list.d/intel-mkl.list
-deb https://apt.repos.intel.com/mkl all main
-APT_LINE
+
+#     apt-key adv --fetch-keys                                                              \
+#         https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+#     cat <<APT_LINE | tee /etc/apt/sources.list.d/intel-mkl.list
+# deb [trunsted=yes] https://apt.repos.intel.com/mkl all main
+# APT_LINE
+    wget https://downloads.paradigm4.com/community/19.3/scidb-19.3.0-repos.deb
+    dpkg --install scidb-19.3.0-repos.deb
     apt-get update
 
     if [ "$dist" = "Debian" ]
