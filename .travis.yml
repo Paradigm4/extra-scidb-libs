@@ -15,10 +15,10 @@ env:
     - SCIDB_VER=19.3
     - PKG_VER=3
   matrix:
-    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=           TARGET=deb
-    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=-trusty    TARGET=deb
-    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-6  TARGET=rpm
-    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-7  TARGET=rpm
+    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=           TARGET=deb  CMD=/lib/systemd/systemd
+    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=-trusty    TARGET=deb  CMD=
+    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-6  TARGET=rpm  CMD=
+    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-7  TARGET=rpm  CMD=
 
 services:
   - docker
@@ -42,7 +42,8 @@ before_script:
     --volume `pwd`:/this
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
     --volume /tmp/$(mktemp --directory):/run
-    rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
+    --volume /tmp/$(mktemp --directory):/run/lock
+    rvernica/scidb:$SCIDB_VER$DEPLOY_IMG $CMD
 
 script:
   - docker exec script sh /this/setup.sh
