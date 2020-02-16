@@ -15,10 +15,10 @@ env:
     - SCIDB_VER=19.3
     - PKG_VER=3
   jobs:
-    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=           TARGET=deb  CMD=/lib/systemd/systemd
-    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=-trusty    TARGET=deb  CMD=
-    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-6  TARGET=rpm  CMD=
-    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-7  TARGET=rpm  CMD=
+    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=           TARGET=deb  ENTRY="--entrypoint /lib/systemd/systemd"
+    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=-trusty    TARGET=deb  ENTRY=
+    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-6  TARGET=rpm  ENTRY=
+    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-7  TARGET=rpm  ENTRY=
 
 services:
   - docker
@@ -43,7 +43,12 @@ before_script:
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
     --volume /tmp/$(mktemp --directory):/run
     --volume /tmp/$(mktemp --directory):/run/lock
-    rvernica/scidb:$SCIDB_VER$DEPLOY_IMG $CMD
+    $ENTRY
+    rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
+
+  - if [ "$DEPLOY_IMG" = "" ]; then
+      docker exec deploy /docker-entrypoint.sh echo;
+    fi
 
 script:
   - docker exec script sh /this/setup.sh
