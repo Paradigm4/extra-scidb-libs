@@ -3,7 +3,7 @@ branches:
   - gh-pages
   - /.*/
 
-sudo: required
+os: linux
 
 language: python
 
@@ -14,7 +14,7 @@ env:
   global:
     - SCIDB_VER=19.3
     - PKG_VER=3
-  matrix:
+  jobs:
     - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=           TARGET=deb  CMD=/lib/systemd/systemd
     - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=-trusty    TARGET=deb  CMD=
     - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-6  TARGET=rpm  CMD=
