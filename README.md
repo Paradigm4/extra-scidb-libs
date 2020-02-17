@@ -113,7 +113,7 @@ the `README.md` file on the `master` and `gh-pages` branches.
 
 To update one of the included plugins do the following:
 
-1. Create a tag in the pugin repository. Bump the plugin tag version
+1. Create a tag in the plug-in repository. Bump the plugin tag version
    accordingly.
 1. Update `extra-scidb-libs.sh` and use the new tag.
 1. Bump package version (see next)

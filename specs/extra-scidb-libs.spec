@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-19.3
-Version:        3
+Version:        4
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -106,6 +106,10 @@ $SCIDB_INSTALL_PATH/shim/before-remove.sh
 %doc
 
 %changelog
+
+* Mon Feb 17 2020 Rares Vernica <rvernica@gmail.com>
+- equi_join with fix for parameter parsing
+- stream with fix for fork issue
 
 * Tue Nov 5 2019  Rares Vernica <rvernica@gmail.com>
 - shim with service support
