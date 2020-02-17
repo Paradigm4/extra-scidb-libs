@@ -61,6 +61,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ### SciDB 19.1
 
+* [extra-scidb-libs-19.3-3-1.x86_64.rpm](extra-scidb-libs-19.3-3-1.x86_64.rpm) (November 5, 2019)
 * [extra-scidb-libs-19.3-2-1.x86_64.rpm](extra-scidb-libs-19.3-2-1.x86_64.rpm) (September 26, 2019)
 * [extra-scidb-libs-19.3-1-1.x86_64.rpm](extra-scidb-libs-19.3-1-1.x86_64.rpm) (July 9, 2019)
 
@@ -81,6 +82,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ### SciDB 19.3
 
+* [extra-scidb-libs-19.3-3.deb](extra-scidb-libs-19.3-3.deb) (November 5, 2019)
 * [extra-scidb-libs-19.3-2.deb](extra-scidb-libs-19.3-2.deb) (September 26, 2019)
 * [extra-scidb-libs-19.3-1.deb](extra-scidb-libs-19.3-1.deb) (July 9, 2019)
 
@@ -101,6 +103,8 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ## SciDB 19.3
 
+* Version `3`
+  * `shim` service support
 * Version `2`
   * `shim` systemd support
   * `accelerated_io_tools` fix cleanup after query cancellation
