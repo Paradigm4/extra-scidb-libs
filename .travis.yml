@@ -15,38 +15,51 @@ env:
     - SCIDB_VER=19.3
     - PKG_VER=3
   jobs:
-    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=           TARGET=deb  ENTRY="--entrypoint /lib/systemd/systemd"
-    - BUILD_IMG=ubuntu:trusty  DEPLOY_IMG=-trusty    TARGET=deb  ENTRY=
-    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-6  TARGET=rpm  ENTRY=
-    - BUILD_IMG=centos:6       DEPLOY_IMG=-centos-7  TARGET=rpm  ENTRY=
+    - BUILD_IMG=ubuntu:trusty
+      DEPLOY_IMG=
+      TARGET=deb
+      ENTRYPOINT=/lib/systemd/systemd
+    - BUILD_IMG=ubuntu:trusty
+      DEPLOY_IMG=-trusty
+      TARGET=deb
+      ENTRYPOINT=/docker-entrypoint.sh
+    - BUILD_IMG=centos:6
+      DEPLOY_IMG=-centos-6
+      TARGET=rpm
+      ENTRYPOINT=/docker-entrypoint.sh
+    - BUILD_IMG=centos:6
+      DEPLOY_IMG=-centos-7
+      TARGET=rpm
+      ENTRYPOINT=/docker-entrypoint.sh
 
 services:
   - docker
 
 before_script:
   - docker run
-    --name script
     --detach
-    --tty
-    --rm
-    --env SCIDB_VER=$SCIDB_VER
     --env SCIDB_INSTALL_PATH=/opt/scidb/$SCIDB_VER
+    --env SCIDB_VER=$SCIDB_VER
+    --name script
+    --rm
+    --tty
     --volume `pwd`:/this
     $BUILD_IMG
 
   - docker run
-    --name deploy
     --detach
-    --tty
+    --entrypoint $ENTRYPOINT
+    --name deploy
     --rm
-    --volume `pwd`:/this
+    --security-opt seccomp:unconfined
+    --tty
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
     --volume /tmp/$(mktemp --directory):/run
     --volume /tmp/$(mktemp --directory):/run/lock
-    $ENTRY
+    --volume `pwd`:/this
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 
-  - if [ "$DEPLOY_IMG" = "" ]; then
+  - if [ "$ENTRYPOINT" = "/lib/systemd/systemd" ]; then
       docker exec deploy /docker-entrypoint.sh echo;
     fi
 
