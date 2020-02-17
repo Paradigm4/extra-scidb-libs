@@ -3,7 +3,7 @@ branches:
   - gh-pages
   - /.*/
 
-sudo: required
+os:linux
 
 language: python
 
@@ -12,7 +12,7 @@ python:
 
 env:
   global: SCIDB_VER=19.3
-  matrix:
+  jobs:
     - IMG=          INSTALL=         ENTRYPOINT=/lib/systemd/systemd
     - IMG=          INSTALL=--github ENTRYPOINT=/lib/systemd/systemd
     - IMG=-trusty   INSTALL=         ENTRYPOINT=/docker-entrypoint.sh
