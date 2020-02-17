@@ -60,7 +60,7 @@ before_script:
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 
   - docker logs deploy
-  - if [ "$DEPLOY_IMG" = "" ]; then
+  - if [ "$ENTRYPOINT" = "/lib/systemd/systemd" ]; then
       docker exec deploy /docker-entrypoint.sh echo;
     fi
   - docker logs deploy
