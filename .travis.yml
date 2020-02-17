@@ -13,14 +13,14 @@ python:
 env:
   global: SCIDB_VER=19.3
   matrix:
-    - IMG=          INSTALL=
-    - IMG=          INSTALL=--github
-    - IMG=-trusty   INSTALL=
-    - IMG=-trusty   INSTALL=--github
-    - IMG=-centos-6 INSTALL=
-    - IMG=-centos-6 INSTALL=--github
-    - IMG=-centos-7 INSTALL=
-    - IMG=-centos-7 INSTALL=--github
+    - IMG=          INSTALL=         ENTRYPOINT=/lib/systemd/systemd
+    - IMG=          INSTALL=--github ENTRYPOINT=/lib/systemd/systemd
+    - IMG=-trusty   INSTALL=         ENTRYPOINT=/docker-entrypoint.sh
+    - IMG=-trusty   INSTALL=--github ENTRYPOINT=/docker-entrypoint.sh
+    - IMG=-centos-6 INSTALL=         ENTRYPOINT=/docker-entrypoint.sh
+    - IMG=-centos-6 INSTALL=--github ENTRYPOINT=/docker-entrypoint.sh
+    - IMG=-centos-7 INSTALL=         ENTRYPOINT=/docker-entrypoint.sh
+    - IMG=-centos-7 INSTALL=--github ENTRYPOINT=/docker-entrypoint.sh
 
 services:
   - docker
@@ -28,6 +28,7 @@ services:
 install:
   - docker run
     --detach
+    --entrypoint $ENTRYPOINT
     --name container
     --rm
     --security-opt seccomp:unconfined
@@ -35,6 +36,10 @@ install:
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
     --volume /tmp/$(mktemp --directory):/run
     rvernica/scidb:${SCIDB_VER}${IMG}
+
+  - if [ "$ENTRYPOINT" = "/lib/systemd/systemd" ]; then
+      docker exec container /docker-entrypoint.sh echo;
+    fi
 
 script:
   - if [ "$IMG" = "-centos-7" ]; then
