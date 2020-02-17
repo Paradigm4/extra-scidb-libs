@@ -35,6 +35,7 @@ install:
     --tty
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
     --volume /tmp/$(mktemp --directory):/run
+    --volume /tmp/$(mktemp --directory):/run/lock
     rvernica/scidb:${SCIDB_VER}${IMG}
 
   - if [ "$ENTRYPOINT" = "/lib/systemd/systemd" ]; then
