@@ -46,9 +46,11 @@ before_script:
     $ENTRY
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 
+  - docker logs deploy
   - if [ "$DEPLOY_IMG" = "" ]; then
       docker exec deploy /docker-entrypoint.sh echo;
     fi
+  - docker logs deploy
 
 script:
   - docker exec script sh /this/setup.sh
