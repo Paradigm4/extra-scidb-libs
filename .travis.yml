@@ -27,10 +27,11 @@ services:
 
 install:
   - docker run
-    --name container
     --detach
-    --tty
+    --name container
     --rm
+    --security-opt seccomp:unconfined
+    --tty
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
     --volume /tmp/$(mktemp --directory):/run
     rvernica/scidb:${SCIDB_VER}${IMG}
