@@ -3,7 +3,7 @@ branches:
   - gh-pages
   - /.*/
 
-os:linux
+os: linux
 
 language: python
 
