@@ -110,14 +110,13 @@ else
         --no-install-recommends                 \
         apt-transport-https                     \
         ca-certificates                         \
-        gnupg-curl
+        gnupg-curl                              \
+        wget
 
-    apt-key adv --fetch-keys                                                              \
-        https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+
     cat <<APT_LINE | tee /etc/apt/sources.list.d/intel-mkl.list
-deb https://apt.repos.intel.com/mkl all main
+deb https://downloads.paradigm4.com/ mkl/
 APT_LINE
-    apt-get update
 
     if [ "$dist" = "Debian" ]
     then

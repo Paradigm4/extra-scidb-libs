@@ -1,3 +1,16 @@
+extra-scidb-libs-19.3 (4)
+
+ * equi_join with fix for parameter parsing
+ * stream with fix for fork issue
+
+-- Rares Vernica <rvernica@gmail.com>  Mon, 17 Feb 2020 15:00:00 -0800
+
+extra-scidb-libs-19.3 (3)
+
+ * shim with service support
+
+-- Rares Vernica <rvernica@gmail.com>  Tue, 5 Nov 2019 20:00:00 -0700
+
 extra-scidb-libs-19.3 (2)
 
  * Shim systemd support
