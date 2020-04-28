@@ -13,7 +13,7 @@ python:
 env:
   global:
     - SCIDB_VER=19.11
-    - PKG_VER=1
+    - PKG_VER=2
   jobs:
     - BUILD_IMG=ubuntu:trusty
       DEPLOY_IMG=
@@ -36,14 +36,14 @@ services:
   - docker
 
 before_script:
-  - docker run
-    --detach
-    --env SCIDB_INSTALL_PATH=/opt/scidb/$SCIDB_VER
-    --env SCIDB_VER=$SCIDB_VER
-    --name script
-    --rm
-    --tty
-    --volume `pwd`:/this
+  - docker run                                          \
+    --detach                                            \
+    --env SCIDB_INSTALL_PATH=/opt/scidb/$SCIDB_VER      \
+    --env SCIDB_VER=$SCIDB_VER                          \
+    --name script                                       \
+    --rm                                                \
+    --tty                                               \
+    --volume `pwd`:/this                                \
     $BUILD_IMG
 
   - docker run
@@ -65,10 +65,10 @@ before_script:
 
 script:
   - docker exec script sh /this/setup.sh
-  - docker exec script /this/extra-scidb-libs.sh
-    $TARGET
-    /root
-    /this
+  - docker exec script /this/extra-scidb-libs.sh        \
+    $TARGET                                             \
+    /root                                               \
+    /this                                               \
     $PKG_VER
 
   - if [ "$TARGET" = "deb" ]; then
