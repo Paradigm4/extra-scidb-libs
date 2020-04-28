@@ -15,22 +15,12 @@ env:
     - SCIDB_VER=19.11
     - PKG_VER=2
   jobs:
-    - BUILD_IMG=ubuntu:trusty
-      DEPLOY_IMG=
+    - BUILD_IMG=ubuntu:xenial
+      DEPLOY_IMG=-xenial
       TARGET=deb
-      ENTRYPOINT=/lib/systemd/systemd
-    - BUILD_IMG=ubuntu:trusty
-      DEPLOY_IMG=-trusty
-      TARGET=deb
-      ENTRYPOINT=/docker-entrypoint.sh
-    - BUILD_IMG=centos:6
-      DEPLOY_IMG=-centos-6
-      TARGET=rpm
-      ENTRYPOINT=/docker-entrypoint.sh
-    - BUILD_IMG=centos:6
+    - BUILD_IMG=centos:7
       DEPLOY_IMG=-centos-7
       TARGET=rpm
-      ENTRYPOINT=/docker-entrypoint.sh
 
 services:
   - docker
@@ -51,16 +41,14 @@ before_script:
     --entrypoint $ENTRYPOINT
     --name deploy
     --rm
-    --security-opt seccomp:unconfined
     --tty
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
     --volume /tmp/$(mktemp --directory):/run
-    --volume /tmp/$(mktemp --directory):/run/lock
     --volume `pwd`:/this
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 
-  - if [ "$ENTRYPOINT" = "/lib/systemd/systemd" ]; then
-      docker exec deploy /docker-entrypoint.sh echo;
+  - if [ "$DEPLOY_IMG" = "-centos-7" ]; then
+      docker exec deploy /opt/scidb/19.11/bin/scidbctl.py start scidb
     fi
 
 script:
