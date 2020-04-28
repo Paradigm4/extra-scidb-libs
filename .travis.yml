@@ -47,7 +47,7 @@ before_script:
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 
   - if [ "$DEPLOY_IMG" = "-centos-7" ]; then
-      docker exec deploy /opt/scidb/19.11/bin/scidbctl.py start scidb
+      docker exec deploy /opt/scidb/19.11/bin/scidbctl.py start scidb;
     fi
 
 script:
