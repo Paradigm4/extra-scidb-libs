@@ -50,6 +50,9 @@ before_script:
     --volume `pwd`:/this
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 
+  - if [ "$TARGET" = "deb" ]; then
+      docker exec deploy apt-get upgrade --assume-yes ;
+    fi
   - docker exec deploy /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb
 
 script:
