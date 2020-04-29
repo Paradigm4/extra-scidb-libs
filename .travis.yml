@@ -18,9 +18,11 @@ env:
     - BUILD_IMG=ubuntu:xenial
       DEPLOY_IMG=-xenial
       TARGET=deb
+      ENTRYPOINT=/sbin/init
     - BUILD_IMG=centos:7
       DEPLOY_IMG=-centos-7
       TARGET=rpm
+      ENTRYPOINT=/docker-entrypoint.sh
 
 services:
   - docker
@@ -37,18 +39,19 @@ before_script:
     $BUILD_IMG
 
   - docker run
+    --cap-add SYS_ADMIN
     --detach
+    --entrypoint $ENTRYPOINT
     --name deploy
     --rm
     --tty
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
+    --volume /sys/fs/selinux:/sys/fs/selinux:ro
     --volume /tmp/$(mktemp --directory):/run
     --volume `pwd`:/this
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 
-  - if [ "$DEPLOY_IMG" = "-centos-7" ]; then
-      docker exec deploy /opt/scidb/19.11/bin/scidbctl.py start scidb;
-    fi
+  - docker exec deploy /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb
 
 script:
   - docker exec script sh /this/setup.sh
@@ -58,15 +61,7 @@ script:
     /this
     $PKG_VER
 
-  - if [ "$TARGET" = "deb" ]; then
-      docker exec deploy sed --in-place
-        "\#deb http://deb.debian.org/debian jessie-updates main#d"
-        /etc/apt/sources.list;
-    fi
   - docker exec deploy sh /this/install.sh --only-prereq
-  - if [ "$DEPLOY_IMG" = "-centos-7" ]; then
-      docker exec deploy /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb;
-    fi
   - if [ "$TARGET" = "rpm" ]; then
       docker exec deploy yum install --assumeyes
         /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER-1.x86_64.rpm;
@@ -74,9 +69,9 @@ script:
       docker exec deploy apt-get install
         --assume-yes
         --no-install-recommends
-        libarrow0;
+        libarrow0 ;
       docker exec deploy dpkg --install
-        /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb;
+        /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb ;
     fi
   - docker exec deploy sh /this/try.sh
 
