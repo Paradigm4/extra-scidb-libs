@@ -51,7 +51,7 @@ function downloadLibs ()
         cd $work_dir/$lib_name
         git checkout $arch_name
         cd ..
-        mv $work_dir/$lib_name $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/
+        mv $work_dir/$lib_name $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/
         rm -rf $work_dir/$lib_name
     done
 }
@@ -87,17 +87,17 @@ source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 [ -d $work_dir -a -w $work_dir ] || die "Working directory $work_dir does not exist or is not writable."
 [ -d $result_dir -a -w $result_dir ] || die "Results directory $result_dir does not exist or is not writable."
 
-rm -rf $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER
-mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER
+rm -rf $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
+mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 
 # The following array should contain tuples of the repo name and the branch to get.
 declare -a libs=(
-    "accelerated_io_tools" "v19.3.1"
-    "equi_join"            "v19.3.1"
-    "grouped_aggregate"    "v19.3.0"
-    "shim"                 "v19.3.2"
-    "stream"               "v19.3.1"
-    "superfunpack"         "v19.3.0"
+    "accelerated_io_tools" "v19.11"
+    "equi_join"            "v19.11"
+    "grouped_aggregate"    "v19.11"
+    "shim"                 "v19.11.2"
+    "stream"               "v19.11"
+    "superfunpack"         "master"
 )
 
 downloadLibs "${libs[@]}"
@@ -110,67 +110,68 @@ if [[ "$1" == "rpm" || "$1" == "both" ]]; then
 
     cp $source_dir/specs/extra-scidb-libs.spec $work_dir/rpmbuild/SPECS
 
-    create_makefile $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER
+    create_makefile $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 
-    cp $source_dir/specs/conf $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/shim/conf
+    cp $source_dir/specs/conf $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/shim/conf
 
-    tar -zcvf extra-scidb-libs-${SCIDB_VER:=19.3}.tar.gz extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER
+    tar -zcvf extra-scidb-libs-${SCIDB_VER:=19.11}.tar.gz extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 
     until ls -l $work_dir/rpmbuild/SOURCES > /dev/null; do sleep 1; done
 
-    mv extra-scidb-libs-${SCIDB_VER:=19.3}.tar.gz $work_dir/rpmbuild/SOURCES
+    mv extra-scidb-libs-${SCIDB_VER:=19.11}.tar.gz $work_dir/rpmbuild/SOURCES
 
-    rm -rf extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER
+    rm -rf extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 
     cd $work_dir/rpmbuild/SPECS
-    export SCIDB_INSTALL_PATH=/opt/scidb/${SCIDB_VER:=19.3}; QA_RPATHS=$[ 0x0002|0x0010 ] rpmbuild -ba extra-scidb-libs.spec
+#    export SCIDB_INSTALL_PATH=/opt/scidb/${SCIDB_VER:=19.11}; QA_RPATHS=$[ 0x0002|0x0010 ] rpmbuild -ba extra-scidb-libs.spec
+    QA_RPATHS=$[ 0x0002|0x0010 ] rpmbuild -ba extra-scidb-libs.spec
 
-    cp $work_dir/rpmbuild/RPMS/x86_64/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER-1.x86_64.rpm $result_dir
-    cp $work_dir/rpmbuild/RPMS/x86_64/extra-scidb-libs-${SCIDB_VER:=19.3}-debuginfo-$PKG_VER-1.x86_64.rpm $result_dir
-    cp $work_dir/rpmbuild/SRPMS/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER-1.src.rpm $result_dir
+    cp $work_dir/rpmbuild/RPMS/x86_64/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER-1.x86_64.rpm $result_dir
+    cp $work_dir/rpmbuild/RPMS/x86_64/extra-scidb-libs-${SCIDB_VER:=19.11}-debuginfo-$PKG_VER-1.x86_64.rpm $result_dir
+    cp $work_dir/rpmbuild/SRPMS/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER-1.src.rpm $result_dir
 
 fi
 
 if [[ "$1" == "deb" || "$1" == "both" ]]; then
-    create_makefile $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER
-    cd $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER
+    create_makefile $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
+    cd $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
     make SCIDB=$SCIDB_INSTALL_PATH
 
     if [ $? -eq 0 ]; then
-        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/lib/scidb/plugins
-        cp */*.so $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/lib/scidb/plugins
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/lib/scidb/plugins
+        cp */*.so $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/lib/scidb/plugins
 
-        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/bin
-        cp shim/shim $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/bin
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/bin
+        cp shim/shim $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/bin
 
-        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim
-        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} shim/init.d/after-install.sh > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/after-install.sh
-        chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/after-install.sh
-        cp shim/init.d/before-remove.sh $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/before-remove.sh
-        chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/before-remove.sh
-        cp shim/init.d/setup-conf.sh $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/setup-conf.sh
-        chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/setup-conf.sh
-        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} shim/init.d/shimsvc.service > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/shimsvc.service
-        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} shim/init.d/shimsvc.initd > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/shimsvc.initd
-        chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/shimsvc.initd
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/shim
+        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.11} shim/init.d/after-install.sh > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/after-install.sh
+        chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/after-install.sh
+        cp shim/init.d/before-remove.sh $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/before-remove.sh
+        chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/before-remove.sh
+        cp shim/init.d/setup-conf.sh $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/setup-conf.sh
+        chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/setup-conf.sh
+        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.11} shim/init.d/shimsvc.service > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/shimsvc.service
+        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.11} shim/init.d/shimsvc.initd > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/shimsvc.initd
+        chmod a+rx $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$SCIDB_INSTALL_PATH/shim/shimsvc.initd
 
-        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/var/lib/shim
-        cp -aR shim/wwwroot $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/var/lib/shim
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/var/lib/shim
+        cp -aR shim/wwwroot $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/var/lib/shim
 
-        mkdir $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/DEBIAN
-        m4 -DVERSION=${SCIDB_VER:=19.3} $source_dir/debian/control > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/DEBIAN/control
+        mkdir $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/DEBIAN
+        m4 -DVERSION=${SCIDB_VER:=19.11} $source_dir/debian/control > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/DEBIAN/control
         hname=$(hostname); hname="$hname.$(hostname -d)"
-        m4 -DVERSION=${SCIDB_VER:=19.3} -DDATE="$(date)" -DHOSTNAME=$hname $source_dir/debian/copyright > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/DEBIAN/copyright
+        m4 -DVERSION=${SCIDB_VER:=19.11} -DDATE="$(date)" -DHOSTNAME=$hname $source_dir/debian/copyright > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/DEBIAN/copyright
 
         userinfo=$(getent passwd $(whoami) | cut -d: -f 5)
         [[ $userinfo == "" ]] && userinfo=$(whoami)
         userinfo="$userinfo <$(whoami)@paradigm4.com>"
-        m4 -DVERSION=${SCIDB_VER:=19.3} -DUSERINFO="$userinfo" $source_dir/debian/changelog > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/DEBIAN/changelog
+        m4 -DVERSION=${SCIDB_VER:=19.11} -DUSERINFO="$userinfo" $source_dir/debian/changelog > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/DEBIAN/changelog
 
-        dest=$work_dir/extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/DEBIAN
+        dest=$work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/DEBIAN
         cp -p $source_dir/debian/compat    $dest/compat
-        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} $source_dir/debian/postinst > $dest/postinst
-        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.3} $source_dir/debian/prerm > $dest/prerm
+        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.11} $source_dir/debian/postinst > $dest/postinst
+        m4 -DXXX_SCIDB_VER_XXX=${SCIDB_VER:=19.11} $source_dir/debian/prerm > $dest/prerm
         chmod a+rx $dest/{postinst,prerm}
 
         cd $work_dir
@@ -179,12 +180,12 @@ if [[ "$1" == "deb" || "$1" == "both" ]]; then
         for i in `seq 1 "$((${#params[@]}/2))"`
         do
             lib_name=${params[0]}
-            rm -rf ./extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER/$lib_name
+            rm -rf ./extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/$lib_name
             params=("${params[@]:2}")
         done
 
-        dpkg-deb --build ./extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER
-        mv ./extra-scidb-libs-${SCIDB_VER:=19.3}-$PKG_VER.deb $result_dir
+        dpkg-deb --build ./extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
+        mv ./extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER.deb $result_dir
 
 
     fi

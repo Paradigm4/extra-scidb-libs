@@ -10,24 +10,24 @@ install_lsb_release()
     echo "Step 0. Install lsb_release"
 
     # Check if yum or apt-get is available
-    ( which yum                                                       \
-      >  /dev/null                                                    \
-      2>&1 )                                                          \
-    || ( which apt-get                                                \
-         >  /dev/null                                                 \
-         2>&1 )                                                       \
-    || ( echo "yum or apt-get not detected. Unsuported distribution." \
+    ( yum --version                                                     \
+      >  /dev/null                                                      \
+      2>&1 )                                                            \
+    || ( apt-get --version                                              \
+         >  /dev/null                                                   \
+         2>&1 )                                                         \
+    || ( echo "yum or apt-get not detected. Unsuported distribution."   \
          && exit 1 )
 
     # Assume RedHat/CentOS first. If it fails assume Ubuntu/Debian.
-    ( which yum                                    \
-      >  /dev/null                                 \
-      2>&1                                         \
-      && yum install --assumeyes redhat-lsb-core ) \
-    || ( which apt-get                             \
-         >  /dev/null                              \
-         2>&1                                      \
-         && apt-get update                         \
+    ( yum --version                                     \
+      >  /dev/null                                      \
+      2>&1                                              \
+      && yum install --assumeyes redhat-lsb-core )      \
+    || ( apt-get --version                              \
+         >  /dev/null                                   \
+         2>&1                                           \
+         && apt-get update                              \
          && apt-get install --assume-yes lsb-release )
 }
 
@@ -57,7 +57,7 @@ then
     sed -i 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/intel-mkl.repo
 
     yum install --assumeyes    \
-        https://downloads.paradigm4.com/devtoolset-3/centos/6/sclo/x86_64/rh/devtoolset-3/scidb-devtoolset-3.noarch.rpm
+        https://downloads.paradigm4.com/devtoolset-3/centos/7/sclo/x86_64/rh/devtoolset-3/scidb-devtoolset-3.noarch.rpm
 
     yum install --assumeyes \
         https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-3.noarch.rpm
@@ -65,14 +65,14 @@ then
     cat <<EOF | tee /etc/yum.repos.d/scidb.repo
 [scidb]
 name=SciDB repository
-baseurl=https://downloads.paradigm4.com/community/$SCIDB_VER/centos6.3
+baseurl=https://downloads.paradigm4.com/community/$SCIDB_VER/centos7
 gpgkey=https://downloads.paradigm4.com/key
 gpgcheck=1
 enabled=1
 
 [scidb-extra]
 name=SciDB extra libs repository
-baseurl=https://downloads.paradigm4.com/extra/$SCIDB_VER/centos6.3
+baseurl=https://downloads.paradigm4.com/extra/$SCIDB_VER/centos7
 gpgcheck=0
 enabled=1
 EOF
@@ -91,8 +91,7 @@ EOF
                rpmdevtools                      \
                scidb-$SCIDB_VER                 \
                scidb-$SCIDB_VER-dev             \
-               scidb-$SCIDB_VER-libboost-devel  \
-               zlib-devel
+               scidb-$SCIDB_VER-libboost-devel
     do
         yum install --assumeyes $pkg
     done
@@ -125,45 +124,32 @@ deb http://archive.ubuntu.com/ubuntu/ trusty main
 APT_LINE
         apt-key adv --keyserver keyserver.ubuntu.com  --recv-keys \
             3B4FE6ACC0B21F32
-    else
-        cat <<APT_LINE | tee /etc/apt/sources.list.d/ubuntu-toolchain-r-test-trusty.list
-deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu trusty main
-APT_LINE
-        apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv \
-            1E9377A2BA9EF27F
     fi
 
     cat <<APT_LINE | tee /etc/apt/sources.list.d/scidb.list
-deb https://downloads.paradigm4.com/ community/$SCIDB_VER/ubuntu14.04/
-deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu14.04/
+deb https://downloads.paradigm4.com/ community/$SCIDB_VER/xenial/
+deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu16.04/
 APT_LINE
      apt-key adv --fetch-keys https://downloads.paradigm4.com/key
 
     echo "Step 2. Install prerequisites"
     apt-get update
-    apt-get install                                     \
-        --assume-yes                                    \
-        --force-yes                                     \
-        --no-install-recommends                         \
-        g++                                             \
-        git                                             \
-        libarrow-dev=$ARROW_VER                         \
-        liblog4cxx10-dev                                \
-        libpcre3-dev                                    \
-        libpqxx-dev                                     \
-        libprotobuf-dev=2.5.0-9ubuntu1                  \
-        m4                                              \
-        make                                            \
-        scidb-$SCIDB_VER                                \
-        scidb-$SCIDB_VER-dev                            \
-        scidb-$SCIDB_VER-libboost-system1.54-dev        \
-        scidb-$SCIDB_VER-libboost1.54-dev
-
-    if [ "$dist" = "Ubuntu" ]
-    then
-        apt-get install                         \
-            --assume-yes                        \
-            --no-install-recommends             \
-            g++-4.9
-    fi
+    apt-get upgrade
+    apt-get install                             \
+        --assume-yes                            \
+        --no-install-recommends                 \
+        bc                                      \
+        g++                                     \
+        git                                     \
+        libarrow-dev=$ARROW_VER                 \
+        libboost-system1.58-dev                 \
+        libboost1.58-dev                        \
+        liblog4cxx10-dev                        \
+        libpcre3-dev                            \
+        libpqxx-dev                             \
+        libprotobuf-dev                         \
+        m4                                      \
+        make                                    \
+        scidb-$SCIDB_VER                        \
+        scidb-$SCIDB_VER-dev
 fi
