@@ -138,6 +138,7 @@ APT_LINE
     apt-get install                             \
         --assume-yes                            \
         --no-install-recommends                 \
+        bc                                      \
         g++                                     \
         git                                     \
         libarrow-dev=$ARROW_VER                 \
@@ -151,12 +152,4 @@ APT_LINE
         make                                    \
         scidb-$SCIDB_VER                        \
         scidb-$SCIDB_VER-dev
-
-    if [ "$dist" = "Ubuntu" ]
-    then
-        apt-get install                         \
-            --assume-yes                        \
-            --no-install-recommends             \
-            g++-4.9
-    fi
 fi
