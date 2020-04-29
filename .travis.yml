@@ -46,7 +46,6 @@ before_script:
     --rm
     --tty
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
-    --volume /sys/fs/selinux:/sys/fs/selinux:ro
     --volume /tmp/$(mktemp --directory):/run
     --volume `pwd`:/this
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
