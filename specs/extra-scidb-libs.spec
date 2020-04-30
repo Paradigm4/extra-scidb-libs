@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-19.3
-Version:        4
+Version:        5
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -106,6 +106,10 @@ $SCIDB_INSTALL_PATH/shim/before-remove.sh
 %doc
 
 %changelog
+
+* Wed Apr 29 2020 Rares Vernica <rvernica@gmail.com>
+- accelerated_io_tools with fix for settings addressing
+- superfunpack with MurmurHash support and null fix
 
 * Mon Feb 17 2020 Rares Vernica <rvernica@gmail.com>
 - equi_join with fix for parameter parsing

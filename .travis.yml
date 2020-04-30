@@ -13,7 +13,7 @@ python:
 env:
   global:
     - SCIDB_VER=19.3
-    - PKG_VER=4
+    - PKG_VER=5
   jobs:
     - BUILD_IMG=ubuntu:trusty
       DEPLOY_IMG=

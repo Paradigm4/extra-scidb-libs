@@ -1,3 +1,10 @@
+extra-scidb-libs-19.3 (5)
+
+ * accelerated_io_tools with fix for settings addressing
+ * superfunpack with MurmurHash support and null fix
+
+-- Rares Vernica <rvernica@gmail.com>  Wed, 29 Apr 2020 21:00:00 -0800
+
 extra-scidb-libs-19.3 (4)
 
  * equi_join with fix for parameter parsing
