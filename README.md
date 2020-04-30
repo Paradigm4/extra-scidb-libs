@@ -15,9 +15,9 @@ Usage:
 ```bash
 wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 ```
-# Manuall Install
+# Manual Install
 
-## CentOS 6 & 7
+## CentOS 7
 
 1. Install the Extra Packages for Enterprise Linux (EPEL) repository
    (see [instructions](https://fedoraproject.org/wiki/EPEL)), if not
@@ -27,17 +27,17 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
    > cat <<EOF | sudo tee /etc/yum.repos.d/scidb-extra.repo
    [scidb-extra]
    name=SciDB extra libs repository
-   baseurl=https://downloads.paradigm4.com/extra/$SCIDB_VER/centos6.3
+   baseurl=https://downloads.paradigm4.com/extra/$SCIDB_VER/centos7
    gpgcheck=0
    enabled=1
    EOF
    ```
 1. Install the `extra-scidb-libs` package:
    ```bash
-   > sudo yum install extra-scidb-libs-18.1
+   > sudo yum install extra-scidb-libs-19.11
    ```
 
-## Ubuntu Trusty
+## Ubuntu Xenial
 
 1. Install the `apt-transport-https` package (if not already installed):
    ```bash
@@ -46,27 +46,52 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 1. Add the SciDB Extra Libs repository:
    ```bash
    > cat <<APT_LINE | sudo tee /etc/apt/sources.list.d/scidb-extra.list
-   deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu14.04/
+   deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu16.04/
    APT_LINE
    > sudo apt-get update
    ```
 1. Install the `extra-scidb-libs` package:
    ```bash
-   > sudo apt-get install extra-scidb-libs-18.1
+   > sudo apt-get install extra-scidb-libs-19.11
    ```
 
 # Download
 
-## CentOS 6 & 7
+## SciDB 19.11
 
-### SciDB 19.1
+# CentOS 7
 
+* [extra-scidb-libs-19.11-3-1.x86_64.rpm](extra-scidb-libs-19.11-3-1.x86_64.rpm) (April 30, 2020)
+* [extra-scidb-libs-19.11-2-1.x86_64.rpm](extra-scidb-libs-19.11-2-1.x86_64.rpm) (April 30, 2020)
+* [extra-scidb-libs-19.11-1-1.x86_64.rpm](extra-scidb-libs-19.11-1-1.x86_64.rpm) (April 30, 2020)
+
+# Ubuntu Xenial
+
+* [extra-scidb-libs-19.11-3.deb](extra-scidb-libs-19.11-3.deb) (April 30, 2020)
+* [extra-scidb-libs-19.11-2.deb](extra-scidb-libs-19.11-2.deb) (April 30, 2020)
+* [extra-scidb-libs-19.11-1.deb](extra-scidb-libs-19.11-1.deb) (April 30, 2020)
+
+## SciDB 19.3
+
+### CentOS 6 & 7
+
+* [extra-scidb-libs-19.3-5-1.x86_64.rpm](extra-scidb-libs-19.3-5-1.x86_64.rpm) (April 29, 2020)
 * [extra-scidb-libs-19.3-4-1.x86_64.rpm](extra-scidb-libs-19.3-4-1.x86_64.rpm) (February 17, 2020)
 * [extra-scidb-libs-19.3-3-1.x86_64.rpm](extra-scidb-libs-19.3-3-1.x86_64.rpm) (November 5, 2019)
 * [extra-scidb-libs-19.3-2-1.x86_64.rpm](extra-scidb-libs-19.3-2-1.x86_64.rpm) (September 26, 2019)
 * [extra-scidb-libs-19.3-1-1.x86_64.rpm](extra-scidb-libs-19.3-1-1.x86_64.rpm) (July 9, 2019)
 
-### SciDB 18.1
+### Ubuntu Trusty
+
+* [extra-scidb-libs-19.3-5.deb](extra-scidb-libs-19.3-5.deb) (April 29, 2020)
+* [extra-scidb-libs-19.3-4.deb](extra-scidb-libs-19.3-4.deb) (February 17, 2020)
+* [extra-scidb-libs-19.3-3.deb](extra-scidb-libs-19.3-3.deb) (November 5, 2019)
+* [extra-scidb-libs-19.3-2.deb](extra-scidb-libs-19.3-2.deb) (September 26, 2019)
+* [extra-scidb-libs-19.3-1.deb](extra-scidb-libs-19.3-1.deb) (July 9, 2019)
+
+## SciDB 18.1
+
+### CentOS 6 & 7
 
 * [extra-scidb-libs-18.1-9-1.x86_64.rpm](extra-scidb-libs-18.1-9-1.x86_64.rpm) (September 26, 2019)
 * [extra-scidb-libs-18.1-8-1.x86_64.rpm](extra-scidb-libs-18.1-8-1.x86_64.rpm) (May 22, 2019)
@@ -79,16 +104,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 * [extra-scidb-libs-18.1-1-1.x86_64.rpm](extra-scidb-libs-18.1-1-1.x86_64.rpm) (April 13, 2018)
 * [extra-scidb-libs-18.1-0-1.x86_64.rpm](extra-scidb-libs-18.1-0-1.x86_64.rpm) (March 21, 2018)
 
-## Ubuntu Trusty
-
-### SciDB 19.3
-
-* [extra-scidb-libs-19.3-4.deb](extra-scidb-libs-19.3-4.deb) (February 17, 2020)
-* [extra-scidb-libs-19.3-3.deb](extra-scidb-libs-19.3-3.deb) (November 5, 2019)
-* [extra-scidb-libs-19.3-2.deb](extra-scidb-libs-19.3-2.deb) (September 26, 2019)
-* [extra-scidb-libs-19.3-1.deb](extra-scidb-libs-19.3-1.deb) (July 9, 2019)
-
-### SciDB 18.1
+### Ubuntu Trusty
 
 * [extra-scidb-libs-18.1-9.deb](extra-scidb-libs-18.1-9.deb) (September 26, 2019)
 * [extra-scidb-libs-18.1-8.deb](extra-scidb-libs-18.1-8.deb) (May 22, 2019)
@@ -103,8 +119,20 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 # Change Log
 
+## SciDB 19.11
+
+* Version `3`
+  * `shim` with fix for query side effects
+* Version `2`
+  * `accelerated_io_tools` with fix for `aio_input` cancel
+* Version `1`
+  * Port plug-ins to SciDB `19.11`
+
 ## SciDB 19.3
 
+* Version `5`
+  * `accelerated_io_tools` with fix for settings addressing
+  * `superfunpack` with MurmurHash support and `null` fix
 * Version `4`
   * `equi_join` with fix for parameter parsing
   * `stream` with fix for fork issue

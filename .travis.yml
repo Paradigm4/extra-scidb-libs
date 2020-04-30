@@ -11,14 +11,10 @@ python:
   - "3.6"
 
 env:
-  global: SCIDB_VER=19.3
+  global: SCIDB_VER=19.11
   jobs:
-    - IMG=          INSTALL=         ENTRYPOINT=/lib/systemd/systemd
-    - IMG=          INSTALL=--github ENTRYPOINT=/lib/systemd/systemd
-    - IMG=-trusty   INSTALL=         ENTRYPOINT=/docker-entrypoint.sh
-    - IMG=-trusty   INSTALL=--github ENTRYPOINT=/docker-entrypoint.sh
-    - IMG=-centos-6 INSTALL=         ENTRYPOINT=/docker-entrypoint.sh
-    - IMG=-centos-6 INSTALL=--github ENTRYPOINT=/docker-entrypoint.sh
+    - IMG=-xenial   INSTALL=         ENTRYPOINT=/sbin/init
+    - IMG=-xenial   INSTALL=--github ENTRYPOINT=/sbin/init
     - IMG=-centos-7 INSTALL=         ENTRYPOINT=/docker-entrypoint.sh
     - IMG=-centos-7 INSTALL=--github ENTRYPOINT=/docker-entrypoint.sh
 
@@ -27,25 +23,19 @@ services:
 
 install:
   - docker run
+    --cap-add SYS_ADMIN
     --detach
     --entrypoint $ENTRYPOINT
     --name container
     --rm
-    --security-opt seccomp:unconfined
     --tty
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
     --volume /tmp/$(mktemp --directory):/run
-    --volume /tmp/$(mktemp --directory):/run/lock
     rvernica/scidb:${SCIDB_VER}${IMG}
 
-  - if [ "$ENTRYPOINT" = "/lib/systemd/systemd" ]; then
-      docker exec container /docker-entrypoint.sh echo;
-    fi
+  - docker exec container /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb
 
 script:
-  - if [ "$IMG" = "-centos-7" ]; then
-      docker exec container /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb;
-    fi
   - docker exec container sh -c
     "wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh
      |  sh -s -- $INSTALL"
