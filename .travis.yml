@@ -13,7 +13,7 @@ python:
 env:
   global:
     - SCIDB_VER=19.11
-    - PKG_VER=1
+    - PKG_VER=2
   jobs:
     - BUILD_IMG=ubuntu:xenial
       DEPLOY_IMG=-xenial
@@ -50,9 +50,6 @@ before_script:
     --volume `pwd`:/this
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 
-  - if [ "$TARGET" = "deb" ]; then
-      docker exec deploy apt-get upgrade --assume-yes ;
-    fi
   - docker exec deploy /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb
 
 script:
