@@ -1,3 +1,9 @@
+extra-scidb-libs-19.11 (3)
+
+ * shim with fix for side effects
+
+-- Rares Vernica <rvernica@gmail.com>  Thr, 30 Apr 2020 15:00:00 -0800
+
 extra-scidb-libs-19.11 (2)
 
  * accelerated_io_tools with fix for aio_input cancel
