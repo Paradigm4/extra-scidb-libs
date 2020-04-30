@@ -7,8 +7,8 @@
 set -o errexit
 
 
-SCIDB_VER=19.3
-PKG_VER=4
+SCIDB_VER=19.11
+PKG_VER=3
 ARROW_VER=0.9.0-1
 
 
@@ -61,14 +61,17 @@ then
     cat <<EOF | tee /etc/yum.repos.d/scidb-extra.repo
 [scidb-extra]
 name=SciDB extra libs repository
-baseurl=https://downloads.paradigm4.com/extra/$SCIDB_VER/centos6.3
+baseurl=https://downloads.paradigm4.com/extra/$SCIDB_VER/centos7
 gpgcheck=0
 enabled=1
 EOF
 
     if [ "$rel" = "7" ]
     then
-        ln -s /usr/lib64/libpcre.so.1 /usr/lib64/libpcre.so.0
+	if [ ! -f /usr/lib64/libpcre.so.0 ]
+	   then
+               ln -s /usr/lib64/libpcre.so.1 /usr/lib64/libpcre.so.0
+	fi
     fi
 
     # yum install --assumeyes \
@@ -100,7 +103,7 @@ else
         gnupg-curl
 
     cat <<APT_LINE | tee /etc/apt/sources.list.d/scidb-extra.list
-deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu14.04/
+deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu16.04/
 APT_LINE
     apt-get update
 
