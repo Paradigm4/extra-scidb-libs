@@ -107,6 +107,10 @@ $SCIDB_INSTALL_PATH/shim/before-remove.sh
 
 %changelog
 
+* Wed Apr 29 2020 Rares Vernica <rvernica@gmail.com>
+- accelerated_io_tools with fix for settings addressing
+- superfunpack with MurmurHash support and null fix
+
 * Mon Feb 17 2020 Rares Vernica <rvernica@gmail.com>
 - equi_join with fix for parameter parsing
 - stream with fix for fork issue
