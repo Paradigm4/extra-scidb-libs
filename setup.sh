@@ -134,7 +134,7 @@ APT_LINE
 
     echo "Step 2. Install prerequisites"
     apt-get update
-    apt-get upgrade
+    apt-get upgrade --assume-yes
     apt-get install                             \
         --assume-yes                            \
         --no-install-recommends                 \

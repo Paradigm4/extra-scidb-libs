@@ -63,7 +63,7 @@ script:
   - docker exec deploy sh /this/install.sh --only-prereq
   - if [ "$TARGET" = "rpm" ]; then
       docker exec deploy yum install --assumeyes
-        /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER-1.x86_64.rpm;
+        /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER-1.x86_64.rpm ;
     else
       docker exec deploy apt-get install
         --assume-yes
