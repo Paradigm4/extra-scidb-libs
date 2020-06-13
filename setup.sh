@@ -2,7 +2,7 @@
 
 set -o errexit
 
-ARROW_VER=0.9.0-1
+ARROW_VER=0.9.0
 
 
 install_lsb_release()
@@ -78,7 +78,7 @@ enabled=1
 EOF
 
     echo "Step 2. Install prerequisites"
-    for pkg in arrow-devel-$ARROW_VER.el6       \
+    for pkg in arrow-devel-$ARROW_VER           \
                devtoolset-3-runtime             \
                devtoolset-3-toolchain           \
                gcc                              \
@@ -141,7 +141,7 @@ APT_LINE
         bc                                      \
         g++                                     \
         git                                     \
-        libarrow-dev=$ARROW_VER                 \
+        libarrow-dev=$ARROW_VER-1               \
         libboost-system1.58-dev                 \
         libboost1.58-dev                        \
         liblog4cxx10-dev                        \
