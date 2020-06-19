@@ -123,7 +123,8 @@ To update one of the included plugins do the following:
 In order to increase the version number of the package do the
 following:
 
-1. Edit the `specs/extra-scidb-libs.spec` file and update the `Version:` line. Optionally, update the `%changelog` section.
+1. Edit the `specs/extra-scidb-libs.spec` file and update the
+   `Version:` line. Optionally, update the `%changelog` section.
 1. Edit the `debian/control` file and update the `Version:` line.
 1. Edit the `debian/copyright` file and update the `Version:` line.
 1. Optionally, update the `debian/changelog` file.
