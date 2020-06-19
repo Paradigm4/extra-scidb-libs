@@ -8,7 +8,7 @@ set -o errexit
 
 
 SCIDB_VER=19.11
-PKG_VER=3
+PKG_VER=4
 ARROW_VER=0.9.0-1
 
 
@@ -44,8 +44,8 @@ which lsb_release      \
 2>&1                   \
 || install_lsb_release
 
-dist=`lsb_release --id | cut --fields=2`
-rel=`lsb_release --release | cut --fields=2 | cut --delimiter=. --fields=1`
+dist=`lsb_release --id --short`
+rel=`lsb_release --release --short | cut --delimiter=. --fields=1`
 
 
 if [ "$dist" = "CentOS" ]
@@ -58,7 +58,7 @@ then
     || yum install --assumeyes \
         https://dl.fedoraproject.org/pub/epel/epel-release-latest-$rel.noarch.rpm
 
-    cat <<EOF | tee /etc/yum.repos.d/scidb-extra.repo
+    cat > /etc/yum.repos.d/scidb-extra.repo <<EOF
 [scidb-extra]
 name=SciDB extra libs repository
 baseurl=https://downloads.paradigm4.com/extra/$SCIDB_VER/centos7
@@ -102,9 +102,9 @@ else
         ca-certificates                         \
         gnupg-curl
 
-    cat <<APT_LINE | tee /etc/apt/sources.list.d/scidb-extra.list
+    cat > /etc/apt/sources.list.d/scidb-extra.list <<EOF
 deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu16.04/
-APT_LINE
+EOF
     apt-get update
 
     if [ "$1" != "--only-prereq" ]

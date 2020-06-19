@@ -61,12 +61,14 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 # CentOS 7
 
+* [extra-scidb-libs-19.11-4-1.x86_64.rpm](extra-scidb-libs-19.11-4-1.x86_64.rpm) (June 18, 2020)
 * [extra-scidb-libs-19.11-3-1.x86_64.rpm](extra-scidb-libs-19.11-3-1.x86_64.rpm) (April 30, 2020)
 * [extra-scidb-libs-19.11-2-1.x86_64.rpm](extra-scidb-libs-19.11-2-1.x86_64.rpm) (April 30, 2020)
 * [extra-scidb-libs-19.11-1-1.x86_64.rpm](extra-scidb-libs-19.11-1-1.x86_64.rpm) (April 30, 2020)
 
 # Ubuntu Xenial
 
+* [extra-scidb-libs-19.11-4.deb](extra-scidb-libs-19.11-4.deb) (June 18, 2020)
 * [extra-scidb-libs-19.11-3.deb](extra-scidb-libs-19.11-3.deb) (April 30, 2020)
 * [extra-scidb-libs-19.11-2.deb](extra-scidb-libs-19.11-2.deb) (April 30, 2020)
 * [extra-scidb-libs-19.11-1.deb](extra-scidb-libs-19.11-1.deb) (April 30, 2020)
@@ -121,10 +123,12 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ## SciDB 19.11
 
+* Version `4`
+  * `accelerated_io_tools` with fix for `read` bug and optional Arrow (`v19.11.3`)
 * Version `3`
-  * `shim` with fix for query side effects
+  * `shim` with fix for query side effects (`v19.11.2`)
 * Version `2`
-  * `accelerated_io_tools` with fix for `aio_input` cancel
+  * `accelerated_io_tools` with fix for `aio_input` cancel (`v19.11.2`)
 * Version `1`
   * Port plug-ins to SciDB `19.11`
 
