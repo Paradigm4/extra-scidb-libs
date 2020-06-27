@@ -8,8 +8,8 @@ set -o errexit
 
 
 SCIDB_VER=19.11
-PKG_VER=4
-ARROW_VER=0.9.0-1
+PKG_VER=5
+ARROW_VER=0.16.0
 
 
 install_lsb_release()
@@ -58,6 +58,10 @@ then
     || yum install --assumeyes \
         https://dl.fedoraproject.org/pub/epel/epel-release-latest-$rel.noarch.rpm
 
+    yum install --assumeyes https://apache.bintray.com/arrow/centos/$(
+        cut --delimiter : --fields 5 /etc/system-release-cpe
+        )/apache-arrow-release-latest.rpm
+
     cat > /etc/yum.repos.d/scidb-extra.repo <<EOF
 [scidb-extra]
 name=SciDB extra libs repository
@@ -73,9 +77,6 @@ EOF
                ln -s /usr/lib64/libpcre.so.1 /usr/lib64/libpcre.so.0
 	fi
     fi
-
-    # yum install --assumeyes \
-    #     https://dl.bintray.com/rvernica/rpm/arrow-libs-$ARROW_VER.el6.x86_64.rpm
 
     if [ "$1" != "--only-prereq" ]
     then
@@ -102,6 +103,19 @@ else
         ca-certificates                         \
         gnupg-curl
 
+    id=`lsb_release --id --short`
+    codename=`lsb_release --codename --short`
+    if [ "$codename" = "stretch" ]
+    then
+        cat > /etc/apt/sources.list.d/backports.list <<EOF
+deb http://deb.debian.org/debian $codename-backports main
+EOF
+    fi
+    wget https://apache.bintray.com/arrow/$(
+        echo $id | tr 'A-Z' 'a-z'
+         )/apache-arrow-archive-keyring-latest-$codename.deb
+    apt install --assume-yes ./apache-arrow-archive-keyring-latest-$codename.deb
+
     cat > /etc/apt/sources.list.d/scidb-extra.list <<EOF
 deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu16.04/
 EOF
@@ -115,7 +129,7 @@ EOF
             apt-get install                     \
                     --assume-yes                \
                     --no-install-recommends     \
-                    libarrow0                   \
+                    libarrow0=$ARROW_VER-1      \
                     wget
             wget --output-document /tmp/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb \
                  https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb
