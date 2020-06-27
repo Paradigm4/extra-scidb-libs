@@ -9,7 +9,8 @@ set -o errexit
 
 SCIDB_VER=19.11
 PKG_VER=5
-ARROW_VER=0.16.0
+ARROW_VER_PART=16
+ARROW_VER=0.$ARROW_VER_PART.0
 
 
 install_lsb_release()
@@ -126,10 +127,10 @@ EOF
         echo "Step 2. Install extra-scidb-libs"
         if [ "$1" = "--github" ]
         then
-            apt-get install                     \
-                    --assume-yes                \
-                    --no-install-recommends     \
-                    libarrow0=$ARROW_VER-1      \
+            apt-get install                                     \
+                    --assume-yes                                \
+                    --no-install-recommends                     \
+                    libarrow$ARROW_VER_PART=$ARROW_VER-1        \
                     wget
             wget --output-document /tmp/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb \
                  https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb
