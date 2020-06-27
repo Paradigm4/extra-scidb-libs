@@ -61,10 +61,6 @@ script:
     /this
     $PKG_VER
 
-
-  - if [ "$TARGET" = "deb" ]; then
-      docker exec deploy mount /sys/fs/selinux -o remount,ro ;
-    fi
   - docker exec deploy sh /this/install.sh --only-prereq
   - if [ "$TARGET" = "rpm" ]; then
       docker exec deploy yum install --assumeyes
