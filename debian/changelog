@@ -1,3 +1,10 @@
+extra-scidb-libs-19.11 (5)
+
+ * accelerated_io_tools with support for Apache Arrow 0.16.0
+ * stream with support for Apache Arrow 0.16.0
+
+-- Rares Vernica <rvernica@gmail.com>  Thr, 18 Jun 2020 19:00:00 -0800
+
 extra-scidb-libs-19.11 (4)
 
  * accelerated_io_tools fix read bug, Arrow optional

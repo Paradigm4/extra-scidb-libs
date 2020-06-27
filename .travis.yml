@@ -13,7 +13,8 @@ python:
 env:
   global:
     - SCIDB_VER=19.11
-    - PKG_VER=4
+    - PKG_VER=5
+    - ARROW_VER_PART=16
   jobs:
     - BUILD_IMG=ubuntu:xenial
       DEPLOY_IMG=-xenial
@@ -60,6 +61,10 @@ script:
     /this
     $PKG_VER
 
+
+  - if [ "$TARGET" = "deb" ]; then
+      docker exec deploy mount /sys/fs/selinux -o remount,ro ;
+    fi
   - docker exec deploy sh /this/install.sh --only-prereq
   - if [ "$TARGET" = "rpm" ]; then
       docker exec deploy yum install --assumeyes
@@ -68,7 +73,7 @@ script:
       docker exec deploy apt-get install
         --assume-yes
         --no-install-recommends
-        libarrow0 ;
+        libarrow$ARROW_VER_PART ;
       docker exec deploy dpkg --install
         /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb ;
     fi

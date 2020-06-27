@@ -2,7 +2,7 @@
 
 set -o errexit
 
-ARROW_VER=0.9.0
+ARROW_VER=0.16.0
 
 
 install_lsb_release()
@@ -61,6 +61,10 @@ then
 
     yum install --assumeyes \
         https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-3.noarch.rpm
+
+    yum install --assumeyes https://apache.bintray.com/arrow/centos/$(
+        cut --delimiter : --fields 5 /etc/system-release-cpe
+        )/apache-arrow-release-latest.rpm
 
     cat <<EOF | tee /etc/yum.repos.d/scidb.repo
 [scidb]
@@ -126,11 +130,24 @@ APT_LINE
             3B4FE6ACC0B21F32
     fi
 
+    id=`lsb_release --id --short`
+    codename=`lsb_release --codename --short`
+    if [ "$codename" = "stretch" ]
+    then
+        cat > /etc/apt/sources.list.d/backports.list <<EOF
+deb http://deb.debian.org/debian $codename-backports main
+EOF
+    fi
+    wget https://apache.bintray.com/arrow/$(
+        echo $id | tr 'A-Z' 'a-z'
+         )/apache-arrow-archive-keyring-latest-$codename.deb
+    apt install --assume-yes ./apache-arrow-archive-keyring-latest-$codename.deb
+
     cat <<APT_LINE | tee /etc/apt/sources.list.d/scidb.list
 deb https://downloads.paradigm4.com/ community/$SCIDB_VER/xenial/
 deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu16.04/
 APT_LINE
-     apt-key adv --fetch-keys https://downloads.paradigm4.com/key
+    apt-key adv --fetch-keys https://downloads.paradigm4.com/key
 
     echo "Step 2. Install prerequisites"
     apt-get update
