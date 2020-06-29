@@ -59,9 +59,10 @@ then
     || yum install --assumeyes \
         https://dl.fedoraproject.org/pub/epel/epel-release-latest-$rel.noarch.rpm
 
-    yum install --assumeyes https://apache.bintray.com/arrow/centos/$(
+    yum list installed apache-arrow-release \
+    || yum install --assumeyes https://apache.bintray.com/arrow/centos/$(
         cut --delimiter : --fields 5 /etc/system-release-cpe
-        )/apache-arrow-release-latest.rpm
+           )/apache-arrow-release-latest.rpm
 
     cat > /etc/yum.repos.d/scidb-extra.repo <<EOF
 [scidb-extra]
