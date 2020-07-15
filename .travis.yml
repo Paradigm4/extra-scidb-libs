@@ -75,6 +75,14 @@ script:
     fi
   - docker exec deploy sh /this/try.sh
 
+  - if [ "$TARGET" = "rpm" ]; then
+      docker exec deploy yum remove --assumeyes
+        extra-scidb-libs-$SCIDB_VER ;
+    else
+      docker exec deploy apt-get remove --assume-yes --purge
+        extra-scidb-libs-$SCIDB_VER ;
+    fi
+
 after_script:
   - docker stop script
   - docker stop deploy
