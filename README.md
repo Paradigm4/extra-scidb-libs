@@ -22,6 +22,8 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 1. Install the Extra Packages for Enterprise Linux (EPEL) repository
    (see [instructions](https://fedoraproject.org/wiki/EPEL)), if not
    already installed.
+1. Add the Apache Arrow repository (see
+   [instructions](https://arrow.apache.org/install/))
 1. Add the SciDB Extra Libs repository:
    ```bash
    > cat <<EOF | sudo tee /etc/yum.repos.d/scidb-extra.repo
@@ -43,6 +45,8 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
    ```bash
    > sudo apt-get install apt-transport-https
    ```
+1. Add the Apache Arrow repository (see
+   [instructions](https://arrow.apache.org/install/))
 1. Add the SciDB Extra Libs repository:
    ```bash
    > cat <<APT_LINE | sudo tee /etc/apt/sources.list.d/scidb-extra.list
