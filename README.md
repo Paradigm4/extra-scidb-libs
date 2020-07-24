@@ -65,6 +65,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 # CentOS 7
 
+* [extra-scidb-libs-19.11-6-1.x86_64.rpm](extra-scidb-libs-19.11-6-1.x86_64.rpm) (July 23, 2020)
 * [extra-scidb-libs-19.11-5-1.x86_64.rpm](extra-scidb-libs-19.11-5-1.x86_64.rpm) (June 27, 2020)
 * [extra-scidb-libs-19.11-4-1.x86_64.rpm](extra-scidb-libs-19.11-4-1.x86_64.rpm) (June 18, 2020)
 * [extra-scidb-libs-19.11-3-1.x86_64.rpm](extra-scidb-libs-19.11-3-1.x86_64.rpm) (April 30, 2020)
@@ -73,6 +74,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 # Ubuntu Xenial
 
+* [extra-scidb-libs-19.11-6.deb](extra-scidb-libs-19.11-6.deb) (July 23, 2020)
 * [extra-scidb-libs-19.11-5.deb](extra-scidb-libs-19.11-5.deb) (June 27, 2020)
 * [extra-scidb-libs-19.11-4.deb](extra-scidb-libs-19.11-4.deb) (June 18, 2020)
 * [extra-scidb-libs-19.11-3.deb](extra-scidb-libs-19.11-3.deb) (April 30, 2020)
@@ -129,6 +131,11 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ## SciDB 19.11
 
+* Version `6`
+   * `accelerated_io_tools` with fix for dangling reference (`v19.11.5`)
+   * `equi_join` with minor fixes (`v19.11.2`)
+   * `grouped_aggregate` with minor fixes (`v19.11.2`)
+   * `shim` with fixes for configuration file, installation failures, auto-commit queries, make service, and CXX flags (`v19.11.3`)
 * Version `5`
    * `accelerated_io_tools` with support for Apache Arrow `0.16.0` (`v19.11.4`)
    * `stream` with support for Apache Arrow `0.16.0` (`v19.11.2`)
