@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-19.11
-Version:        5
+Version:        6
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -106,6 +106,13 @@ $SCIDB_INSTALL_PATH/shim/before-remove.sh
 %doc
 
 %changelog
+
+* Thu Jul 23 2020 Rares Vernica <rvernica@gmail.com>
+- accelerated_io_tools with fix for dangling reference
+- equi_join with minor fixes
+- grouped_aggregate with minor fixes
+- shim with fixes for configuration file, installation failures,
+  auto-commit queries, make service, and CXX flags
 
 * Thu Jun 27 2020 Rares Vernica <rvernica@gmail.com>
 - accelerated_io_tools with support for Apache Arrow 0.16.0

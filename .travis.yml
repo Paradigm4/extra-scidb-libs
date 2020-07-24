@@ -13,17 +13,15 @@ python:
 env:
   global:
     - SCIDB_VER=19.11
-    - PKG_VER=5
+    - PKG_VER=6
     - ARROW_VER_PART=16
   jobs:
     - BUILD_IMG=ubuntu:xenial
       DEPLOY_IMG=-xenial
       TARGET=deb
-      ENTRYPOINT=/sbin/init
     - BUILD_IMG=centos:7
       DEPLOY_IMG=-centos-7
       TARGET=rpm
-      ENTRYPOINT=/docker-entrypoint.sh
 
 services:
   - docker
@@ -40,9 +38,7 @@ before_script:
     $BUILD_IMG
 
   - docker run
-    --cap-add SYS_ADMIN
     --detach
-    --entrypoint $ENTRYPOINT
     --name deploy
     --rm
     --tty
@@ -51,7 +47,9 @@ before_script:
     --volume `pwd`:/this
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 
-  - docker exec deploy /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb
+  - if [ "$TARGET" = "rpm" ]; then
+      docker exec deploy /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb ;
+    fi
 
 script:
   - docker exec script sh /this/setup.sh
@@ -70,8 +68,8 @@ script:
         --assume-yes
         --no-install-recommends
         libarrow$ARROW_VER_PART ;
-      docker exec deploy dpkg --install
-        /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb ;
+      docker exec --env EXTRA_SCIDB_LIBS_SYSTEMCTL_FAIL_OK=true deploy
+        dpkg --install /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb ;
     fi
   - docker exec deploy sh /this/try.sh
 
