@@ -24,6 +24,7 @@ services:
 install:
   - docker run
     --detach
+    --env EXTRA_SCIDB_LIBS_SYSTEMCTL_FAIL_OK=true
     --name container
     --rm
     --tty
