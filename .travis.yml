@@ -13,19 +13,17 @@ python:
 env:
   global: SCIDB_VER=19.11
   jobs:
-    - IMG=-xenial   INSTALL=         ENTRYPOINT=/sbin/init
-    - IMG=-xenial   INSTALL=--github ENTRYPOINT=/sbin/init
-    - IMG=-centos-7 INSTALL=         ENTRYPOINT=/docker-entrypoint.sh
-    - IMG=-centos-7 INSTALL=--github ENTRYPOINT=/docker-entrypoint.sh
+    - IMG=-xenial   INSTALL=
+    - IMG=-xenial   INSTALL=--github
+    - IMG=-centos-7 INSTALL=
+    - IMG=-centos-7 INSTALL=--github
 
 services:
   - docker
 
 install:
   - docker run
-    --cap-add SYS_ADMIN
     --detach
-    --entrypoint $ENTRYPOINT
     --name container
     --rm
     --tty
@@ -33,7 +31,9 @@ install:
     --volume /tmp/$(mktemp --directory):/run
     rvernica/scidb:${SCIDB_VER}${IMG}
 
-  - docker exec container /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb
+  - if [ "$IMG" = "-centos-7" ]; then
+      docker exec container /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb ;
+    fi
 
 script:
   - docker exec container sh -c
@@ -42,3 +42,11 @@ script:
   - docker exec container sh -c
     "wget -O- https://paradigm4.github.io/extra-scidb-libs/try.sh
      |  sh"
+
+  - if [ "$IMG" = "-centos-7" ]; then
+      docker exec container yum remove --assumeyes
+        extra-scidb-libs-$SCIDB_VER ;
+    else
+      docker exec container apt-get remove --assume-yes --purge
+        extra-scidb-libs-$SCIDB_VER ;
+    fi
