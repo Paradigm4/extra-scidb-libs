@@ -39,6 +39,7 @@ before_script:
 
   - docker run
     --detach
+    --env EXTRA_SCIDB_LIBS_SYSTEMCTL_FAIL_OK=true
     --name deploy
     --rm
     --tty
@@ -68,8 +69,8 @@ script:
         --assume-yes
         --no-install-recommends
         libarrow$ARROW_VER_PART ;
-      docker exec --env EXTRA_SCIDB_LIBS_SYSTEMCTL_FAIL_OK=true deploy
-        dpkg --install /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb ;
+      docker exec deploy dpkg --install
+        /this/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb ;
     fi
   - docker exec deploy sh /this/try.sh
 
