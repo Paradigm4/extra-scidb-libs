@@ -5,6 +5,7 @@ set -o errexit
 QUERY="iquery --afl --query"
 
 $QUERY "load_library('accelerated_io_tools')"
+$QUERY "load_library('bridge')"
 $QUERY "load_library('equi_join')"
 $QUERY "load_library('grouped_aggregate')"
 $QUERY "load_library('stream')"
@@ -25,13 +26,13 @@ wget --quiet --no-check-certificate --output-document=- \
     https://localhost:8083/version
 echo
 
-echo "regex()..."
+echo "superfunpack: regex()..."
 $QUERY "filter(list('operators'), regex(name,'(.*)q(.*)'));"
 $QUERY "filter(
           build(<x:string>[i], '[(a),(b),(c)]', true),
           regex(x, '(.)q(.)'))"
 
-echo "rsub()..."
+echo "superfunpack: rsub()..."
 $QUERY "apply(
           build(
             <x:string>[i=0:0],
@@ -39,10 +40,27 @@ $QUERY "apply(
             true),
           y, rsub(x,'s/serious/silly/'))"
 
-echo "aio_save() w/ Arrow..."
+echo "accelerated_io_tools: aio_save() w/ Arrow..."
 $QUERY "aio_save(
           filter(
             build(<x:int64> [i=0:20:0:4], i),
             x % 2 = 0),
           '/tmp/try-1.arrow',
           'format=arrow')"
+
+echo "bridge: xsave()"
+$QUERY "xsave(build(<x:int64>[i=0:19:0:5], i), 'file:///tmp/bridge_test')"
+
+echo "bridge: xinput()"
+$QUERY "xinput('file:///tmp/bridge_test')"
+
+if [ -d ~/.aws ]
+then
+    echo "Found ~/.aws directory"
+
+    echo "bridge: xsave() w/ S3"
+    $QUERY "xsave(build(<x:int64>[i=0:19:0:5], i), 's3://p4tests/s3bridge_test/extra_scidb_libs')"
+
+    echo "bridge: xinput() w/ S3"
+    $QUERY "xinput('s3://p4tests/s3bridge_test/extra_scidb_libs')"
+fi

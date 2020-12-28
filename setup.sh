@@ -3,7 +3,7 @@
 set -o errexit
 
 ARROW_VER=0.16.0
-
+BASEDIR=$(dirname "$0")
 
 install_lsb_release()
 {
@@ -56,7 +56,7 @@ then
         https://yum.repos.intel.com/mkl/setup/intel-mkl.repo
     sed -i 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/intel-mkl.repo
 
-    yum install --assumeyes    \
+    yum install --assumeyes \
         https://downloads.paradigm4.com/devtoolset-3/centos/7/sclo/x86_64/rh/devtoolset-3/scidb-devtoolset-3.noarch.rpm
 
     yum install --assumeyes \
@@ -83,12 +83,15 @@ EOF
 
     echo "Step 2. Install prerequisites"
     for pkg in arrow-devel-$ARROW_VER           \
+               cmake3                           \
                devtoolset-3-runtime             \
                devtoolset-3-toolchain           \
                gcc                              \
                git                              \
+               libcurl-devel                    \
                libpqxx-devel                    \
                log4cxx-devel                    \
+               openssl-devel                    \
                pcre-devel                       \
                protobuf-devel-2.4.1             \
                rpm-build                        \
@@ -99,6 +102,41 @@ EOF
     do
         yum install --assumeyes $pkg
     done
+
+    echo "Step 3. Download, Build, and Install cURL"
+    # cURL
+    curl https://curl.haxx.se/download/curl-7.72.0.tar.gz \
+        | tar --extract --gzip --directory=$BASEDIR
+
+    old_path=`pwd`
+    cd $BASEDIR/curl-7.72.0
+    ./configure --prefix=/opt/curl
+    make
+    make install
+    make clean
+    cd $old_path
+
+    echo "Step 4. Download, Build and Install AWS SDK"
+    # AWS SDK
+    curl --location https://github.com/aws/aws-sdk-cpp/archive/1.8.3.tar.gz \
+        | tar --extract --gzip --directory=$BASEDIR
+    old_path=`pwd`
+    cd $BASEDIR/aws-sdk-cpp-1.8.3
+    mkdir build
+    cd build
+    scl enable devtoolset-3                                                     \
+        "cmake3 ..                                                              \
+                  -DBUILD_ONLY=s3                                               \
+                  -DBUILD_SHARED_LIBS=ON                                        \
+                  -DCMAKE_BUILD_TYPE=RelWithDebInfo                             \
+                  -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-3/root/usr/bin/g++    \
+                  -DCMAKE_C_COMPILER=/opt/rh/devtoolset-3/root/usr/bin/gcc      \
+                  -DCMAKE_INSTALL_PREFIX=/opt/aws"
+    make
+    make install
+    cd ..
+    rm -rf build
+    cd $old_path
 
 else
     # Debian/Ubuntu
@@ -156,11 +194,13 @@ APT_LINE
         --assume-yes                            \
         --no-install-recommends                 \
         bc                                      \
+        cmake                                   \
         g++                                     \
         git                                     \
         libarrow-dev=$ARROW_VER-1               \
         libboost-system1.58-dev                 \
         libboost1.58-dev                        \
+        libcurl4-openssl-dev                    \
         liblog4cxx10-dev                        \
         libpcre3-dev                            \
         libpqxx-dev                             \
@@ -169,4 +209,24 @@ APT_LINE
         make                                    \
         scidb-$SCIDB_VER                        \
         scidb-$SCIDB_VER-dev
+
+    echo "Step 3. Download, Build and Install AWS SDK"
+    # AWS SDK
+    old_path=`pwd`
+    wget --no-verbose --output-document -                               \
+         https://github.com/aws/aws-sdk-cpp/archive/1.8.3.tar.gz        \
+        | tar --extract --gzip --directory=$BASEDIR
+    cd $BASEDIR/aws-sdk-cpp-1.8.3
+    mkdir build
+    cd build
+    cmake ..                                    \
+           -DBUILD_ONLY=s3                      \
+           -DBUILD_SHARED_LIBS=ON               \
+           -DCMAKE_BUILD_TYPE=RelWithDebInfo    \
+           -DCMAKE_INSTALL_PREFIX=/opt/aws
+    make
+    make install
+    cd ..
+    rm -rf build
+    cd $old_path
 fi

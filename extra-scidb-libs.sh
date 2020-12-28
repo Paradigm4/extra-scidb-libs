@@ -37,8 +37,17 @@ fi
 
 function downloadLibs ()
 {
+    mkdir --parent ~/.ssh
+    chmod go-rwX ~/.ssh
+    echo -e "Host github.com\n\tStrictHostKeyChecking no" >> ~/.ssh/config
+    if [ ! -f ~/.ssh/id_rsa ] || [ ! -f ~/.ssh/id_rsa.pub ]
+    then
+        echo "-- - Please verify that GitHub SSH keys are configured. - --"
+    fi
+
     cd $work_dir
     params=("$@")
+    echo $params
     for i in $(seq 1 "$((${#params[@]}/2))")
     do
         lib_name=${params[0]}
@@ -47,7 +56,8 @@ function downloadLibs ()
 
         params=("${params[@]:2}")
 
-        git clone https://github.com/Paradigm4/$lib_name.git
+        # git clone https://github.com/Paradigm4/$lib_name.git
+        git clone git@github.com:Paradigm4/$lib_name.git
         cd $work_dir/$lib_name
         git checkout $arch_name
         cd ..
@@ -59,13 +69,12 @@ function downloadLibs ()
 function create_makefile()
 {
     make_dir=$1
-    cd $make_dir ; dirs=($(ls))
+    cd $make_dir
 
     echo "all:" > $make_dir/Makefile
-    for lib_name in "${dirs[@]}"
+    for f in `ls */Makefile`
     do
-        makefiles=($(find . -name Makefile | LC_COLLATE=C sort | grep $lib_name | xargs -n1 dirname))
-        echo -e "\t\$(MAKE) -C ${makefiles[0]}" >> $make_dir/Makefile
+        echo -e "\t\$(MAKE) -C $(dirname $f)" >> $make_dir/Makefile
     done
     cd $work_dir
 }
@@ -93,6 +102,7 @@ mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 # The following array should contain tuples of the repo name and the branch to get.
 declare -a libs=(
     "accelerated_io_tools" "v19.11.5"
+    "bridge"               "master"
     "equi_join"            "v19.11.2"
     "grouped_aggregate"    "v19.11.2"
     "shim"                 "v19.11.3"
@@ -101,6 +111,15 @@ declare -a libs=(
 )
 
 downloadLibs "${libs[@]}"
+
+# Bridge: Copy AWS libs
+aws_lib_dir=lib
+if [[ "$1" == "rpm" ]]; then aws_lib_dir=${aws_lib_dir}64; fi
+for f in libaws-c-common.so.0unstable libaws-c-event-stream.so.0unstable libaws-checksums.so libaws-cpp-sdk-core.so libaws-cpp-sdk-s3.so
+do
+    cp /opt/aws/$aws_lib_dir/$f $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/bridge/
+done
+
 
 if [[ "$1" == "rpm" || "$1" == "both" ]]; then
 
@@ -113,6 +132,9 @@ if [[ "$1" == "rpm" || "$1" == "both" ]]; then
     create_makefile $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 
     cp $source_dir/specs/conf $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/shim/conf
+
+    # Bridge: Copy cURL lib
+    cp /opt/curl/lib/libcurl.so.4.6.0 $work_dir//extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/bridge/
 
     tar -zcvf extra-scidb-libs-${SCIDB_VER:=19.11}.tar.gz extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 
@@ -158,7 +180,11 @@ if [[ "$1" == "deb" || "$1" == "both" ]]; then
         mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/var/lib/shim
         cp -aR shim/wwwroot $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/var/lib/shim
 
-        mkdir $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/DEBIAN
+        # Bridge
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/opt/aws/lib
+        cp bridge/libaws* $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/opt/aws/lib
+
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/DEBIAN
         m4 -DVERSION=${SCIDB_VER:=19.11} $source_dir/debian/control > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/DEBIAN/control
         hname=$(hostname); hname="$hname.$(hostname -d)"
         m4 -DVERSION=${SCIDB_VER:=19.11} -DDATE="$(date)" -DHOSTNAME=$hname $source_dir/debian/copyright > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/DEBIAN/copyright
