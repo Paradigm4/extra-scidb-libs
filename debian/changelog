@@ -1,3 +1,9 @@
+extra-scidb-libs-20.10 (1)
+
+ * Port plugins to 20.10
+
+-- Jason Kinchen <jkinchen@paradigm4.com> Tue, 5 Jan 2021 14:00:00 -0500
+
 extra-scidb-libs-19.11 (6)
 
  * accelerated_io_tools with fix for dangling reference

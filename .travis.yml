@@ -12,8 +12,8 @@ python:
 
 env:
   global:
-    - SCIDB_VER=19.11
-    - PKG_VER=6
+    - SCIDB_VER=20.10
+    - PKG_VER=1
     - ARROW_VER_PART=16
   jobs:
     - BUILD_IMG=ubuntu:xenial

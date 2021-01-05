@@ -1,5 +1,5 @@
-Name:           extra-scidb-libs-19.11
-Version:        6
+Name:           extra-scidb-libs-20.10
+Version:        1
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -18,7 +18,7 @@ Source0:        %{name}/%{name}.tar.gz
 %global __find_requires_orig %{__find_requires}
 %define __find_requires %{_builddir}/find-requires %{__find_requires_orig}
 
-Requires: /opt/scidb/19.11/bin/scidb, openssl-devel, arrow-libs >= 0.16.0-1, arrow-libs < 0.17.0-1
+Requires: /opt/scidb/20.10/bin/scidb, openssl-devel, arrow-libs >= 0.16.0-1, arrow-libs < 0.17.0-1
 Requires(post): info
 Requires(preun): info
 
@@ -91,7 +91,7 @@ fi
 
 if [ -z "$SCIDB_INSTALL_PATH" ]
 then
-    export SCIDB_INSTALL_PATH=/opt/scidb/19.11
+    export SCIDB_INSTALL_PATH=/opt/scidb/20.10
 fi
 
 $SCIDB_INSTALL_PATH/shim/after-install.sh
@@ -106,6 +106,8 @@ $SCIDB_INSTALL_PATH/shim/before-remove.sh
 %doc
 
 %changelog
+* Tue Jan 5 2021 Jason Kinchen <jkinchen@paradigm4.com>
+- Port plugins to SciDB 20.10
 
 * Thu Jul 23 2020 Rares Vernica <rvernica@gmail.com>
 - accelerated_io_tools with fix for dangling reference
