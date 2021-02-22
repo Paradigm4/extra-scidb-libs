@@ -37,17 +37,16 @@ fi
 
 function downloadLibs ()
 {
-    mkdir --parent ~/.ssh
-    chmod go-rwX ~/.ssh
-    echo -e "Host github.com\n\tStrictHostKeyChecking no" >> ~/.ssh/config
-    if [ ! -f ~/.ssh/id_rsa ] || [ ! -f ~/.ssh/id_rsa.pub ]
-    then
-        echo "-- - Please verify that GitHub SSH keys are configured. - --"
-    fi
+    # mkdir --parent ~/.ssh
+    # chmod go-rwX ~/.ssh
+    # echo -e "Host github.com\n\tStrictHostKeyChecking no" >> ~/.ssh/config
+    # if [ ! -f ~/.ssh/id_rsa ] || [ ! -f ~/.ssh/id_rsa.pub ]
+    # then
+    #     echo "-- - Please verify that GitHub SSH keys are configured. - --"
+    # fi
 
     cd $work_dir
     params=("$@")
-    echo $params
     for i in $(seq 1 "$((${#params[@]}/2))")
     do
         lib_name=${params[0]}
@@ -56,8 +55,8 @@ function downloadLibs ()
 
         params=("${params[@]:2}")
 
-        # git clone https://github.com/Paradigm4/$lib_name.git
-        git clone git@github.com:Paradigm4/$lib_name.git
+        git clone https://github.com/Paradigm4/$lib_name.git
+        # git clone git@github.com:Paradigm4/$lib_name.git
         cd $work_dir/$lib_name
         git checkout $arch_name
         cd ..
