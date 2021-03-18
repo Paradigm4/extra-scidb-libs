@@ -64,7 +64,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ## SciDB 19.11
 
-# CentOS 7
+### CentOS 7
 
 * [extra-scidb-libs-19.11-7-1.x86_64.rpm](extra-scidb-libs-19.11-7-1.x86_64.rpm) (March 17, 2021)
 * [extra-scidb-libs-19.11-6-1.x86_64.rpm](extra-scidb-libs-19.11-6-1.x86_64.rpm) (July 23, 2020)
@@ -74,7 +74,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 * [extra-scidb-libs-19.11-2-1.x86_64.rpm](extra-scidb-libs-19.11-2-1.x86_64.rpm) (April 30, 2020)
 * [extra-scidb-libs-19.11-1-1.x86_64.rpm](extra-scidb-libs-19.11-1-1.x86_64.rpm) (April 30, 2020)
 
-# Ubuntu Xenial
+### Ubuntu Xenial
 
 * [extra-scidb-libs-19.11-7.deb](extra-scidb-libs-19.11-7.deb) (March 17, 2021)
 * [extra-scidb-libs-19.11-6.deb](extra-scidb-libs-19.11-6.deb) (July 23, 2020)
