@@ -101,7 +101,7 @@ mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 # The following array should contain tuples of the repo name and the branch to get.
 declare -a libs=(
     "accelerated_io_tools" "v19.11.5"
-    "bridge"               "master"
+    "bridge"               "v19.11.1"
     "equi_join"            "v19.11.2"
     "grouped_aggregate"    "v19.11.2"
     "shim"                 "v19.11.3"
