@@ -105,7 +105,7 @@ EOF
 
     echo "Step 3. Download, Build, and Install cURL"
     # cURL
-    curl https://curl.haxx.se/download/curl-7.72.0.tar.gz \
+    curl https://curl.se/download/curl-7.72.0.tar.gz    \
         | tar --extract --gzip --directory=$BASEDIR
 
     old_path=`pwd`
