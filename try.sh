@@ -59,8 +59,10 @@ then
     echo "Found ~/.aws directory"
 
     echo "bridge: xsave() w/ S3"
-    $QUERY "xsave(build(<x:int64>[i=0:19:0:5], i), 's3://p4tests/s3bridge_test/extra_scidb_libs')"
+    $QUERY "xsave(build(<x:int64>[i=0:19:0:5], i), 's3://p4tests/bridge_test/extra_scidb_libs')"
 
     echo "bridge: xinput() w/ S3"
-    $QUERY "xinput('s3://p4tests/s3bridge_test/extra_scidb_libs')"
+    $QUERY "xinput('s3://p4tests/bridge_test/extra_scidb_libs')"
+
+    echo "-->>> Please delete s3://p4tests/bridge_test/extra_scidb_libs"
 fi
