@@ -133,7 +133,7 @@ $SCIDB_INSTALL_PATH/shim/before-remove.sh
 
 %changelog
 
-* Mon Dec 28 2020 Rares Vernica <rvernica@gmail.com>
+* Wed Mar 17 2021 Rares Vernica <rvernica@gmail.com>
 - bridge plugin
 
 * Thu Jul 23 2020 Rares Vernica <rvernica@gmail.com>
