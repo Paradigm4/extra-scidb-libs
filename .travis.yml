@@ -13,7 +13,7 @@ python:
 env:
   global:
     - SCIDB_VER=19.11
-    - PKG_VER=6
+    - PKG_VER=7
     - ARROW_VER_PART=16
   jobs:
     - BUILD_IMG=ubuntu:xenial
@@ -42,9 +42,9 @@ before_script:
     --env EXTRA_SCIDB_LIBS_SYSTEMCTL_FAIL_OK=true
     --name deploy
     --rm
+    --tmpfs /run
     --tty
     --volume /sys/fs/cgroup:/sys/fs/cgroup:ro
-    --volume /tmp/$(mktemp --directory):/run
     --volume `pwd`:/this
     rvernica/scidb:$SCIDB_VER$DEPLOY_IMG
 

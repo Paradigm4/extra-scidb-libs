@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-19.11
-Version:        6
+Version:        7
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -36,11 +36,13 @@ make SCIDB=%{_scidb_install_path} %{?_smp_mflags}
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 cp accelerated_io_tools/libaccelerated_io_tools.so %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
+cp bridge/libbridge.so                             %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 cp equi_join/libequi_join.so                       %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 cp grouped_aggregate/libgrouped_aggregate.so       %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 cp stream/libstream.so                             %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 cp superfunpack/src/libsuperfunpack.so             %{buildroot}%{_scidb_install_path}/lib/scidb/plugins
 
+# -- - Shim - --
 mkdir -p %{buildroot}%{_scidb_install_path}/shim
 sed "s!XXX_SCIDB_VER_XXX!%{_scidb_version}!g" shim/init.d/after-install.sh > %{buildroot}%{_scidb_install_path}/shim/after-install.sh
 chmod a+rx %{buildroot}%{_scidb_install_path}/shim/after-install.sh
@@ -61,7 +63,19 @@ mkdir -p %{buildroot}/usr/local/share/man/man1
 cp shim/man/shim.1 %{buildroot}/usr/local/share/man/man1
 mkdir -p %{buildroot}/var/lib/shim
 
+# -- - Bridge - --
+mkdir -p %{buildroot}/opt/aws/lib64/
+cp bridge/libaws-c-common.so.0unstable        %{buildroot}/opt/aws/lib64/
+cp bridge/libaws-c-event-stream.so.0unstable  %{buildroot}/opt/aws/lib64/
+cp bridge/libaws-checksums.so                 %{buildroot}/opt/aws/lib64/
+cp bridge/libaws-cpp-sdk-core.so              %{buildroot}/opt/aws/lib64/
+cp bridge/libaws-cpp-sdk-s3.so                %{buildroot}/opt/aws/lib64/
+mkdir -p %{buildroot}/opt/curl/lib/
+cp bridge/libcurl.so.4.6.0     %{buildroot}/opt/curl/lib/
+
+
 echo %{_scidb_install_path}/lib/scidb/plugins/libaccelerated_io_tools.so >  files.lst
+echo %{_scidb_install_path}/lib/scidb/plugins/libbridge.so               >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libequi_join.so            >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libgrouped_aggregate.so    >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libstream.so               >> files.lst
@@ -72,9 +86,16 @@ echo %{_scidb_install_path}/shim/setup-conf.sh                           >> file
 echo %{_scidb_install_path}/shim/shimsvc.initd                           >> files.lst
 echo %{_scidb_install_path}/shim/shimsvc.service                         >> files.lst
 
-echo %{_scidb_install_path}/bin/shim >> files.lst
-echo /var/lib/shim/wwwroot >> files.lst
-echo /usr/local/share/man/man1/shim.1 >> files.lst
+echo %{_scidb_install_path}/bin/shim     >> files.lst
+echo /var/lib/shim/wwwroot               >> files.lst
+echo /usr/local/share/man/man1/shim.1    >> files.lst
+
+echo /opt/aws/lib64/libaws-c-common.so.0unstable        >> files.lst
+echo /opt/aws/lib64/libaws-c-event-stream.so.0unstable  >> files.lst
+echo /opt/aws/lib64/libaws-checksums.so                 >> files.lst
+echo /opt/aws/lib64/libaws-cpp-sdk-core.so              >> files.lst
+echo /opt/aws/lib64/libaws-cpp-sdk-s3.so                >> files.lst
+echo /opt/curl/lib/libcurl.so.4.6.0                     >> files.lst
 
 %post
 # Stop any existing service
@@ -96,6 +117,11 @@ fi
 
 $SCIDB_INSTALL_PATH/shim/after-install.sh
 
+# -- - Bridge - --
+cd /opt/curl/lib
+ln -s libcurl.so.4.6.0 libcurl.so
+ln -s libcurl.so.4.6.0 libcurl.so.4
+
 
 %preun
 $SCIDB_INSTALL_PATH/shim/before-remove.sh
@@ -107,6 +133,9 @@ $SCIDB_INSTALL_PATH/shim/before-remove.sh
 
 %changelog
 
+* Mon Dec 28 2020 Rares Vernica <rvernica@gmail.com>
+- bridge plugin
+
 * Thu Jul 23 2020 Rares Vernica <rvernica@gmail.com>
 - accelerated_io_tools with fix for dangling reference
 - equi_join with minor fixes
@@ -114,7 +143,7 @@ $SCIDB_INSTALL_PATH/shim/before-remove.sh
 - shim with fixes for configuration file, installation failures,
   auto-commit queries, make service, and CXX flags
 
-* Thu Jun 27 2020 Rares Vernica <rvernica@gmail.com>
+* Sat Jun 27 2020 Rares Vernica <rvernica@gmail.com>
 - accelerated_io_tools with support for Apache Arrow 0.16.0
 - stream with support for Apache Arrow 0.16.0
 

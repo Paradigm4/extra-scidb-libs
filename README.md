@@ -12,6 +12,7 @@ tools from other GitHub.com repositories.
 Currently, the following tools are included:
 
 - [accelerated_io_tools](https://github.com/Paradigm4/accelerated_io_tools)
+- [bridge](https://github.com/Paradigm4/bridge)
 - [equi_join](https://github.com/Paradigm4/equi_join)
 - [grouped_aggregate](https://github.com/Paradigm4/grouped_aggregate)
 - [shim](https://github.com/Paradigm4/shim)
