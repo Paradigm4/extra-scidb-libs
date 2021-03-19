@@ -1,11 +1,3 @@
-if [ "$#" -ne 1 ]
-then
-    echo "Need target parameter:"
-    echo "$0 rpm|deb"
-    exit 64
-fi
-
-
 TARGET=$1
 if [ "$TARGET" == "rpm" ]
 then
