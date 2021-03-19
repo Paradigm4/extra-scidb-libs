@@ -132,6 +132,7 @@ EOF
                     --assume-yes                                \
                     --no-install-recommends                     \
                     libarrow$ARROW_VER_PART=$ARROW_VER-1        \
+                    libcurl3                                    \
                     wget
             wget --output-document /tmp/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb \
                  https://paradigm4.github.io/extra-scidb-libs/extra-scidb-libs-$SCIDB_VER-$PKG_VER.deb
