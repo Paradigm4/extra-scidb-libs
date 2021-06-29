@@ -77,6 +77,9 @@ echo "============="
 echo "== = TRY = =="
 echo "============="
 docker cp ~/.aws deploy-$TARGET:/root/.aws
+docker exec deploy-$TARGET sed --in-place 's#io-paths-list=/tmp#io-paths-list=/tmp:s3/p4tests/bridge_test/extra_scidb_libs#' /opt/scidb/19.11/etc/config.ini
+docker exec deploy-$TARGET /opt/scidb/$SCIDB_VER/bin/scidbctl.py stop scidb
+docker exec deploy-$TARGET /opt/scidb/$SCIDB_VER/bin/scidbctl.py start scidb
 docker exec deploy-$TARGET sh /this/try.sh
 
 
@@ -100,3 +103,4 @@ echo "== = STOP = =="
 echo "=============="
 docker stop deploy-$TARGET
 docker rm deploy-$TARGET
+aws s3 rm --recursive s3://p4tests/bridge_test/extra_scidb_libs
