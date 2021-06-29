@@ -1,9 +1,10 @@
 extra-scidb-libs-19.11 (8)
 
- * brideg with fixes for compresison, permisisons, error messages,
-   null flags, and upgrade to Arrow 3.0.0
- * accelerated_io_tools upgrade to Arrow 3.0.0
- * stream upgrade to Arrow 3.0.0
+ * bridge with fixes for compression, permissions, error messages, null
+   flags, and upgrade to Apache Arrow 3.0.0
+ * accelerated_io_tools upgrade to Apache Arrow 3.0.0
+ * stream upgrade to Apache Arrow 3.0.0, change to Arrow format,
+   fix result distribution
 
 -- Rares Vernica <rvernica@gmail.com> Tue, 29 Jun 2021 10:00:00 -08000
 

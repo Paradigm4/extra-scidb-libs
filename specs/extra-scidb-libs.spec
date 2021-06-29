@@ -165,10 +165,11 @@ rm /opt/apache-arrow/lib64/libarrow.so.300
 %changelog
 
 * Tue Jun 29 2021 Rares Vernica <rvernica@gmail.com>
-- bridge with fixes for compresison, permisisons, error messages, null
-  flags, and upgrade to Arrow 3.0.0
-- accelerated_io_tools upgrade to Arrow 3.0.0
-- stream upgrade to Arrow 3.0.0
+- bridge with fixes for compression, permissions, error messages, null
+  flags, and upgrade to Apache Arrow 3.0.0
+- accelerated_io_tools upgrade to Apache Arrow 3.0.0
+- stream upgrade to Apache Arrow 3.0.0, change to Arrow format,
+  fix result distribution
 
 * Wed Mar 17 2021 Rares Vernica <rvernica@gmail.com>
 - bridge plugin

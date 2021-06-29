@@ -58,11 +58,11 @@ then
         https://yum.repos.intel.com/mkl/setup/intel-mkl.repo
     sed -i 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/intel-mkl.repo
 
-    # yum install --assumeyes \
-    #     https://downloads.paradigm4.com/devtoolset-3/centos/7/sclo/x86_64/rh/devtoolset-3/scidb-devtoolset-3.noarch.rpm
+    yum install --assumeyes \
+        https://downloads.paradigm4.com/devtoolset-3/centos/7/sclo/x86_64/rh/devtoolset-3/scidb-devtoolset-3.noarch.rpm
 
-    # yum install --assumeyes \
-    #     https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-3.noarch.rpm
+    yum install --assumeyes \
+        https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-3.noarch.rpm
 
     cat <<EOF | tee /etc/yum.repos.d/scidb.repo
 [scidb]
@@ -99,7 +99,7 @@ EOF
                scidb-$SCIDB_VER-dev             \
                scidb-$SCIDB_VER-libboost-devel
     do
-        echo yum install --assumeyes $pkg
+        yum install --assumeyes $pkg
     done
 
     echo "-- - --"

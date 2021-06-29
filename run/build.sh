@@ -32,25 +32,33 @@ then
            openssh-client
 fi
 
-docker exec build-$TARGET mkdir /root/.ssh
-docker cp ~/.ssh/id_rsa.github     build-$TARGET:/root/.ssh/id_rsa
-docker cp ~/.ssh/id_rsa.github.pub build-$TARGET:/root/.ssh/id_rsa.pub
-docker exec build-$TARGET ssh-agent > ssh-agent.out
 
-AUTH=`grep SSH_AUTH ssh-agent.out | cut --delimiter ';' --fields 1`
-AGENT=`grep SSH_AGENT ssh-agent.out | cut --delimiter ';' --fields 1`
+# -- - Private GitHub Setup - --
 
-docker exec                                     \
-       --tty                                    \
-       --interactive                            \
-       --env $AGENT                             \
-       --env $AUTH                              \
-       build-$TARGET                            \
-       ssh-add /root/.ssh/id_rsa
+# docker exec build-$TARGET mkdir /root/.ssh
+# docker cp ~/.ssh/id_rsa.github     build-$TARGET:/root/.ssh/id_rsa
+# docker cp ~/.ssh/id_rsa.github.pub build-$TARGET:/root/.ssh/id_rsa.pub
+# docker exec build-$TARGET ssh-agent > ssh-agent.out
+
+# AUTH=`grep SSH_AUTH ssh-agent.out | cut --delimiter ';' --fields 1`
+# AGENT=`grep SSH_AGENT ssh-agent.out | cut --delimiter ';' --fields 1`
+
+# docker exec                                     \
+#        --tty                                    \
+#        --interactive                            \
+#        --env $AGENT                             \
+#        --env $AUTH                              \
+#        build-$TARGET                            \
+#        ssh-add /root/.ssh/id_rsa
+
+# docker exec                                                     \
+#        --env $AGENT                                             \
+#        --env $AUTH                                              \
+#        build-$TARGET                                            \
+#        /this/extra-scidb-libs.sh $TARGET /root /this $PKG_VER
+
 
 docker exec                                                     \
-       --env $AGENT                                             \
-       --env $AUTH                                              \
        build-$TARGET                                            \
        /this/extra-scidb-libs.sh $TARGET /root /this $PKG_VER
 
