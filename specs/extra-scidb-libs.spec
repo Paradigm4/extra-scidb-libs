@@ -1,5 +1,5 @@
 Name:           extra-scidb-libs-19.11
-Version:        7
+Version:        8
 Release:        1
 License:	GPLv3
 Summary:        Several prototype operators and functions for SciDB
@@ -18,7 +18,7 @@ Source0:        %{name}/%{name}.tar.gz
 %global __find_requires_orig %{__find_requires}
 %define __find_requires %{_builddir}/find-requires %{__find_requires_orig}
 
-Requires: /opt/scidb/19.11/bin/scidb, openssl-devel, arrow-libs >= 0.16.0-1, arrow-libs < 0.17.0-1
+Requires: /opt/scidb/19.11/bin/scidb, openssl-devel
 Requires(post): info
 Requires(preun): info
 
@@ -63,15 +63,21 @@ mkdir -p %{buildroot}/usr/local/share/man/man1
 cp shim/man/shim.1 %{buildroot}/usr/local/share/man/man1
 mkdir -p %{buildroot}/var/lib/shim
 
+
 # -- - Bridge - --
-mkdir -p %{buildroot}/opt/aws/lib64/
-cp bridge/libaws-c-common.so.0unstable        %{buildroot}/opt/aws/lib64/
-cp bridge/libaws-c-event-stream.so.0unstable  %{buildroot}/opt/aws/lib64/
-cp bridge/libaws-checksums.so                 %{buildroot}/opt/aws/lib64/
-cp bridge/libaws-cpp-sdk-core.so              %{buildroot}/opt/aws/lib64/
-cp bridge/libaws-cpp-sdk-s3.so                %{buildroot}/opt/aws/lib64/
+mkdir -p %{buildroot}/opt/aws-sdk-cpp/lib64/
+cp bridge/libaws-c-common.so.0unstable        %{buildroot}/opt/aws-sdk-cpp/lib64/
+cp bridge/libaws-c-event-stream.so.0unstable  %{buildroot}/opt/aws-sdk-cpp/lib64/
+cp bridge/libaws-checksums.so                 %{buildroot}/opt/aws-sdk-cpp/lib64/
+cp bridge/libaws-cpp-sdk-core.so              %{buildroot}/opt/aws-sdk-cpp/lib64/
+cp bridge/libaws-cpp-sdk-s3.so                %{buildroot}/opt/aws-sdk-cpp/lib64/
+
+mkdir -p %{buildroot}/opt/apache-arrow/lib64/
+cp bridge/libarrow.so.300.0.0 %{buildroot}/opt/apache-arrow/lib64/
+
 mkdir -p %{buildroot}/opt/curl/lib/
-cp bridge/libcurl.so.4.6.0     %{buildroot}/opt/curl/lib/
+cp bridge/libcurl.so.4.6.0 %{buildroot}/opt/curl/lib/
+# -- -
 
 
 echo %{_scidb_install_path}/lib/scidb/plugins/libaccelerated_io_tools.so >  files.lst
@@ -80,6 +86,7 @@ echo %{_scidb_install_path}/lib/scidb/plugins/libequi_join.so            >> file
 echo %{_scidb_install_path}/lib/scidb/plugins/libgrouped_aggregate.so    >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libstream.so               >> files.lst
 echo %{_scidb_install_path}/lib/scidb/plugins/libsuperfunpack.so         >> files.lst
+echo %{_scidb_install_path}/shim                                         >> files.lst
 echo %{_scidb_install_path}/shim/after-install.sh                        >> files.lst
 echo %{_scidb_install_path}/shim/before-remove.sh                        >> files.lst
 echo %{_scidb_install_path}/shim/setup-conf.sh                           >> files.lst
@@ -90,14 +97,23 @@ echo %{_scidb_install_path}/bin/shim     >> files.lst
 echo /var/lib/shim/wwwroot               >> files.lst
 echo /usr/local/share/man/man1/shim.1    >> files.lst
 
-echo /opt/aws/lib64/libaws-c-common.so.0unstable        >> files.lst
-echo /opt/aws/lib64/libaws-c-event-stream.so.0unstable  >> files.lst
-echo /opt/aws/lib64/libaws-checksums.so                 >> files.lst
-echo /opt/aws/lib64/libaws-cpp-sdk-core.so              >> files.lst
-echo /opt/aws/lib64/libaws-cpp-sdk-s3.so                >> files.lst
-echo /opt/curl/lib/libcurl.so.4.6.0                     >> files.lst
+echo /opt/aws-sdk-cpp                                          >> files.lst
+echo /opt/aws-sdk-cpp/lib64/libaws-c-common.so.0unstable       >> files.lst
+echo /opt/aws-sdk-cpp/lib64/libaws-c-event-stream.so.0unstable >> files.lst
+echo /opt/aws-sdk-cpp/lib64/libaws-checksums.so                >> files.lst
+echo /opt/aws-sdk-cpp/lib64/libaws-cpp-sdk-core.so             >> files.lst
+echo /opt/aws-sdk-cpp/lib64/libaws-cpp-sdk-s3.so               >> files.lst
 
+echo /opt/apache-arrow                                         >> files.lst
+echo /opt/apache-arrow/lib64/libarrow.so.300.0.0               >> files.lst
+
+echo /opt/curl                                                 >> files.lst
+echo /opt/curl/lib/libcurl.so.4.6.0                            >> files.lst
+
+# ===
 %post
+# ===
+# -- - Shim - --
 # Stop any existing service
 # SystemD
 if test -n "$(which systemctl 2>/dev/null)"; then
@@ -114,17 +130,32 @@ if [ -z "$SCIDB_INSTALL_PATH" ]
 then
     export SCIDB_INSTALL_PATH=/opt/scidb/19.11
 fi
-
 $SCIDB_INSTALL_PATH/shim/after-install.sh
 
 # -- - Bridge - --
 cd /opt/curl/lib
-ln -s libcurl.so.4.6.0 libcurl.so
-ln -s libcurl.so.4.6.0 libcurl.so.4
+[ -f libcurl.so.4 ] || ln -s libcurl.so.4.6.0 libcurl.so.4
+[ -f libcurl.so   ] || ln -s libcurl.so.4.6.0 libcurl.so
+
+cd /opt/apache-arrow/lib64
+[ -f libarrow.so.300 ] || ln -s libarrow.so.300.0.0 libarrow.so.300
+[ -f libarrow.so     ] || ln -s libarrow.so.300     libarrow.so
 
 
+# ===
 %preun
+# ===
+# -- - Shim - --
+if [ -z "$SCIDB_INSTALL_PATH" ]
+then
+    export SCIDB_INSTALL_PATH=/opt/scidb/19.11
+fi
 $SCIDB_INSTALL_PATH/shim/before-remove.sh
+# -- - Bridge - --
+rm /opt/curl/lib/libcurl.so
+rm /opt/curl/lib/libcurl.so.4
+rm /opt/apache-arrow/lib64/libarrow.so
+rm /opt/apache-arrow/lib64/libarrow.so.300
 
 
 %files -f files.lst
@@ -132,6 +163,12 @@ $SCIDB_INSTALL_PATH/shim/before-remove.sh
 %doc
 
 %changelog
+
+* Tue Jun 29 2021 Rares Vernica <rvernica@gmail.com>
+- bridge with fixes for compresison, permisisons, error messages, null
+  flags, and upgrade to Arrow 3.0.0
+- accelerated_io_tools upgrade to Arrow 3.0.0
+- stream upgrade to Arrow 3.0.0
 
 * Wed Mar 17 2021 Rares Vernica <rvernica@gmail.com>
 - bridge plugin

@@ -54,6 +54,12 @@ $QUERY "xsave(build(<x:int64>[i=0:19:0:5], i), 'file:///tmp/bridge_test')"
 echo "bridge: xinput()"
 $QUERY "xinput('file:///tmp/bridge_test')"
 
+echo "bridge: file checks"
+cat /tmp/bridge_test/metadata
+file /tmp/bridge_test/index/0
+file /tmp/bridge_test/chunks/c_0
+rm --recursive --force /tmp/bridge_test
+
 if [ -d ~/.aws ]
 then
     echo "Found ~/.aws directory"

@@ -2,7 +2,7 @@
 
 set -o errexit
 
-ARROW_VER=0.16.0
+ARROW_VER=3.0.0
 BASEDIR=$(dirname "$0")
 
 install_lsb_release()
@@ -45,7 +45,9 @@ if [ "$dist" = "CentOS" ]
 then
     # CentOS
 
-    echo "Step 1. Configure prerequisites repositories"
+    echo "-- - --"
+    echo "Step 1/5. Configure prerequisites repositories"
+    echo "-- - --"
     yum repolist               \
     |  grep epel               \
     || yum install --assumeyes \
@@ -56,15 +58,11 @@ then
         https://yum.repos.intel.com/mkl/setup/intel-mkl.repo
     sed -i 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/intel-mkl.repo
 
-    yum install --assumeyes \
-        https://downloads.paradigm4.com/devtoolset-3/centos/7/sclo/x86_64/rh/devtoolset-3/scidb-devtoolset-3.noarch.rpm
+    # yum install --assumeyes \
+    #     https://downloads.paradigm4.com/devtoolset-3/centos/7/sclo/x86_64/rh/devtoolset-3/scidb-devtoolset-3.noarch.rpm
 
-    yum install --assumeyes \
-        https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-3.noarch.rpm
-
-    yum install --assumeyes https://apache.bintray.com/arrow/centos/$(
-        cut --delimiter : --fields 5 /etc/system-release-cpe
-        )/apache-arrow-release-latest.rpm
+    # yum install --assumeyes \
+    #     https://download.postgresql.org/pub/repos/yum/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-3.noarch.rpm
 
     cat <<EOF | tee /etc/yum.repos.d/scidb.repo
 [scidb]
@@ -81,9 +79,10 @@ gpgcheck=0
 enabled=1
 EOF
 
-    echo "Step 2. Install prerequisites"
-    for pkg in arrow-devel-$ARROW_VER           \
-               cmake3                           \
+    echo "-- - --"
+    echo "Step 2/5. Install prerequisites"
+    echo "-- - --"
+    for pkg in cmake3                           \
                devtoolset-3-runtime             \
                devtoolset-3-toolchain           \
                gcc                              \
@@ -100,10 +99,36 @@ EOF
                scidb-$SCIDB_VER-dev             \
                scidb-$SCIDB_VER-libboost-devel
     do
-        yum install --assumeyes $pkg
+        echo yum install --assumeyes $pkg
     done
 
-    echo "Step 3. Download, Build, and Install cURL"
+    echo "-- - --"
+    echo "Step 3/5. Download, Build, and Install Arrow"
+    echo "-- - --"
+    # Arrow
+    curl --location \
+        "https://www.apache.org/dyn/closer.lua?action=download&filename=arrow/arrow-3.0.0/apache-arrow-3.0.0.tar.gz" \
+        | tar --extract --gzip --directory=$BASEDIR
+    old_path=`pwd`
+    cd $BASEDIR/apache-arrow-3.0.0/cpp
+    mkdir build
+    cd build
+    scl enable devtoolset-3                                             \
+        "cmake3 ..                                                      \
+             -DARROW_WITH_LZ4=ON                                        \
+             -DARROW_WITH_ZLIB=ON                                       \
+             -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-3/root/usr/bin/g++ \
+             -DCMAKE_C_COMPILER=/opt/rh/devtoolset-3/root/usr/bin/gcc   \
+             -DCMAKE_INSTALL_PREFIX=/opt/apache-arrow"
+    make
+    make install
+    cd ..
+    rm -rf build
+    cd $old_path
+
+    echo "-- - --"
+    echo "Step 4/5. Download, Build, and Install cURL"
+    echo "-- - --"
     # cURL
     curl https://curl.se/download/curl-7.72.0.tar.gz    \
         | tar --extract --gzip --directory=$BASEDIR
@@ -116,7 +141,9 @@ EOF
     make clean
     cd $old_path
 
-    echo "Step 4. Download, Build and Install AWS SDK"
+    echo "-- - --"
+    echo "Step 5/5. Download, Build and Install AWS SDK"
+    echo "-- - --"
     # AWS SDK
     curl --location https://github.com/aws/aws-sdk-cpp/archive/1.8.3.tar.gz \
         | tar --extract --gzip --directory=$BASEDIR
@@ -124,14 +151,14 @@ EOF
     cd $BASEDIR/aws-sdk-cpp-1.8.3
     mkdir build
     cd build
-    scl enable devtoolset-3                                                     \
-        "cmake3 ..                                                              \
-                  -DBUILD_ONLY=s3                                               \
-                  -DBUILD_SHARED_LIBS=ON                                        \
-                  -DCMAKE_BUILD_TYPE=RelWithDebInfo                             \
-                  -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-3/root/usr/bin/g++    \
-                  -DCMAKE_C_COMPILER=/opt/rh/devtoolset-3/root/usr/bin/gcc      \
-                  -DCMAKE_INSTALL_PREFIX=/opt/aws"
+    scl enable devtoolset-3                                             \
+        "cmake3 ..                                                      \
+             -DBUILD_ONLY=s3                                            \
+             -DBUILD_SHARED_LIBS=ON                                     \
+             -DCMAKE_BUILD_TYPE=RelWithDebInfo                          \
+             -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-3/root/usr/bin/g++ \
+             -DCMAKE_C_COMPILER=/opt/rh/devtoolset-3/root/usr/bin/gcc   \
+             -DCMAKE_INSTALL_PREFIX=/opt/aws-sdk-cpp"
     make
     make install
     cd ..
@@ -141,7 +168,9 @@ EOF
 else
     # Debian/Ubuntu
 
-    echo "Step 1. Configure prerequisites repositories"
+    echo "-- - --"
+    echo "Step 1/3. Configure prerequisites repositories"
+    echo "-- - --"
     sed --in-place                                                  \
         "\#deb http://deb.debian.org/debian jessie-updates main#d"  \
         /etc/apt/sources.list
@@ -187,7 +216,9 @@ deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu16.04/
 APT_LINE
     apt-key adv --fetch-keys https://downloads.paradigm4.com/key
 
-    echo "Step 2. Install prerequisites"
+    echo "-- - --"
+    echo "Step 2/3. Install prerequisites"
+    echo "-- - --"
     apt-get update
     apt-get upgrade --assume-yes
     apt-get install                             \
@@ -210,20 +241,22 @@ APT_LINE
         scidb-$SCIDB_VER                        \
         scidb-$SCIDB_VER-dev
 
-    echo "Step 3. Download, Build and Install AWS SDK"
+    echo "-- - --"
+    echo "Step 3/3. Download, Build and Install AWS SDK"
+    echo "-- - --"
     # AWS SDK
-    old_path=`pwd`
     wget --no-verbose --output-document -                               \
          https://github.com/aws/aws-sdk-cpp/archive/1.8.3.tar.gz        \
         | tar --extract --gzip --directory=$BASEDIR
+    old_path=`pwd`
     cd $BASEDIR/aws-sdk-cpp-1.8.3
     mkdir build
     cd build
     cmake ..                                    \
-           -DBUILD_ONLY=s3                      \
-           -DBUILD_SHARED_LIBS=ON               \
-           -DCMAKE_BUILD_TYPE=RelWithDebInfo    \
-           -DCMAKE_INSTALL_PREFIX=/opt/aws
+        -DBUILD_ONLY=s3                         \
+        -DBUILD_SHARED_LIBS=ON                  \
+        -DCMAKE_BUILD_TYPE=RelWithDebInfo       \
+        -DCMAKE_INSTALL_PREFIX=/opt/aws-sdk-cpp
     make
     make install
     cd ..

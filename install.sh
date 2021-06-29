@@ -8,9 +8,9 @@ set -o errexit
 
 
 SCIDB_VER=19.11
-PKG_VER=7
-ARROW_VER_PART=16
-ARROW_VER=0.$ARROW_VER_PART.0
+PKG_VER=8
+ARROW_VER_PART=300
+ARROW_VER=3.0.0
 
 
 install_lsb_release()
@@ -59,10 +59,10 @@ then
     || yum install --assumeyes \
         https://dl.fedoraproject.org/pub/epel/epel-release-latest-$rel.noarch.rpm
 
-    yum list installed apache-arrow-release \
-    || yum install --assumeyes https://apache.bintray.com/arrow/centos/$(
-        cut --delimiter : --fields 5 /etc/system-release-cpe
-           )/apache-arrow-release-latest.rpm
+    # yum list installed apache-arrow-release \
+    # || yum install --assumeyes https://apache.bintray.com/arrow/centos/$(
+    #     cut --delimiter : --fields 5 /etc/system-release-cpe
+    #        )/apache-arrow-release-latest.rpm
 
     cat > /etc/yum.repos.d/scidb-extra.repo <<EOF
 [scidb-extra]

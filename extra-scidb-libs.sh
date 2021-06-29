@@ -98,26 +98,52 @@ source_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rm -rf $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 
-# The following array should contain tuples of the repo name and the branch to get.
+# The following array should contain tuples of the repo name and the
+# branch to get.
 declare -a libs=(
-    "accelerated_io_tools" "v19.11.5"
-    "bridge"               "v19.11.1"
+    "accelerated_io_tools" "v19.11.6"
+    "bridge"               "v19.11.2"
     "equi_join"            "v19.11.2"
     "grouped_aggregate"    "v19.11.2"
     "shim"                 "v19.11.3"
-    "stream"               "v19.11.2"
+    "stream"               "v19.11.3"
     "superfunpack"         "v19.11.1"
 )
+ARROW_SO_VER=300.0.0
+
 
 downloadLibs "${libs[@]}"
 
-# Bridge: Copy AWS libs
-aws_lib_dir=lib
-if [[ "$1" == "rpm" ]]; then aws_lib_dir=${aws_lib_dir}64; fi
-for f in libaws-c-common.so.0unstable libaws-c-event-stream.so.0unstable libaws-checksums.so libaws-cpp-sdk-core.so libaws-cpp-sdk-s3.so
+
+# -- - Bridge - --
+# Copy SO files for AWS-SDK-CPP, Apache Arrow, and cURL
+lib_dir=lib
+so_list=""
+
+# Apache Arrow and cURL .so files
+if [[ "$1" == "rpm" ]]
+then
+    lib_dir="${lib_dir}64"
+    so_list+="/opt/apache-arrow/$lib_dir/libarrow.so.300.0.0 "
+    so_list+="/opt/curl/lib/libcurl.so.4.6.0 "
+fi
+
+# AWS-SDK-CPP .so files
+for f in libaws-c-common.so.0unstable           \
+         libaws-c-event-stream.so.0unstable     \
+         libaws-checksums.so                    \
+         libaws-cpp-sdk-core.so                 \
+         libaws-cpp-sdk-s3.so
 do
-    cp /opt/aws/$aws_lib_dir/$f $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/bridge/
+    so_list+="/opt/aws-sdk-cpp/$lib_dir/$f "
 done
+
+# Copy all .so files collected
+for so in $so_list
+do
+    cp "$so" "$work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/bridge/"
+done
+# -- -
 
 
 if [[ "$1" == "rpm" || "$1" == "both" ]]; then
@@ -131,9 +157,6 @@ if [[ "$1" == "rpm" || "$1" == "both" ]]; then
     create_makefile $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 
     cp $source_dir/specs/conf $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/shim/conf
-
-    # Bridge: Copy cURL lib
-    cp /opt/curl/lib/libcurl.so.4.6.0 $work_dir//extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/bridge/
 
     tar -zcvf extra-scidb-libs-${SCIDB_VER:=19.11}.tar.gz extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER
 
@@ -179,9 +202,10 @@ if [[ "$1" == "deb" || "$1" == "both" ]]; then
         mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/var/lib/shim
         cp -aR shim/wwwroot $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/var/lib/shim
 
-        # Bridge
-        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/opt/aws/lib
-        cp bridge/libaws* $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/opt/aws/lib
+        # -- - Bridge - --
+        mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/opt/aws-sdk-cpp/lib
+        cp bridge/libaws* $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/opt/aws-sdk-cpp/lib
+        # -- -
 
         mkdir -p $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/DEBIAN
         m4 -DVERSION=${SCIDB_VER:=19.11} $source_dir/debian/control > $work_dir/extra-scidb-libs-${SCIDB_VER:=19.11}-$PKG_VER/DEBIAN/control

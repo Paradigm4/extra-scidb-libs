@@ -1,7 +1,7 @@
 # Overview
 
 [![SciDB 19.11](https://img.shields.io/badge/SciDB-19.11-blue.svg)](https://forum.paradigm4.com/t/scidb-release-19-11/2411)
-[![Build Status](https://travis-ci.org/Paradigm4/extra-scidb-libs.svg)](https://travis-ci.org/Paradigm4/extra-scidb-libs)
+[![arrow 3.0.0](https://img.shields.io/badge/arrow-3.0.0-blue.svg)](https://arrow.apache.org/release/3.0.0.html)
 
 
 This repository contains the scripts and control files to build a

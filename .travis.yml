@@ -13,8 +13,8 @@ python:
 env:
   global:
     - SCIDB_VER=19.11
-    - PKG_VER=7
-    - ARROW_VER_PART=16
+    - PKG_VER=8
+    - ARROW_VER_PART=300
   jobs:
     - BUILD_IMG=ubuntu:xenial
       DEPLOY_IMG=-xenial
