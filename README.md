@@ -16,6 +16,9 @@ Usage:
 ```bash
 wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 ```
+
+*Note* SciDB restart is required if upgrading `extra-scidb-libs`
+
 # Manual Install
 
 ## CentOS 7
@@ -66,6 +69,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ### CentOS 7
 
+* [extra-scidb-libs-19.11-8-1.x86_64.rpm](extra-scidb-libs-19.11-8-1.x86_64.rpm) (June 29, 2021)
 * [extra-scidb-libs-19.11-7-1.x86_64.rpm](extra-scidb-libs-19.11-7-1.x86_64.rpm) (March 17, 2021)
 * [extra-scidb-libs-19.11-6-1.x86_64.rpm](extra-scidb-libs-19.11-6-1.x86_64.rpm) (July 23, 2020)
 * [extra-scidb-libs-19.11-5-1.x86_64.rpm](extra-scidb-libs-19.11-5-1.x86_64.rpm) (June 27, 2020)
@@ -76,6 +80,7 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ### Ubuntu Xenial
 
+* [extra-scidb-libs-19.11-8.deb](extra-scidb-libs-19.11-8.deb) (June 29, 2021)
 * [extra-scidb-libs-19.11-7.deb](extra-scidb-libs-19.11-7.deb) (March 17, 2021)
 * [extra-scidb-libs-19.11-6.deb](extra-scidb-libs-19.11-6.deb) (July 23, 2020)
 * [extra-scidb-libs-19.11-5.deb](extra-scidb-libs-19.11-5.deb) (June 27, 2020)
@@ -134,6 +139,15 @@ wget -O- https://paradigm4.github.io/extra-scidb-libs/install.sh | sudo sh
 
 ## SciDB 19.11
 
+* Version `8`
+  * `accelerated_io_tools` upgrade for Apache Arrow `3.0.0` (`v19.11.6`)
+  * `bridge` with fixes for compression, permissions, error messages, null flags, and upgrade to Apache Arrow `3.0.0` (`v19.11.2`)
+  * `stream` upgrade to Apache Arrow `3.0.0` (`v19.11.3`), change to Arrow format, fix result distribution
+  * Include Apache Arrow `3.0.0` in `rpm` package
+* Version `7`
+   * Include `bridge` (`v19.11.1`)
+   * Include AWS S3 libraries
+   * Include cURL libraries in `rpm` package
 * Version `6`
    * `accelerated_io_tools` with fix for dangling reference (`v19.11.5`)
    * `equi_join` with minor fixes (`v19.11.2`)
