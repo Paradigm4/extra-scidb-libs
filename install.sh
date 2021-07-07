@@ -113,10 +113,13 @@ else
 deb http://deb.debian.org/debian $codename-backports main
 EOF
     fi
-    wget https://apache.bintray.com/arrow/$(
+    wget https://apache.jfrog.io/artifactory/arrow/$(
         echo $id | tr 'A-Z' 'a-z'
          )/apache-arrow-archive-keyring-latest-$codename.deb
     apt install --assume-yes ./apache-arrow-archive-keyring-latest-$codename.deb
+    sed --in-place                                      \
+        's#bintray.com#jfrog.io/artifactory#'           \
+        /etc/apt/sources.list.d/apache-arrow.sources
 
     cat > /etc/apt/sources.list.d/scidb-extra.list <<EOF
 deb https://downloads.paradigm4.com/ extra/$SCIDB_VER/ubuntu16.04/
