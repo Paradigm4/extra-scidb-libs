@@ -56,7 +56,7 @@ then
     yum install --assumeyes yum-utils
     yum-config-manager --add-repo                               \
         https://yum.repos.intel.com/mkl/setup/intel-mkl.repo
-    sed -i 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/intel-mkl.repo
+    sed --in-place 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/intel-mkl.repo
 
     yum install --assumeyes \
         https://downloads.paradigm4.com/devtoolset-3/centos/7/sclo/x86_64/rh/devtoolset-3/scidb-devtoolset-3.noarch.rpm
@@ -205,10 +205,14 @@ APT_LINE
 deb http://deb.debian.org/debian $codename-backports main
 EOF
     fi
-    wget https://apache.bintray.com/arrow/$(
+    wget https://apache.jfrog.io/artifactory/arrow/$(
         echo $id | tr 'A-Z' 'a-z'
          )/apache-arrow-archive-keyring-latest-$codename.deb
     apt install --assume-yes ./apache-arrow-archive-keyring-latest-$codename.deb
+    sed --in-place                                      \
+        's#bintray.com#jfrog.io/artifactory#'           \
+        /etc/apt/sources.list.d/apache-arrow.sources
+
 
     cat <<APT_LINE | tee /etc/apt/sources.list.d/scidb.list
 deb https://downloads.paradigm4.com/ community/$SCIDB_VER/xenial/
